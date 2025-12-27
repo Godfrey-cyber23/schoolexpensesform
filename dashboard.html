@@ -198,6 +198,103 @@
       height: 36px;
     }
 
+    /* Filter Controls */
+    .filter-container {
+      background: white;
+      border-radius: 6px;
+      padding: 12px;
+      margin-bottom: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .filter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      cursor: pointer;
+    }
+
+    .filter-header h3 {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .filter-toggle {
+      background: none;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+      color: var(--primary);
+    }
+
+    .filters-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .filters-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .filters-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .filter-group {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .filter-group label {
+      font-size: 0.75rem;
+      color: #666;
+      font-weight: 600;
+    }
+
+    .filter-group select {
+      padding: 8px 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 0.85rem;
+      background-color: white;
+      cursor: pointer;
+    }
+
+    .filter-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      padding-top: 8px;
+      border-top: 1px solid #eee;
+    }
+
+    .btn-clear {
+      background-color: #f8f9fa;
+      border: 1px solid #ddd;
+      color: #666;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+    }
+
+    .btn-apply {
+      background-color: var(--primary);
+      color: white;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+    }
+
     /* Table Container - Compact */
     .table-wrapper {
       background: white;
@@ -557,7 +654,50 @@
     </div>
 
     <div class="toolbar">
-      <input type="text" id="searchInput" placeholder="🔍 Search..." onkeyup="filterTable()">
+      <input type="text" id="searchInput" placeholder="🔍 Search by student, term, or notes..." onkeyup="filterTable()">
+    </div>
+
+    <!-- Filter Controls -->
+    <div class="filter-container">
+      <div class="filter-header" onclick="toggleFilters()">
+        <h3>⚙️ Filters</h3>
+        <button class="filter-toggle" id="filterToggle">▼</button>
+      </div>
+      <div class="filters-grid" id="filtersGrid" style="display: none;">
+        <div class="filter-group">
+          <label for="filterStudent">Student</label>
+          <select id="filterStudent" onchange="applyFilters()">
+            <option value="">All Students</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filterTerm">Term</label>
+          <select id="filterTerm" onchange="applyFilters()">
+            <option value="">All Terms</option>
+            <option value="Term 1">Term 1</option>
+            <option value="Term 2">Term 2</option>
+            <option value="Term 3">Term 3</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filterYear">Year</label>
+          <select id="filterYear" onchange="applyFilters()">
+            <option value="">All Years</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="filterFlagged">Flag Status</label>
+          <select id="filterFlagged" onchange="applyFilters()">
+            <option value="">All</option>
+            <option value="flagged">Flagged Only</option>
+            <option value="not-flagged">Not Flagged</option>
+          </select>
+        </div>
+      </div>
+      <div class="filter-actions" id="filterActions" style="display: none;">
+        <button class="btn-clear" onclick="clearFilters()">Clear Filters</button>
+        <button class="btn-apply" onclick="applyFilters()">Apply Filters</button>
+      </div>
     </div>
 
     <div class="scroll-hint">
@@ -639,8 +779,30 @@
  <script>
 const API = "https://script.google.com/macros/s/AKfycbzEEeuwtZm-qGOmKLza3IfdVieYurAH14xgp3Q0lUPwUpvyz2rIHUlkC48sCc2FUK9i/exec";
 let allData = [];
+let filteredData = [];
 
-window.onload = loadData;
+// Filter state
+let currentFilters = {
+  student: '',
+  term: '',
+  year: '',
+  flagged: '',
+  search: ''
+};
+
+window.onload = function() {
+  loadData();
+  // Set current year in year filter
+  const currentYear = new Date().getFullYear();
+  const yearSelect = document.getElementById('filterYear');
+  // Add recent years
+  for (let i = currentYear + 1; i >= currentYear - 5; i--) {
+    const option = document.createElement('option');
+    option.value = i;
+    option.textContent = i;
+    yearSelect.appendChild(option);
+  }
+};
 
 function loadData() {
   document.getElementById('loading').style.display = 'block';
@@ -658,8 +820,13 @@ function loadData() {
         const jsonText = text.substring(jsonStart, jsonEnd);
         const data = JSON.parse(jsonText);
         allData = data.data || [];
-        renderTable(allData);
-        updateStats(allData);
+        filteredData = [...allData];
+        
+        // Populate student filter dropdown
+        populateStudentFilter();
+        
+        renderTable(filteredData);
+        updateStats(filteredData);
       } else {
         throw new Error('No valid JSON found in response');
       }
@@ -677,6 +844,126 @@ function loadData() {
     });
 }
 
+function populateStudentFilter() {
+  const studentSelect = document.getElementById('filterStudent');
+  const students = [...new Set(allData.map(item => item.student))].sort();
+  
+  // Clear existing options except first
+  while (studentSelect.options.length > 1) {
+    studentSelect.remove(1);
+  }
+  
+  // Add student options
+  students.forEach(student => {
+    const option = document.createElement('option');
+    option.value = student;
+    option.textContent = student;
+    studentSelect.appendChild(option);
+  });
+}
+
+function toggleFilters() {
+  const filtersGrid = document.getElementById('filtersGrid');
+  const filterActions = document.getElementById('filterActions');
+  const filterToggle = document.getElementById('filterToggle');
+  
+  if (filtersGrid.style.display === 'none') {
+    filtersGrid.style.display = 'grid';
+    filterActions.style.display = 'flex';
+    filterToggle.textContent = '▲';
+  } else {
+    filtersGrid.style.display = 'none';
+    filterActions.style.display = 'none';
+    filterToggle.textContent = '▼';
+  }
+}
+
+function applyFilters() {
+  // Get filter values
+  currentFilters.student = document.getElementById('filterStudent').value;
+  currentFilters.term = document.getElementById('filterTerm').value;
+  currentFilters.year = document.getElementById('filterYear').value;
+  currentFilters.flagged = document.getElementById('filterFlagged').value;
+  currentFilters.search = document.getElementById('searchInput').value.toLowerCase().trim();
+  
+  // Apply filters
+  filteredData = allData.filter(item => {
+    // Student filter
+    if (currentFilters.student && item.student !== currentFilters.student) {
+      return false;
+    }
+    
+    // Term filter
+    if (currentFilters.term && item.term !== currentFilters.term) {
+      return false;
+    }
+    
+    // Year filter
+    if (currentFilters.year && item.year != currentFilters.year) {
+      return false;
+    }
+    
+    // Flagged filter
+    const isFlagged = item.flagged === true || item.flagged === 'true';
+    if (currentFilters.flagged === 'flagged' && !isFlagged) {
+      return false;
+    }
+    if (currentFilters.flagged === 'not-flagged' && isFlagged) {
+      return false;
+    }
+    
+    // Search filter
+    if (currentFilters.search) {
+      const searchMatch = 
+        item.student.toLowerCase().includes(currentFilters.search) ||
+        item.term.toLowerCase().includes(currentFilters.search) ||
+        (item.notes && item.notes.toLowerCase().includes(currentFilters.search)) ||
+        item.year.toString().includes(currentFilters.search);
+      
+      if (!searchMatch) {
+        return false;
+      }
+    }
+    
+    return true;
+  });
+  
+  renderTable(filteredData);
+  updateStats(filteredData);
+  
+  // Update search input to match filter state
+  document.getElementById('searchInput').value = currentFilters.search;
+}
+
+function clearFilters() {
+  // Reset filter inputs
+  document.getElementById('filterStudent').value = '';
+  document.getElementById('filterTerm').value = '';
+  document.getElementById('filterYear').value = '';
+  document.getElementById('filterFlagged').value = '';
+  document.getElementById('searchInput').value = '';
+  
+  // Reset filter state
+  currentFilters = {
+    student: '',
+    term: '',
+    year: '',
+    flagged: '',
+    search: ''
+  };
+  
+  // Show all data
+  filteredData = [...allData];
+  renderTable(filteredData);
+  updateStats(filteredData);
+}
+
+function filterTable() {
+  // Update search filter and apply all filters
+  currentFilters.search = document.getElementById('searchInput').value.toLowerCase().trim();
+  applyFilters();
+}
+
 function renderTable(data) {
   const tbody = document.getElementById('tableBody');
   tbody.innerHTML = "";
@@ -686,9 +973,9 @@ function renderTable(data) {
       <tr>
         <td colspan="13" style="text-align:center; padding: 30px;">
           <div class="empty-state">
-            <h3>No Records</h3>
-            <p>Add your first expense record</p>
-            <a href="index.html" class="btn btn-add" style="padding: 6px 10px; font-size: 0.8rem;">+ Add Record</a>
+            <h3>No Records Found</h3>
+            <p>Try adjusting your filters or search</p>
+            <button class="btn btn-add" onclick="clearFilters()" style="padding: 6px 10px; font-size: 0.8rem;">Clear Filters</button>
           </div>
         </td>
       </tr>`; 
@@ -891,29 +1178,12 @@ function toggleFlag(id, currentStatus) {
     });
 }
 
-function filterTable() {
-  const q = document.getElementById("searchInput").value.toLowerCase().trim();
-  if (!q) {
-    renderTable(allData);
-    return;
-  }
-  
-  const filteredData = allData.filter(i => 
-    i.student.toLowerCase().includes(q) || 
-    i.term.toLowerCase().includes(q) || 
-    (i.notes && i.notes.toLowerCase().includes(q)) ||
-    i.year.toString().includes(q)
-  );
-  
-  renderTable(filteredData);
-}
-
 function exportData() {
   const filterTerm = document.getElementById('exportSelect').value;
-  let dataToExport = allData;
+  let dataToExport = filteredData; // Use filtered data for export
   
   if (filterTerm !== 'all') {
-    dataToExport = allData.filter(i => i.term === filterTerm);
+    dataToExport = dataToExport.filter(i => i.term === filterTerm);
   }
 
   if (dataToExport.length === 0) {
@@ -946,14 +1216,14 @@ function exportData() {
   const encodedUri = encodeURI(csvContent);
   const link = document.createElement("a");
   link.setAttribute("href", encodedUri);
-  link.setAttribute("download", `expenses_${filterTerm}.csv`);
+  link.setAttribute("download", `expenses_${filterTerm}_filtered.csv`);
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
 }
 
 function openModal(id) {
-  const r = allData.find(x => x.id == id);
+  const r = filteredData.find(x => x.id == id);
   if(!r) {
     console.error('Record not found with id:', id);
     return;
