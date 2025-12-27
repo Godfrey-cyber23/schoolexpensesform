@@ -636,7 +636,7 @@
     </div>
   </div>
 
-  <script>
+ <script>
 const API = "https://script.google.com/macros/s/AKfycbzEEeuwtZm-qGOmKLza3IfdVieYurAH14xgp3Q0lUPwUpvyz2rIHUlkC48sCc2FUK9i/exec";
 let allData = [];
 
@@ -704,13 +704,12 @@ function renderTable(data) {
     const flagClass = isFlagged ? 'flagged-true' : 'flagged-false';
     const flagIcon = isFlagged ? '★' : '☆';
 
-    // Create row with event listeners instead of inline onclick
     const row = document.createElement('tr');
     row.dataset.id = r.id;
     
     row.innerHTML = `
       <td>
-        <button class="flag-btn ${flagClass}" data-id="${r.id}" data-flagged="${isFlagged}" 
+        <button class="flag-btn ${flagClass}" 
                 title="${isFlagged ? 'Unflag' : 'Flag'}">
           ${flagIcon}
         </button>
@@ -728,12 +727,15 @@ function renderTable(data) {
       <td class="total-col">${formatNum(total)}</td>
       <td>
         <div class="action-buttons">
-          <button class="action-btn btn-view" data-id="${r.id}" title="View">View</button>
+          <button class="action-btn btn-view" title="View">View</button>
           <a href="index.html?id=${encodeURIComponent(r.id)}" class="action-btn btn-edit" title="Edit">Edit</a>
-          <button class="action-btn btn-del" data-id="${r.id}" title="Delete">Del</button>
+          <button class="action-btn btn-del" title="Delete">Del</button>
         </div>
       </td>
     `;
+    
+    // Store data on the row for event handlers
+    row.dataset.record = JSON.stringify(r);
     
     // Add click event for the whole row
     row.addEventListener('click', (e) => {
@@ -754,9 +756,10 @@ function attachTableEventListeners() {
   document.querySelectorAll('.flag-btn').forEach(btn => {
     btn.addEventListener('click', function(e) {
       e.stopPropagation();
-      const id = this.dataset.id;
-      const currentFlagged = this.dataset.flagged === 'true';
-      toggleFlag(id, currentFlagged);
+      const row = this.closest('tr');
+      const record = JSON.parse(row.dataset.record);
+      const currentFlagged = record.flagged === true || record.flagged === 'true';
+      toggleFlag(record.id, currentFlagged);
     });
   });
   
@@ -764,8 +767,9 @@ function attachTableEventListeners() {
   document.querySelectorAll('.btn-view').forEach(btn => {
     btn.addEventListener('click', function(e) {
       e.stopPropagation();
-      const id = this.dataset.id;
-      openModal(id);
+      const row = this.closest('tr');
+      const record = JSON.parse(row.dataset.record);
+      openModal(record.id);
     });
   });
   
@@ -773,8 +777,9 @@ function attachTableEventListeners() {
   document.querySelectorAll('.btn-del').forEach(btn => {
     btn.addEventListener('click', function(e) {
       e.stopPropagation();
-      const id = this.dataset.id;
-      del(id);
+      const row = this.closest('tr');
+      const record = JSON.parse(row.dataset.record);
+      del(record.id);
     });
   });
 }
@@ -837,6 +842,10 @@ function del(id) {
 }
 
 function toggleFlag(id, currentStatus) {
+  console.log('Toggling flag for id:', id, 'currentStatus:', currentStatus);
+  
+  document.getElementById('loading').style.display = 'block';
+  
   // Use POST request for update
   const formData = new FormData();
   formData.append('action', 'update');
@@ -851,26 +860,40 @@ function toggleFlag(id, currentStatus) {
   })
   .then(response => response.text())
   .then(text => {
+    console.log('Response text:', text);
+    
     const jsonStart = text.indexOf('{');
     const jsonEnd = text.lastIndexOf('}') + 1;
     
     if (jsonStart !== -1 && jsonEnd > jsonStart) {
       const jsonText = text.substring(jsonStart, jsonEnd);
-      const result = JSON.parse(jsonText);
+      console.log('JSON text to parse:', jsonText);
       
-      if (result.success) {
-        // Reload data to show updated flag
-        loadData();
-      } else {
-        alert("Failed to update flag: " + (result.message || 'Unknown error'));
+      try {
+        const result = JSON.parse(jsonText);
+        console.log('Parsed result:', result);
+        
+        if (result.success) {
+          // Reload data to show updated flag
+          loadData();
+        } else {
+          alert("Failed to update flag: " + (result.message || 'Unknown error'));
+          document.getElementById('loading').style.display = 'none';
+        }
+      } catch (parseError) {
+        console.error('Parse error:', parseError);
+        alert("Failed to parse server response");
+        document.getElementById('loading').style.display = 'none';
       }
     } else {
+      console.error('No JSON found in response');
       throw new Error('Invalid response from server');
     }
   })
   .catch(err => {
-    console.error(err);
-    alert("Failed to update flag.");
+    console.error('Fetch error:', err);
+    alert("Failed to update flag. Check console for details.");
+    document.getElementById('loading').style.display = 'none';
   });
 }
 
