@@ -846,65 +846,49 @@ function toggleFlag(id, currentStatus) {
   
   document.getElementById('loading').style.display = 'block';
   
-  // Create the payload
-  const payload = {
-    action: 'update',
-    data: {
-      id: id,
-      flagged: !currentStatus
-    }
-  };
+  // Try using GET request first (simpler for debugging)
+  const url = `${API}?action=update&id=${encodeURIComponent(id)}&flagged=${!currentStatus}&t=${new Date().getTime()}`;
   
-  console.log('Sending payload:', payload);
+  console.log('GET URL:', url);
   
-  // Send as JSON instead of FormData
-  fetch(API, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(payload)
-  })
-  .then(response => {
-    console.log('Response status:', response.status);
-    return response.text();
-  })
-  .then(text => {
-    console.log('Response text:', text);
-    
-    const jsonStart = text.indexOf('{');
-    const jsonEnd = text.lastIndexOf('}') + 1;
-    
-    if (jsonStart !== -1 && jsonEnd > jsonStart) {
-      const jsonText = text.substring(jsonStart, jsonEnd);
-      console.log('JSON text to parse:', jsonText);
+  fetch(url)
+    .then(response => response.text())
+    .then(text => {
+      console.log('Response text:', text);
       
-      try {
-        const result = JSON.parse(jsonText);
-        console.log('Parsed result:', result);
+      const jsonStart = text.indexOf('{');
+      const jsonEnd = text.lastIndexOf('}') + 1;
+      
+      if (jsonStart !== -1 && jsonEnd > jsonStart) {
+        const jsonText = text.substring(jsonStart, jsonEnd);
+        console.log('JSON text to parse:', jsonText);
         
-        if (result.success) {
-          // Reload data to show updated flag
-          loadData();
-        } else {
-          alert("Failed to update flag: " + (result.message || 'Unknown error'));
+        try {
+          const result = JSON.parse(jsonText);
+          console.log('Parsed result:', result);
+          
+          if (result.success) {
+            // Reload data to show updated flag
+            loadData();
+          } else {
+            alert("Failed to update flag: " + (result.message || 'Unknown error'));
+            document.getElementById('loading').style.display = 'none';
+          }
+        } catch (parseError) {
+          console.error('Parse error:', parseError);
+          alert("Failed to parse server response");
           document.getElementById('loading').style.display = 'none';
         }
-      } catch (parseError) {
-        console.error('Parse error:', parseError);
-        alert("Failed to parse server response");
-        document.getElementById('loading').style.display = 'none';
+      } else {
+        console.error('No JSON found in response');
+        throw new Error('Invalid response from server');
       }
-    } else {
-      console.error('No JSON found in response');
-      throw new Error('Invalid response from server');
-    }
-  })
-  .catch(err => {
-    console.error('Fetch error:', err);
-    alert("Failed to update flag. Check console for details.");
-    document.getElementById('loading').style.display = 'none';
-  });
+    })
+    .catch(err => {
+      console.error('Fetch error:', err);
+      alert("Failed to update flag. Check console for details.");
+      document.getElementById('loading').style.display = 'none';
+    });
 }
 
 function filterTable() {
