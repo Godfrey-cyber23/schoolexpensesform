@@ -569,41 +569,103 @@ window.onload = loadData;
 
 function loadData() {
   document.getElementById('loading').style.display = 'block';
+  document.getElementById('loading').innerText = 'Loading data...';
   
-  // Add cache-busting parameter to prevent caching
+  // Add cache-busting parameter
   const timestamp = new Date().getTime();
-  const url = `${API}?t=${timestamp}`;
+  const url = `${API}?action=read&t=${timestamp}`;
+  
+  console.log('Fetching from:', url);
   
   fetch(url)
     .then(res => {
+      console.log('Response status:', res.status);
       if (!res.ok) {
         throw new Error(`HTTP error! status: ${res.status}`);
       }
-      return res.json();
+      return res.text(); // Get raw text first
     })
-    .then(data => {
-      allData = data.data || [];
-      renderTable(allData);
-      updateStats(allData);
-      document.getElementById('loading').style.display = 'none';
+    .then(text => {
+      console.log('Raw response length:', text.length);
+      console.log('Raw response (first 500 chars):', text.substring(0, 500));
+      
+      try {
+        const data = JSON.parse(text);
+        console.log('Parsed successfully');
+        
+        if (data.warning) {
+          console.warn('API Warning:', data.warning);
+          // Show warning to user
+          alert(`Note: ${data.warning}. Total records in sheet: ${data.totalRecords || 'unknown'}`);
+        }
+        
+        allData = data.data || [];
+        console.log('Data loaded:', allData.length, 'records');
+        renderTable(allData);
+        updateStats(allData);
+        document.getElementById('loading').style.display = 'none';
+      } catch (parseError) {
+        console.error('JSON Parse Error:', parseError);
+        console.error('Problematic text:', text.substring(520, 540)); // Show around the error position
+        
+        // Try to fix common JSON issues
+        const fixedText = fixJsonText(text);
+        try {
+          const data = JSON.parse(fixedText);
+          allData = data.data || [];
+          renderTable(allData);
+          updateStats(allData);
+          document.getElementById('loading').style.display = 'none';
+        } catch (secondError) {
+          throw new Error(`JSON parse failed: ${parseError.message}. Response may be too large or malformed.`);
+        }
+      }
     })
     .catch(err => {
       console.error('Error loading data:', err);
       document.getElementById('loading').innerHTML = `
         <div class="empty-state">
-          <h3>Connection Error</h3>
-          <p>Unable to connect to Google Sheets. Please check:</p>
+          <h3>Error Loading Data</h3>
+          <p>${err.message}</p>
+          <p>Possible causes:</p>
           <ol style="text-align: left; display: inline-block; margin: 10px auto;">
-            <li>Is the Apps Script deployed as a Web App?</li>
-            <li>Is "Who has access" set to "Anyone"?</li>
-            <li>Did you replace the API URL above?</li>
+            <li>Response too large from Google Sheets</li>
+            <li>Malformed data in spreadsheet</li>
+            <li>Network connectivity issue</li>
           </ol>
           <button class="btn btn-add" onclick="loadData()" style="margin-top: 15px;">Retry</button>
+          <button class="btn" onclick="testAPI()" style="margin-top: 10px; background-color: #eee;">Test API</button>
         </div>
       `;
     });
 }
 
+// Helper function to fix common JSON issues
+function fixJsonText(text) {
+  // Remove any null characters
+  text = text.replace(/\0/g, '');
+  
+  // Remove control characters except newlines and tabs
+  text = text.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '');
+  
+  // Fix common JSON issues
+  text = text.trim();
+  
+  // Ensure it starts and ends with braces
+  if (!text.startsWith('{')) text = '{' + text;
+  if (!text.endsWith('}')) text = text + '}';
+  
+  // Fix unescaped quotes inside strings (basic fix)
+  text = text.replace(/([{,]\s*"[^"]*)"([^"]*"[},])/g, '$1\\"$2');
+  
+  return text;
+}
+
+// Test the API directly
+function testAPI() {
+  const testUrl = `${API}?action=read&t=${new Date().getTime()}`;
+  window.open(testUrl, '_blank');
+}
 
 function renderTable(data) {
   const tbody = document.getElementById('tableBody');
