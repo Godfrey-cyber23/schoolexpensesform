@@ -846,19 +846,29 @@ function toggleFlag(id, currentStatus) {
   
   document.getElementById('loading').style.display = 'block';
   
-  // Use POST request for update
-  const formData = new FormData();
-  formData.append('action', 'update');
-  formData.append('data', JSON.stringify({ 
-    id: id, 
-    flagged: !currentStatus 
-  }));
+  // Create the payload
+  const payload = {
+    action: 'update',
+    data: {
+      id: id,
+      flagged: !currentStatus
+    }
+  };
   
+  console.log('Sending payload:', payload);
+  
+  // Send as JSON instead of FormData
   fetch(API, {
     method: 'POST',
-    body: formData
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload)
   })
-  .then(response => response.text())
+  .then(response => {
+    console.log('Response status:', response.status);
+    return response.text();
+  })
   .then(text => {
     console.log('Response text:', text);
     
