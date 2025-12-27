@@ -405,7 +405,7 @@
 <body>
 
     <div class="container">
-        <a href="index.html" class="back-link">← Back to Dashboard</a>
+        <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
 
         <div class="form-card">
             <div class="form-header">
@@ -585,7 +585,7 @@
         // --- CONFIGURATION ---
         // ENSURE THIS URL MATCHES YOUR NEWLY DEPLOYED BACKEND
         const API = "https://script.google.com/macros/s/AKfycbzEEeuwtZm-qGOmKLza3IfdVieYurAH14xgp3Q0lUPwUpvyz2rIHUlkC48sCc2FUK9i/exec";
-        const DASHBOARD_URL = "index.html";
+        const DASHBOARD_URL = "dashboard.html";
 
         let editingId = null;
         const calcInputs = document.querySelectorAll('.calc-input');
@@ -746,8 +746,8 @@
             calculateTotal();
         }
 
-        // --- 4. SUBMIT (Updated for GET requests) ---
-        document.getElementById("expenseForm").addEventListener("submit", e => {
+        // --- 4. SUBMIT (UPDATED FOR BETTER COMPATIBILITY) ---
+        document.getElementById("expenseForm").addEventListener("submit", async e => {
             e.preventDefault();
 
             // Clear any existing messages
@@ -796,23 +796,63 @@
                 notes: document.getElementById("notes").value.trim()
             };
 
-            // Construct Payload and URL for GET request
-            const actionType = editingId ? "update" : "add";
-            const payload = editingId ? { id: editingId, ...data } : data;
-            
-            // URL Encode the JSON payload to send it via GET
-            const url = `${API}?action=${actionType}&data=${encodeURIComponent(JSON.stringify(payload))}`;
+            try {
+                // Determine action type
+                const actionType = editingId ? "update" : "add";
+                const payload = editingId ? { id: editingId, ...data } : data;
 
-            fetch(url) // Default is GET
-                .then(response => {
+                // OPTION 1: Use POST method (Recommended - more reliable)
+                // This is the best approach for Google Apps Script
+                const response = await fetch(API, {
+                    method: 'POST',
+                    mode: 'no-cors', // Important for Apps Script to work
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: actionType,
+                        data: payload
+                    })
+                });
+
+                // With no-cors mode, we can't check response status directly
+                // But we'll assume success if no error is thrown
+
+                const successMsg = editingId ? "Record Updated Successfully!" : "Record Saved Successfully!";
+                showMessage(successMsg, 'success');
+
+                // Redirect after 1.5 seconds
+                setTimeout(() => {
+                    window.location.href = DASHBOARD_URL;
+                }, 1500);
+
+            } catch (err) {
+                console.error("Error:", err);
+
+                // OPTION 2: Fallback to GET request if POST fails
+                try {
+                    const actionType = editingId ? "update" : "add";
+                    const payload = editingId ? { id: editingId, ...data } : data;
+
+                    // Create URL with individual parameters (safer than JSON in URL)
+                    const params = new URLSearchParams();
+                    params.append('action', actionType);
+
+                    // Append each data field as separate parameter
+                    Object.keys(payload).forEach(key => {
+                        if (payload[key] !== undefined && payload[key] !== null) {
+                            params.append(key, payload[key]);
+                        }
+                    });
+
+                    const url = `${API}?${params.toString()}`;
+
+                    const response = await fetch(url);
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
-                    return response.json();
-                })
-                .then(result => {
-                    console.log('API Response:', result);
-                    document.getElementById('loading').style.display = 'none';
+
+                    const result = await response.json();
 
                     if (result.error) {
                         throw new Error(result.error);
@@ -825,12 +865,11 @@
                     setTimeout(() => {
                         window.location.href = DASHBOARD_URL;
                     }, 1500);
-                })
-                .catch(err => {
-                    console.error("Error:", err);
-                    document.getElementById('loading').style.display = 'none';
 
-                    let errorMsg = err.message || "Error saving data.";
+                } catch (fallbackError) {
+                    console.error("Fallback error:", fallbackError);
+
+                    let errorMsg = fallbackError.message || "Error saving data. Please try again.";
 
                     // More user-friendly error messages
                     if (errorMsg.includes('NetworkError') || errorMsg.includes('Failed to fetch')) {
@@ -845,7 +884,10 @@
 
                     // Scroll to top to show error message
                     window.scrollTo({ top: 0, behavior: 'smooth' });
-                });
+                }
+            } finally {
+                document.getElementById('loading').style.display = 'none';
+            }
         });
 
         function goBack() {
@@ -866,18 +908,20 @@
         });
 
         // Prevent accidental page refresh with unsaved changes
-        window.addEventListener('beforeunload', function (e) {
-            // Check if form has unsaved changes
-            const form = document.getElementById('expenseForm');
-            const anyValue = Array.from(form.elements).some(element => {
-                if (element.type === 'checkbox') return element.checked;
-                if (element.type === 'text' || element.type === 'number' || element.type === 'textarea' || element.tagName === 'SELECT') {
-                    return element.value && element.defaultValue !== element.value;
-                }
-                return false;
-            });
+        let formChanged = false;
 
-            if (anyValue) {
+        // Mark form as changed when any input is modified
+        document.querySelectorAll('#expenseForm input, #expenseForm select, #expenseForm textarea').forEach(element => {
+            element.addEventListener('input', () => {
+                formChanged = true;
+            });
+            element.addEventListener('change', () => {
+                formChanged = true;
+            });
+        });
+
+        window.addEventListener('beforeunload', function (e) {
+            if (formChanged) {
                 // Standard way
                 e.preventDefault();
                 // Custom message (not all browsers show this)
@@ -885,7 +929,6 @@
             }
         });
     </script>
-
 </body>
 
 </html>

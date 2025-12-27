@@ -462,7 +462,7 @@
         <span class="btn-text">Download</span>
         <span class="btn-icon">📥</span>
       </button>
-      <a href="form.html" class="btn btn-add" title="Add New Record">
+      <a href="index.html" class="btn btn-add" title="Add New Record">
         <span class="btn-text">Add Record</span>
         <span class="btn-icon">+</span>
       </a>
@@ -617,7 +617,7 @@ function renderTable(data) {
           <div class="empty-state">
             <h3>No Records</h3>
             <p>Add your first expense record</p>
-            <a href="form.html" class="btn btn-add" style="padding: 6px 10px; font-size: 0.8rem;">+ Add Record</a>
+            <a href="index.html" class="btn btn-add" style="padding: 6px 10px; font-size: 0.8rem;">+ Add Record</a>
           </div>
         </td>
       </tr>`; 
@@ -652,7 +652,7 @@ function renderTable(data) {
         <td>
           <div class="action-buttons">
             <button class="action-btn btn-view" onclick="openModal(${r.id}); event.stopPropagation();" title="View">View</button>
-            <a href="form.html?id=${r.id}" class="action-btn btn-edit" onclick="event.stopPropagation();" title="Edit">Edit</a>
+            <a href="index.html?id=${r.id}" class="action-btn btn-edit" onclick="event.stopPropagation();" title="Edit">Edit</a>
             <button class="action-btn btn-del" onclick="del(${r.id}); event.stopPropagation();" title="Delete">Del</button>
           </div>
         </td>
