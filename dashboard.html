@@ -637,186 +637,52 @@
   </div>
 
   <script>
-    const API = "https://script.google.com/macros/s/AKfycbzEEeuwtZm-qGOmKLza3IfdVieYurAH14xgp3Q0lUPwUpvyz2rIHUlkC48sCc2FUK9i/exec";
-    let allData = [];
+const API = "https://script.google.com/macros/s/AKfycbzEEeuwtZm-qGOmKLza3IfdVieYurAH14xgp3Q0lUPwUpvyz2rIHUlkC48sCc2FUK9i/exec";
+let allData = [];
 
-    window.onload = loadData;
+window.onload = loadData;
 
-    function loadData() {
-      document.getElementById('loading').style.display = 'block';
-      document.getElementById('loading').innerText = 'Loading data...';
-
-      // Add cache-busting parameter
-      const timestamp = new Date().getTime();
-      const url = `${API}?action=read&t=${timestamp}`;
-
-      console.log('Fetching from:', url);
-
-      fetch(url)
-        .then(res => {
-          console.log('Response status:', res.status);
-          if (!res.ok) {
-            throw new Error(`HTTP error! status: ${res.status}`);
-          }
-          return res.text(); // Get raw text first
-        })
-        .then(text => {
-          console.log('Raw response length:', text.length);
-          console.log('Raw response (first 200 chars):', text.substring(0, 200));
-
-          // Clean the response - remove any headers appended after JSON
-          const cleanedText = cleanApiResponse(text);
-          console.log('Cleaned text:', cleanedText);
-
-          try {
-            const data = JSON.parse(cleanedText);
-            console.log('Parsed successfully:', data);
-
-            if (data.warning) {
-              console.warn('API Warning:', data.warning);
-            }
-
-            allData = data.data || [];
-            console.log('Data loaded:', allData.length, 'records');
-            renderTable(allData);
-            updateStats(allData);
-            document.getElementById('loading').style.display = 'none';
-          } catch (parseError) {
-            console.error('JSON Parse Error:', parseError);
-            console.error('Problematic text near error:', text.substring(490, 510));
-            throw new Error(`JSON parse failed: ${parseError.message}`);
-          }
-        })
-        .catch(err => {
-          console.error('Error loading data:', err);
-          document.getElementById('loading').innerHTML = `
+function loadData() {
+  document.getElementById('loading').style.display = 'block';
+  
+  const url = `${API}?action=read&t=${new Date().getTime()}`;
+  
+  fetch(url)
+    .then(res => res.text())
+    .then(text => {
+      // Extract JSON from response (remove any appended headers)
+      const jsonStart = text.indexOf('{');
+      const jsonEnd = text.lastIndexOf('}') + 1;
+      
+      if (jsonStart !== -1 && jsonEnd > jsonStart) {
+        const jsonText = text.substring(jsonStart, jsonEnd);
+        const data = JSON.parse(jsonText);
+        allData = data.data || [];
+        renderTable(allData);
+        updateStats(allData);
+      } else {
+        throw new Error('No valid JSON found in response');
+      }
+      document.getElementById('loading').style.display = 'none';
+    })
+    .catch(err => {
+      console.error('Error:', err);
+      document.getElementById('loading').innerHTML = `
         <div class="empty-state">
           <h3>Error Loading Data</h3>
           <p>${err.message}</p>
-          <p>Possible causes:</p>
-          <ol style="text-align: left; display: inline-block; margin: 10px auto;">
-            <li>Backend API returning invalid JSON</li>
-            <li>Check Apps Script deployment settings</li>
-            <li>Try refreshing the page</li>
-          </ol>
-          <button class="btn btn-add" onclick="loadData()" style="margin-top: 15px;">Retry</button>
-          <button class="btn" onclick="testDirectAPI()" style="margin-top: 10px; background-color: #eee;">Test API Directly</button>
+          <button class="btn btn-add" onclick="loadData()">Retry</button>
         </div>
       `;
-        });
-    }
+    });
+}
 
-    // Function to clean API response - removes headers appended after JSON
-    function cleanApiResponse(text) {
-      // Trim whitespace
-      text = text.trim();
-
-      // Find the end of JSON (last '}' followed by whitespace)
-      const jsonEnd = text.lastIndexOf('}');
-      if (jsonEnd !== -1) {
-        // Extract only the JSON part (up to and including the last '}')
-        const cleaned = text.substring(0, jsonEnd + 1).trim();
-
-        // Validate it starts with '{'
-        if (cleaned.startsWith('{')) {
-          return cleaned;
-        }
-      }
-
-      // If we can't find valid JSON, try to extract JSON-like content
-      const jsonMatch = text.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        return jsonMatch[0];
-      }
-
-      // If all else fails, return original text
-      return text;
-    }
-
-    // Test API directly in browser
-    function testDirectAPI() {
-      const testUrl = `${API}?action=read&t=${new Date().getTime()}`;
-      console.log('Testing API directly:', testUrl);
-
-      // Open in new tab
-      window.open(testUrl, '_blank');
-
-      // Also try to fetch with better error handling
-      fetch(testUrl)
-        .then(res => res.text())
-        .then(text => {
-          console.log('Direct fetch response:', text);
-          console.log('Response length:', text.length);
-          console.log('First 500 chars:', text.substring(0, 500));
-
-          // Try to parse
-          try {
-            const data = JSON.parse(text);
-            console.log('Direct parse successful:', data);
-            alert('Direct API test successful! Found ' + (data.data ? data.data.length : 0) + ' records.');
-          } catch (err) {
-            console.error('Direct parse failed:', err);
-            console.log('Trying to clean and parse...');
-
-            const cleaned = cleanApiResponse(text);
-            console.log('Cleaned:', cleaned);
-
-            try {
-              const data = JSON.parse(cleaned);
-              console.log('Cleaned parse successful:', data);
-              alert('API works after cleaning! Found ' + (data.data ? data.data.length : 0) + ' records.');
-            } catch (cleanErr) {
-              alert('API returns invalid JSON. Check Apps Script deployment.');
-            }
-          }
-        })
-        .catch(err => {
-          console.error('Direct fetch failed:', err);
-          alert('Failed to fetch from API: ' + err.message);
-        });
-    }
-
-    // Helper function to fix common JSON issues
-    function fixJsonText(text) {
-      // Remove any null characters
-      text = text.replace(/\0/g, '');
-
-      // Remove control characters except newlines and tabs
-      text = text.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '');
-
-      // Fix common JSON issues
-      text = text.trim();
-
-      // Ensure it starts and ends with braces
-      if (!text.startsWith('{')) text = '{' + text;
-      if (!text.endsWith('}')) text = text + '}';
-
-      // Fix unescaped quotes inside strings (basic fix)
-      text = text.replace(/([{,]\s*"[^"]*)"([^"]*"[},])/g, '$1\\"$2');
-
-      return text;
-    }
-
-    // Helper function to escape HTML special characters
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    }
-
-    // Test the API directly
-    function testAPI() {
-      const testUrl = `${API}?action=read&t=${new Date().getTime()}`;
-      window.open(testUrl, '_blank');
-    }
-
-    function renderTable(data) {
-      const tbody = document.getElementById('tableBody');
-      tbody.innerHTML = "";
-      data.sort((a, b) => new Date(b.expense_date) - new Date(a.expense_date));
-
-      if (!data.length) {
-        tbody.innerHTML = `
+function renderTable(data) {
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = "";
+  
+  if (!data.length) { 
+    tbody.innerHTML = `
       <tr>
         <td colspan="13" style="text-align:center; padding: 30px;">
           <div class="empty-state">
@@ -825,218 +691,307 @@
             <a href="index.html" class="btn btn-add" style="padding: 6px 10px; font-size: 0.8rem;">+ Add Record</a>
           </div>
         </td>
-      </tr>`;
-        return;
+      </tr>`; 
+    return; 
+  }
+
+  // Sort by date (newest first)
+  data.sort((a, b) => new Date(b.expense_date) - new Date(a.expense_date));
+
+  data.forEach(r => {
+    const total = (Number(r.tuition)||0)+(Number(r.food)||0)+(Number(r.transport)||0)+(Number(r.materials)||0)+(Number(r.hygiene)||0)+(Number(r.other)||0);
+    const isFlagged = r.flagged === true || r.flagged === 'true';
+    const flagClass = isFlagged ? 'flagged-true' : 'flagged-false';
+    const flagIcon = isFlagged ? '★' : '☆';
+
+    // Create row with event listeners instead of inline onclick
+    const row = document.createElement('tr');
+    row.dataset.id = r.id;
+    
+    row.innerHTML = `
+      <td>
+        <button class="flag-btn ${flagClass}" data-id="${r.id}" data-flagged="${isFlagged}" 
+                title="${isFlagged ? 'Unflag' : 'Flag'}">
+          ${flagIcon}
+        </button>
+      </td>
+      <td style="font-weight:600;">${escapeHtml(r.student)}</td>
+      <td>${new Date(r.expense_date).toLocaleDateString(undefined, {month:'short', day:'numeric'})}</td>
+      <td>${escapeHtml(r.term)}</td>
+      <td>${r.year}</td>
+      <td class="number-col">${formatNum(r.tuition)}</td>
+      <td class="number-col">${formatNum(r.food)}</td>
+      <td class="number-col">${formatNum(r.transport)}</td>
+      <td class="number-col">${formatNum(r.materials)}</td>
+      <td class="number-col">${formatNum(r.hygiene)}</td>
+      <td class="number-col">${formatNum(r.other)}</td>
+      <td class="total-col">${formatNum(total)}</td>
+      <td>
+        <div class="action-buttons">
+          <button class="action-btn btn-view" data-id="${r.id}" title="View">View</button>
+          <a href="index.html?id=${encodeURIComponent(r.id)}" class="action-btn btn-edit" title="Edit">Edit</a>
+          <button class="action-btn btn-del" data-id="${r.id}" title="Delete">Del</button>
+        </div>
+      </td>
+    `;
+    
+    // Add click event for the whole row
+    row.addEventListener('click', (e) => {
+      if (!e.target.closest('button') && !e.target.closest('a')) {
+        openModal(r.id);
       }
+    });
+    
+    tbody.appendChild(row);
+  });
+  
+  // Add event listeners after table is rendered
+  attachTableEventListeners();
+}
 
-      data.forEach(r => {
-        const total = (Number(r.tuition) || 0) + (Number(r.food) || 0) + (Number(r.transport) || 0) + (Number(r.materials) || 0) + (Number(r.hygiene) || 0) + (Number(r.other) || 0);
-        const isFlagged = r.flagged === true || r.flagged === 'true';
-        const flagClass = isFlagged ? 'flagged-true' : 'flagged-false';
-        const flagIcon = isFlagged ? '★' : '☆';
+function attachTableEventListeners() {
+  // Flag buttons
+  document.querySelectorAll('.flag-btn').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const id = this.dataset.id;
+      const currentFlagged = this.dataset.flagged === 'true';
+      toggleFlag(id, currentFlagged);
+    });
+  });
+  
+  // View buttons
+  document.querySelectorAll('.btn-view').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const id = this.dataset.id;
+      openModal(id);
+    });
+  });
+  
+  // Delete buttons
+  document.querySelectorAll('.btn-del').forEach(btn => {
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      const id = this.dataset.id;
+      del(id);
+    });
+  });
+}
 
-        // IMPORTANT: Quote the ID since it's a string that may contain underscores
-        const quotedId = JSON.stringify(r.id); // This will properly escape the string
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
 
-        tbody.innerHTML += `
-      <tr onclick="openModal(${quotedId})">
-        <td>
-          <button class="flag-btn ${flagClass}" onclick="toggleFlag(${quotedId}, ${isFlagged}); event.stopPropagation();" 
-                  title="${isFlagged ? 'Unflag' : 'Flag'}">
-            ${flagIcon}
-          </button>
-        </td>
-        <td style="font-weight:600;">${escapeHtml(r.student)}</td>
-        <td>${new Date(r.expense_date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</td>
-        <td>${escapeHtml(r.term)}</td>
-        <td>${r.year}</td>
-        <td class="number-col">${formatNum(r.tuition)}</td>
-        <td class="number-col">${formatNum(r.food)}</td>
-        <td class="number-col">${formatNum(r.transport)}</td>
-        <td class="number-col">${formatNum(r.materials)}</td>
-        <td class="number-col">${formatNum(r.hygiene)}</td>
-        <td class="number-col">${formatNum(r.other)}</td>
-        <td class="total-col">${formatNum(total)}</td>
-        <td>
-          <div class="action-buttons">
-            <button class="action-btn btn-view" onclick="openModal(${quotedId}); event.stopPropagation();" title="View">View</button>
-            <a href="index.html?id=${encodeURIComponent(r.id)}" class="action-btn btn-edit" onclick="event.stopPropagation();" title="Edit">Edit</a>
-            <button class="action-btn btn-del" onclick="del(${quotedId}); event.stopPropagation();" title="Delete">Del</button>
-          </div>
-        </td>
-      </tr>`;
-      });
-    }
+function updateStats(data) {
+  let grandTotal = 0, flaggedCount = 0;
+  data.forEach(r => {
+    grandTotal += (Number(r.tuition)||0)+(Number(r.food)||0)+(Number(r.transport)||0)+(Number(r.materials)||0)+(Number(r.hygiene)||0)+(Number(r.other)||0);
+    if(r.flagged === true || r.flagged === 'true') flaggedCount++;
+  });
+  document.getElementById('grandTotalDisplay').innerText = formatNum(grandTotal);
+  document.getElementById('recordCount').innerText = data.length;
+  document.getElementById('flaggedCount').innerText = flaggedCount;
+}
 
-    function updateStats(data) {
-      let grandTotal = 0, flaggedCount = 0;
-      data.forEach(r => {
-        grandTotal += (Number(r.tuition) || 0) + (Number(r.food) || 0) + (Number(r.transport) || 0) + (Number(r.materials) || 0) + (Number(r.hygiene) || 0) + (Number(r.other) || 0);
-        if (r.flagged === true || r.flagged === 'true') flaggedCount++;
-      });
-      document.getElementById('grandTotalDisplay').innerText = formatNum(grandTotal);
-      document.getElementById('recordCount').innerText = data.length;
-      document.getElementById('flaggedCount').innerText = flaggedCount;
-    }
+function formatNum(num) { 
+  const n = Number(num||0);
+  return n.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+}
 
-    function formatNum(num) {
-      const n = Number(num || 0);
-      if (n >= 1000) {
-        return n.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 });
-      }
-      return n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-    }
-
-    function del(id) {
-      if (confirm("Delete this record?")) {
-        document.getElementById('loading').style.display = 'block';
-        fetch(API + "?id=" + id, {
-          method: "DELETE",
-          headers: { 'Content-Type': 'application/json' }
-        })
-          .then(response => {
-            if (!response.ok) throw new Error('Delete failed');
+function del(id) {
+  if(confirm("Delete this record?")) {
+    document.getElementById('loading').style.display = 'block';
+    
+    // Use GET request with action=delete
+    const url = `${API}?action=delete&id=${encodeURIComponent(id)}&t=${new Date().getTime()}`;
+    
+    fetch(url)
+      .then(res => res.text())
+      .then(text => {
+        const jsonStart = text.indexOf('{');
+        const jsonEnd = text.lastIndexOf('}') + 1;
+        
+        if (jsonStart !== -1 && jsonEnd > jsonStart) {
+          const jsonText = text.substring(jsonStart, jsonEnd);
+          const result = JSON.parse(jsonText);
+          
+          if (result.success) {
             loadData();
-          })
-          .catch(err => {
-            console.error(err);
-            alert("Delete failed. Try again.");
+          } else {
+            alert("Delete failed: " + (result.message || 'Unknown error'));
             document.getElementById('loading').style.display = 'none';
-          });
-      }
-    }
-
-    function toggleFlag(id, currentStatus) {
-      fetch(API, {
-        method: "PUT",
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: id, flagged: !currentStatus })
+          }
+        } else {
+          throw new Error('Invalid response from server');
+        }
       })
-        .then(response => {
-          if (!response.ok) throw new Error('Update failed');
-          loadData();
-        })
-        .catch(err => {
-          console.error(err);
-          alert("Failed to update flag.");
-        });
-    }
-
-    function filterTable() {
-      const q = document.getElementById("searchInput").value.toLowerCase().trim();
-      if (!q) {
-        renderTable(allData);
-        return;
-      }
-
-      const filteredData = allData.filter(i =>
-        i.student.toLowerCase().includes(q) ||
-        i.term.toLowerCase().includes(q) ||
-        (i.notes && i.notes.toLowerCase().includes(q)) ||
-        i.year.toString().includes(q)
-      );
-
-      renderTable(filteredData);
-    }
-
-    function exportData() {
-      const filterTerm = document.getElementById('exportSelect').value;
-      let dataToExport = allData;
-
-      if (filterTerm !== 'all') {
-        dataToExport = allData.filter(i => i.term === filterTerm);
-      }
-
-      if (dataToExport.length === 0) {
-        alert("No data to export!");
-        return;
-      }
-
-      let csvContent = "data:text/csv;charset=utf-8,";
-      csvContent += "Student,Date,Term,Year,Tuition,Food,Transport,Materials,Hygiene,Other,Total,Notes\n";
-
-      dataToExport.forEach(r => {
-        const total = (Number(r.tuition) || 0) + (Number(r.food) || 0) + (Number(r.transport) || 0) + (Number(r.materials) || 0) + (Number(r.hygiene) || 0) + (Number(r.other) || 0);
-        const row = [
-          `"${r.student}"`,
-          r.expense_date,
-          r.term,
-          r.year,
-          r.tuition,
-          r.food,
-          r.transport,
-          r.materials,
-          r.hygiene,
-          r.other,
-          total,
-          `"${(r.notes || '').replace(/"/g, '""')}"`
-        ];
-        csvContent += row.join(",") + "\n";
+      .catch(err => {
+        console.error(err);
+        alert("Delete failed. Try again.");
+        document.getElementById('loading').style.display = 'none';
       });
+  }
+}
 
-      const encodedUri = encodeURI(csvContent);
-      const link = document.createElement("a");
-      link.setAttribute("href", encodedUri);
-      link.setAttribute("download", `expenses_${filterTerm}.csv`);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+function toggleFlag(id, currentStatus) {
+  // Use POST request for update
+  const formData = new FormData();
+  formData.append('action', 'update');
+  formData.append('data', JSON.stringify({ 
+    id: id, 
+    flagged: !currentStatus 
+  }));
+  
+  fetch(API, {
+    method: 'POST',
+    body: formData
+  })
+  .then(response => response.text())
+  .then(text => {
+    const jsonStart = text.indexOf('{');
+    const jsonEnd = text.lastIndexOf('}') + 1;
+    
+    if (jsonStart !== -1 && jsonEnd > jsonStart) {
+      const jsonText = text.substring(jsonStart, jsonEnd);
+      const result = JSON.parse(jsonText);
+      
+      if (result.success) {
+        // Reload data to show updated flag
+        loadData();
+      } else {
+        alert("Failed to update flag: " + (result.message || 'Unknown error'));
+      }
+    } else {
+      throw new Error('Invalid response from server');
     }
+  })
+  .catch(err => {
+    console.error(err);
+    alert("Failed to update flag.");
+  });
+}
 
-    function openModal(id) {
-      const r = allData.find(x => x.id == id);
-      if (!r) return;
+function filterTable() {
+  const q = document.getElementById("searchInput").value.toLowerCase().trim();
+  if (!q) {
+    renderTable(allData);
+    return;
+  }
+  
+  const filteredData = allData.filter(i => 
+    i.student.toLowerCase().includes(q) || 
+    i.term.toLowerCase().includes(q) || 
+    (i.notes && i.notes.toLowerCase().includes(q)) ||
+    i.year.toString().includes(q)
+  );
+  
+  renderTable(filteredData);
+}
 
-      const total = (Number(r.tuition) || 0) + (Number(r.food) || 0) + (Number(r.transport) || 0) + (Number(r.materials) || 0) + (Number(r.hygiene) || 0) + (Number(r.other) || 0);
+function exportData() {
+  const filterTerm = document.getElementById('exportSelect').value;
+  let dataToExport = allData;
+  
+  if (filterTerm !== 'all') {
+    dataToExport = allData.filter(i => i.term === filterTerm);
+  }
 
-      document.getElementById('modalStudent').innerText = r.student;
-      document.getElementById('modalTerm').innerText = r.term;
-      document.getElementById('modalYear').innerText = r.year;
-      document.getElementById('receiptDate').innerText = new Date(r.expense_date).toLocaleDateString();
-      document.getElementById('modalTotal').innerText = formatNum(total);
-      document.getElementById('modalNotes').innerText = r.notes || "No notes";
-      document.getElementById('modalId').innerText = r.id;
+  if (dataToExport.length === 0) {
+    alert("No data to export!");
+    return;
+  }
 
-      let breakdownHTML = "";
-      const categories = [
-        { k: 'tuition', l: 'Tuition' },
-        { k: 'food', l: 'Food' },
-        { k: 'transport', l: 'Transport' },
-        { k: 'materials', l: 'Materials' },
-        { k: 'hygiene', l: 'Hygiene' },
-        { k: 'other', l: 'Other' }
-      ];
+  let csvContent = "data:text/csv;charset=utf-8,";
+  csvContent += "Student,Date,Term,Year,Tuition,Food,Transport,Materials,Hygiene,Other,Total,Notes\n";
 
-      categories.forEach(cat => {
-        const value = Number(r[cat.k]) || 0;
-        if (value > 0) {
-          breakdownHTML += `
+  dataToExport.forEach(r => {
+    const total = (Number(r.tuition)||0)+(Number(r.food)||0)+(Number(r.transport)||0)+(Number(r.materials)||0)+(Number(r.hygiene)||0)+(Number(r.other)||0);
+    const row = [
+      `"${r.student}"`,
+      r.expense_date,
+      r.term,
+      r.year,
+      r.tuition,
+      r.food,
+      r.transport,
+      r.materials,
+      r.hygiene,
+      r.other,
+      total,
+      `"${(r.notes || '').replace(/"/g, '""')}"`
+    ];
+    csvContent += row.join(",") + "\n";
+  });
+
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", `expenses_${filterTerm}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+function openModal(id) {
+  const r = allData.find(x => x.id == id);
+  if(!r) {
+    console.error('Record not found with id:', id);
+    return;
+  }
+
+  const total = (Number(r.tuition)||0)+(Number(r.food)||0)+(Number(r.transport)||0)+(Number(r.materials)||0)+(Number(r.hygiene)||0)+(Number(r.other)||0);
+
+  document.getElementById('modalStudent').innerText = r.student;
+  document.getElementById('modalTerm').innerText = r.term;
+  document.getElementById('modalYear').innerText = r.year;
+  document.getElementById('receiptDate').innerText = new Date(r.expense_date).toLocaleDateString();
+  document.getElementById('modalTotal').innerText = formatNum(total);
+  document.getElementById('modalNotes').innerText = r.notes || "No notes";
+  document.getElementById('modalId').innerText = r.id;
+
+  let breakdownHTML = "";
+  const categories = [
+    {k:'tuition', l:'Tuition'}, 
+    {k:'food', l:'Food'}, 
+    {k:'transport', l:'Transport'}, 
+    {k:'materials', l:'Materials'}, 
+    {k:'hygiene', l:'Hygiene'}, 
+    {k:'other', l:'Other'}
+  ];
+
+  categories.forEach(cat => {
+    const value = Number(r[cat.k]) || 0;
+    if(value > 0) {
+      breakdownHTML += `
         <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.9rem;">
           <span>${cat.l}:</span>
           <span>${formatNum(value)}</span>
         </div>`;
-        }
-      });
-
-      document.getElementById('modalBreakdown').innerHTML = breakdownHTML;
-      document.getElementById('viewModal').style.display = 'flex';
-      document.body.style.overflow = 'hidden';
     }
+  });
+  
+  document.getElementById('modalBreakdown').innerHTML = breakdownHTML;
+  document.getElementById('viewModal').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
 
-    function closeModal() {
-      document.getElementById('viewModal').style.display = 'none';
-      document.body.style.overflow = 'auto';
-    }
+function closeModal() {
+  document.getElementById('viewModal').style.display = 'none';
+  document.body.style.overflow = 'auto';
+}
 
-    window.onclick = function (event) {
-      const modal = document.getElementById('viewModal');
-      if (event.target == modal) closeModal();
-    }
+window.onclick = function(event) {
+  const modal = document.getElementById('viewModal');
+  if (event.target == modal) closeModal();
+}
 
-    document.addEventListener('keydown', function (event) {
-      if (event.key === 'Escape') closeModal();
-    });
-  </script>
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') closeModal();
+});
+</script>
 </body>
 
 </html>
