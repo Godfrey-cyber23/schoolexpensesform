@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,25 +27,25 @@
       font-size: 14px;
     }
 
-    .container { 
-      max-width: 1400px; 
-      margin: 0 auto; 
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
       padding: 0 8px;
     }
 
     /* Header - Compact for Mobile */
-    .header { 
-      display: flex; 
-      justify-content: space-between; 
-      align-items: center; 
-      margin-bottom: 15px; 
-      gap: 10px; 
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      gap: 10px;
       flex-wrap: nowrap;
     }
-    
-    .header h1 { 
-      margin: 0; 
-      font-size: 1.3rem; 
+
+    .header h1 {
+      margin: 0;
+      font-size: 1.3rem;
       color: var(--dark);
       white-space: nowrap;
       overflow: hidden;
@@ -52,17 +53,17 @@
       flex-shrink: 0;
       max-width: 50%;
     }
-    
-    .actions-bar { 
-      display: flex; 
-      gap: 6px; 
+
+    .actions-bar {
+      display: flex;
+      gap: 6px;
       flex-wrap: nowrap;
       justify-content: flex-end;
       align-items: center;
       flex-shrink: 1;
       min-width: 0;
     }
-    
+
     .btn {
       padding: 8px 10px;
       border: none;
@@ -79,54 +80,58 @@
       height: 36px;
       min-width: min-content;
     }
-    
-    .btn-add { 
-      background-color: var(--primary); 
-      color: white; 
+
+    .btn-add {
+      background-color: var(--primary);
+      color: white;
       padding: 8px 12px;
     }
-    
-    .btn-export { 
-      background-color: var(--dark); 
-      color: white; 
+
+    .btn-export {
+      background-color: var(--dark);
+      color: white;
     }
-    
-    .btn-export-term { 
-      background-color: white; 
-      border: 1px solid var(--dark); 
+
+    .btn-export-term {
+      background-color: white;
+      border: 1px solid var(--dark);
       color: var(--dark);
       padding: 8px 8px;
       font-size: 0.75rem;
       max-width: 100px;
     }
-    
+
     /* Icon-only buttons on very small screens */
     @media (max-width: 360px) {
       .btn-text {
         display: none;
       }
+
       .btn-icon {
         display: inline-block !important;
         font-size: 1rem;
       }
+
       .btn-add {
         padding: 8px;
         min-width: 36px;
       }
+
       .btn-export {
         padding: 8px;
         min-width: 36px;
       }
+
       .btn-export-term {
         max-width: 70px;
       }
     }
-    
+
     .btn-icon {
       display: none;
       margin: 0;
     }
-    
+
     /* Stats Cards - Compact */
     .stats-grid {
       display: grid;
@@ -134,39 +139,39 @@
       gap: 8px;
       margin-bottom: 15px;
     }
-    
+
     @media (max-width: 480px) {
       .stats-grid {
         gap: 6px;
       }
     }
-    
-    .stat-card { 
-      background: white; 
-      padding: 10px 12px; 
-      border-radius: 6px; 
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
+
+    .stat-card {
+      background: white;
+      padding: 10px 12px;
+      border-radius: 6px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
       border-left: 3px solid var(--primary);
       min-width: 0;
       overflow: hidden;
     }
-    
-    .stat-card h3 { 
-      margin: 0 0 4px; 
-      font-size: 0.7rem; 
-      color: #95a5a6; 
-      text-transform: uppercase; 
-      font-weight: 700; 
+
+    .stat-card h3 {
+      margin: 0 0 4px;
+      font-size: 0.7rem;
+      color: #95a5a6;
+      text-transform: uppercase;
+      font-weight: 700;
       letter-spacing: 0.3px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    
-    .stat-card .value { 
-      font-size: 1.2rem; 
-      font-weight: 800; 
-      color: var(--dark); 
+
+    .stat-card .value {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--dark);
       line-height: 1.2;
       white-space: nowrap;
       overflow: hidden;
@@ -174,87 +179,88 @@
     }
 
     /* Compact Toolbar */
-    .toolbar { 
-      margin-bottom: 12px; 
-      display: flex; 
-      justify-content: space-between; 
+    .toolbar {
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
       align-items: center;
       flex-wrap: nowrap;
       gap: 8px;
     }
-    
-    input[type="text"] { 
-      width: 100%; 
-      padding: 9px 12px; 
-      border: 1px solid #ddd; 
+
+    input[type="text"] {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid #ddd;
       border-radius: 5px;
       font-size: 0.85rem;
       min-width: 0;
       height: 36px;
     }
-    
+
     /* Table Container - Compact */
-    .table-wrapper { 
-      background: white; 
-      border-radius: 6px; 
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
-      overflow-x: auto; 
+    .table-wrapper {
+      background: white;
+      border-radius: 6px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      overflow-x: auto;
       position: relative;
       -webkit-overflow-scrolling: touch;
       margin-bottom: 15px;
       font-size: 0.85rem;
     }
-    
-    table { 
-      width: 100%; 
-      border-collapse: collapse; 
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
       min-width: 900px;
     }
-    
+
     @media (max-width: 768px) {
       table {
         min-width: 700px;
       }
     }
-    
-    th, td { 
-      padding: 8px 6px; 
-      text-align: left; 
-      border-bottom: 1px solid #eee; 
+
+    th,
+    td {
+      padding: 8px 6px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
       font-size: 0.8rem;
       vertical-align: middle;
     }
-    
-    th { 
-      background-color: #f8f9fa; 
-      color: var(--dark); 
+
+    th {
+      background-color: #f8f9fa;
+      color: var(--dark);
       font-weight: 600;
       position: sticky;
       top: 0;
       z-index: 10;
       white-space: nowrap;
     }
-    
+
     /* Clickable Row */
-    tbody tr { 
-      cursor: pointer; 
-      transition: background 0.1s; 
+    tbody tr {
+      cursor: pointer;
+      transition: background 0.1s;
     }
-    
-    tbody tr:hover { 
-      background-color: #f0f8ff; 
+
+    tbody tr:hover {
+      background-color: #f0f8ff;
     }
-    
+
     /* Number columns alignment */
-    .number-col { 
-      text-align: right; 
+    .number-col {
+      text-align: right;
       font-family: 'SF Mono', 'Courier New', monospace;
       font-feature-settings: "tnum";
       font-variant-numeric: tabular-nums;
     }
-    
-    .total-col { 
-      font-weight: bold; 
+
+    .total-col {
+      font-weight: bold;
       color: var(--dark);
       text-align: right;
       font-family: 'SF Mono', 'Courier New', monospace;
@@ -267,14 +273,14 @@
       gap: 4px;
       flex-wrap: nowrap;
     }
-    
-    .action-btn { 
-      padding: 4px 6px; 
-      border-radius: 3px; 
-      text-decoration: none; 
-      font-size: 0.7rem; 
-      border: none; 
-      cursor: pointer; 
+
+    .action-btn {
+      padding: 4px 6px;
+      border-radius: 3px;
+      text-decoration: none;
+      font-size: 0.7rem;
+      border: none;
+      cursor: pointer;
       white-space: nowrap;
       text-align: center;
       display: inline-flex;
@@ -283,16 +289,27 @@
       min-height: 24px;
       min-width: 40px;
     }
-    
-    .btn-edit { background-color: #f39c12; color: white; }
-    .btn-del { background-color: var(--danger); color: white; }
-    .btn-view { background-color: var(--primary); color: white; }
+
+    .btn-edit {
+      background-color: #f39c12;
+      color: white;
+    }
+
+    .btn-del {
+      background-color: var(--danger);
+      color: white;
+    }
+
+    .btn-view {
+      background-color: var(--primary);
+      color: white;
+    }
 
     /* Compact Flag Icon */
-    .flag-btn { 
-      background: none; 
-      border: none; 
-      cursor: pointer; 
+    .flag-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
       font-size: 1rem;
       padding: 4px;
       width: 32px;
@@ -303,55 +320,90 @@
       border-radius: 50%;
       transition: background-color 0.2s;
     }
-    
-    .flagged-true { color: var(--warning); text-shadow: 0 0 2px rgba(0,0,0,0.2); }
-    .flagged-false { color: #ccc; }
+
+    .flagged-true {
+      color: var(--warning);
+      text-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+    }
+
+    .flagged-false {
+      color: #ccc;
+    }
 
     /* Column abbreviations for mobile */
     @media (max-width: 768px) {
-      th:nth-child(6)::after { content: " (T)"; font-size: 0.6rem; opacity: 0.7; }
-      th:nth-child(7)::after { content: " (F)"; font-size: 0.6rem; opacity: 0.7; }
-      th:nth-child(8)::after { content: " (Tr)"; font-size: 0.6rem; opacity: 0.7; }
-      th:nth-child(9)::after { content: " (M)"; font-size: 0.6rem; opacity: 0.7; }
-      th:nth-child(10)::after { content: " (H)"; font-size: 0.6rem; opacity: 0.7; }
-      th:nth-child(11)::after { content: " (O)"; font-size: 0.6rem; opacity: 0.7; }
+      th:nth-child(6)::after {
+        content: " (T)";
+        font-size: 0.6rem;
+        opacity: 0.7;
+      }
+
+      th:nth-child(7)::after {
+        content: " (F)";
+        font-size: 0.6rem;
+        opacity: 0.7;
+      }
+
+      th:nth-child(8)::after {
+        content: " (Tr)";
+        font-size: 0.6rem;
+        opacity: 0.7;
+      }
+
+      th:nth-child(9)::after {
+        content: " (M)";
+        font-size: 0.6rem;
+        opacity: 0.7;
+      }
+
+      th:nth-child(10)::after {
+        content: " (H)";
+        font-size: 0.6rem;
+        opacity: 0.7;
+      }
+
+      th:nth-child(11)::after {
+        content: " (O)";
+        font-size: 0.6rem;
+        opacity: 0.7;
+      }
     }
 
     /* Modal adjustments for mobile */
     .modal-overlay {
-      display: none; 
-      position: fixed; 
-      top: 0; 
-      left: 0; 
-      width: 100%; 
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
       height: 100%;
-      background: rgba(0,0,0,0.5); 
-      z-index: 1000; 
-      justify-content: center; 
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      justify-content: center;
       align-items: center;
       padding: 15px;
       overflow-y: auto;
     }
-    
+
     .modal-content {
-      background: white; 
-      width: 100%; 
-      max-width: 400px; 
-      padding: 20px; 
+      background: white;
+      width: 100%;
+      max-width: 400px;
+      padding: 20px;
       border-radius: 8px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
       position: relative;
       max-height: 85vh;
       overflow-y: auto;
       font-size: 0.9rem;
     }
-    
-    .modal-close { 
-      position: absolute; 
-      top: 12px; 
-      right: 12px; 
-      font-size: 1.5rem; 
-      cursor: pointer; 
+
+    .modal-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      font-size: 1.5rem;
+      cursor: pointer;
       color: #999;
       line-height: 1;
       width: 24px;
@@ -360,7 +412,7 @@
       align-items: center;
       justify-content: center;
     }
-    
+
     /* Footer note for mobile table scrolling */
     .scroll-hint {
       text-align: center;
@@ -369,59 +421,67 @@
       font-size: 0.75rem;
       display: none;
     }
-    
+
     @media (max-width: 768px) {
       .scroll-hint {
         display: block;
       }
     }
-    
+
     /* Very small screen adjustments */
     @media (max-width: 320px) {
       body {
         padding: 8px;
       }
+
       .container {
         padding: 0 4px;
       }
+
       .header {
         gap: 6px;
       }
+
       .header h1 {
         font-size: 1.1rem;
       }
+
       .btn {
         padding: 6px 8px;
         height: 32px;
         font-size: 0.75rem;
       }
+
       .stat-card {
         padding: 8px 10px;
       }
+
       .stat-card .value {
         font-size: 1.1rem;
       }
-      th, td {
+
+      th,
+      td {
         padding: 6px 4px;
         font-size: 0.75rem;
       }
     }
-    
+
     /* Loading and Empty States */
-    #loading { 
-      text-align: center; 
-      padding: 30px 20px; 
+    #loading {
+      text-align: center;
+      padding: 30px 20px;
       color: #666;
       font-size: 0.9rem;
     }
-    
+
     .empty-state {
       text-align: center;
       padding: 30px 15px;
       color: #666;
       font-size: 0.9rem;
     }
-    
+
     .empty-state h3 {
       margin-bottom: 8px;
       color: var(--dark);
@@ -430,191 +490,206 @@
 
     /* Print Styles */
     @media print {
-      body * { visibility: hidden; }
-      .modal-content, .modal-content * { visibility: visible; }
-      .modal-content { 
-        position: absolute; 
-        left: 0; 
-        top: 0; 
-        width: 100%; 
-        margin: 0; 
-        padding: 15px; 
-        box-shadow: none; 
+      body * {
+        visibility: hidden;
       }
-      .modal-close, .modal-footer { display: none !important; }
+
+      .modal-content,
+      .modal-content * {
+        visibility: visible;
+      }
+
+      .modal-content {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin: 0;
+        padding: 15px;
+        box-shadow: none;
+      }
+
+      .modal-close,
+      .modal-footer {
+        display: none !important;
+      }
     }
   </style>
 </head>
+
 <body>
 
-<div class="container">
-  
-  <div class="header">
-    <h1>🏫 Expenses</h1>
-    <div class="actions-bar">
-      <select id="exportSelect" class="btn btn-export-term">
-        <option value="all">All</option>
-        <option value="Term 1">Term 1</option>
-        <option value="Term 2">Term 2</option>
-        <option value="Term 3">Term 3</option>
-      </select>
-      <button class="btn btn-export" onclick="exportData()" title="Download Excel">
-        <span class="btn-text">Download</span>
-        <span class="btn-icon">📥</span>
-      </button>
-      <a href="index.html" class="btn btn-add" title="Add New Record">
-        <span class="btn-text">Add Record</span>
-        <span class="btn-icon">+</span>
-      </a>
-    </div>
-  </div>
+  <div class="container">
 
-  <div class="stats-grid">
-    <div class="stat-card">
-      <h3>Total Spent</h3>
-      <div class="value" id="grandTotalDisplay">0.00</div>
-    </div>
-    <div class="stat-card">
-      <h3>Records</h3>
-      <div class="value" id="recordCount">0</div>
-    </div>
-    <div class="stat-card">
-      <h3>Flagged</h3>
-      <div class="value" id="flaggedCount">0</div>
-    </div>
-  </div>
-
-  <div class="toolbar">
-    <input type="text" id="searchInput" placeholder="🔍 Search..." onkeyup="filterTable()">
-  </div>
-
-  <div class="scroll-hint">
-    ← Scroll to see all columns →
-  </div>
-
-  <div class="table-wrapper">
-    <table id="expenseTable">
-      <thead>
-        <tr>
-          <th width="50">Flag</th>
-          <th width="120">Student</th>
-          <th width="80">Date</th>
-          <th width="70">Term</th>
-          <th width="70">Year</th>
-          <th width="80" class="number-col">Tuition</th>
-          <th width="80" class="number-col">Food</th>
-          <th width="80" class="number-col">Transp</th>
-          <th width="80" class="number-col">Mat</th>
-          <th width="80" class="number-col">Hyg</th>
-          <th width="80" class="number-col">Other</th>
-          <th width="90" class="total-col">Total</th>
-          <th width="120">Actions</th>
-        </tr>
-      </thead>
-      <tbody id="tableBody"></tbody>
-    </table>
-    <div id="loading">Loading...</div>
-  </div>
-
-</div>
-
-<!-- View/Receipt Modal -->
-<div id="viewModal" class="modal-overlay">
-  <div class="modal-content">
-    <span class="modal-close" onclick="closeModal()">&times;</span>
-    
-    <div class="receipt-header">
-      <h2 style="font-size: 1.3rem; margin: 0 0 5px 0;">Payment Receipt</h2>
-      <p style="font-size: 0.85rem; color: #666; margin: 0 0 5px 0;">School Expenses</p>
-      <p id="receiptDate" style="font-size: 0.8rem; color: #999; margin: 0;"></p>
-    </div>
-
-    <div style="margin-top: 15px;">
-      <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem;">
-        <strong>Student:</strong> <span id="modalStudent"></span>
-      </div>
-      <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem;">
-        <strong>Term:</strong> <span id="modalTerm"></span>
-      </div>
-      <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem;">
-        <strong>Year:</strong> <span id="modalYear"></span>
+    <div class="header">
+      <h1>🏫 Expenses</h1>
+      <div class="actions-bar">
+        <select id="exportSelect" class="btn btn-export-term">
+          <option value="all">All</option>
+          <option value="Term 1">Term 1</option>
+          <option value="Term 2">Term 2</option>
+          <option value="Term 3">Term 3</option>
+        </select>
+        <button class="btn btn-export" onclick="exportData()" title="Download Excel">
+          <span class="btn-text">Download</span>
+          <span class="btn-icon">📥</span>
+        </button>
+        <a href="index.html" class="btn btn-add" title="Add New Record">
+          <span class="btn-text">Add Record</span>
+          <span class="btn-icon">+</span>
+        </a>
       </div>
     </div>
-    
-    <hr style="border:0; border-top:1px solid #eee; margin: 10px 0;">
-    
-    <div id="modalBreakdown"></div>
-    
-    <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.1rem; margin-top: 15px; border-top: 2px dashed #ccc; padding-top: 10px;">
-      <span>Total:</span> <span id="modalTotal"></span>
-    </div>
-    
-    <div style="margin-top: 15px; font-size: 0.8rem; color: #777;">
-      <div style="margin-bottom: 5px;"><strong>Notes:</strong> <span id="modalNotes">None</span></div>
-      <div><strong>ID:</strong> <span id="modalId"></span></div>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3>Total Spent</h3>
+        <div class="value" id="grandTotalDisplay">0.00</div>
+      </div>
+      <div class="stat-card">
+        <h3>Records</h3>
+        <div class="value" id="recordCount">0</div>
+      </div>
+      <div class="stat-card">
+        <h3>Flagged</h3>
+        <div class="value" id="flaggedCount">0</div>
+      </div>
     </div>
 
-    <div style="text-align: center; margin-top: 20px; display: flex; gap: 10px; justify-content: center;">
-      <button class="btn btn-export" onclick="window.print()" style="padding: 8px 12px; font-size: 0.8rem;">Print</button>
-      <button class="btn" onclick="closeModal()" style="margin-left: 0; background-color: #eee; padding: 8px 12px; font-size: 0.8rem;">Close</button>
+    <div class="toolbar">
+      <input type="text" id="searchInput" placeholder="🔍 Search..." onkeyup="filterTable()">
+    </div>
+
+    <div class="scroll-hint">
+      ← Scroll to see all columns →
+    </div>
+
+    <div class="table-wrapper">
+      <table id="expenseTable">
+        <thead>
+          <tr>
+            <th width="50">Flag</th>
+            <th width="120">Student</th>
+            <th width="80">Date</th>
+            <th width="70">Term</th>
+            <th width="70">Year</th>
+            <th width="80" class="number-col">Tuition</th>
+            <th width="80" class="number-col">Food</th>
+            <th width="80" class="number-col">Transp</th>
+            <th width="80" class="number-col">Mat</th>
+            <th width="80" class="number-col">Hyg</th>
+            <th width="80" class="number-col">Other</th>
+            <th width="90" class="total-col">Total</th>
+            <th width="120">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+      </table>
+      <div id="loading">Loading...</div>
+    </div>
+
+  </div>
+
+  <!-- View/Receipt Modal -->
+  <div id="viewModal" class="modal-overlay">
+    <div class="modal-content">
+      <span class="modal-close" onclick="closeModal()">&times;</span>
+
+      <div class="receipt-header">
+        <h2 style="font-size: 1.3rem; margin: 0 0 5px 0;">Payment Receipt</h2>
+        <p style="font-size: 0.85rem; color: #666; margin: 0 0 5px 0;">School Expenses</p>
+        <p id="receiptDate" style="font-size: 0.8rem; color: #999; margin: 0;"></p>
+      </div>
+
+      <div style="margin-top: 15px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem;">
+          <strong>Student:</strong> <span id="modalStudent"></span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem;">
+          <strong>Term:</strong> <span id="modalTerm"></span>
+        </div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem;">
+          <strong>Year:</strong> <span id="modalYear"></span>
+        </div>
+      </div>
+
+      <hr style="border:0; border-top:1px solid #eee; margin: 10px 0;">
+
+      <div id="modalBreakdown"></div>
+
+      <div
+        style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.1rem; margin-top: 15px; border-top: 2px dashed #ccc; padding-top: 10px;">
+        <span>Total:</span> <span id="modalTotal"></span>
+      </div>
+
+      <div style="margin-top: 15px; font-size: 0.8rem; color: #777;">
+        <div style="margin-bottom: 5px;"><strong>Notes:</strong> <span id="modalNotes">None</span></div>
+        <div><strong>ID:</strong> <span id="modalId"></span></div>
+      </div>
+
+      <div style="text-align: center; margin-top: 20px; display: flex; gap: 10px; justify-content: center;">
+        <button class="btn btn-export" onclick="window.print()"
+          style="padding: 8px 12px; font-size: 0.8rem;">Print</button>
+        <button class="btn" onclick="closeModal()"
+          style="margin-left: 0; background-color: #eee; padding: 8px 12px; font-size: 0.8rem;">Close</button>
+      </div>
     </div>
   </div>
-</div>
 
-<script>
-const API = "https://script.google.com/macros/s/AKfycbzEEeuwtZm-qGOmKLza3IfdVieYurAH14xgp3Q0lUPwUpvyz2rIHUlkC48sCc2FUK9i/exec";
-let allData = [];
+  <script>
+    const API = "https://script.google.com/macros/s/AKfycbzEEeuwtZm-qGOmKLza3IfdVieYurAH14xgp3Q0lUPwUpvyz2rIHUlkC48sCc2FUK9i/exec";
+    let allData = [];
 
-window.onload = loadData;
+    window.onload = loadData;
 
-function loadData() {
-  document.getElementById('loading').style.display = 'block';
-  document.getElementById('loading').innerText = 'Loading data...';
-  
-  // Add cache-busting parameter
-  const timestamp = new Date().getTime();
-  const url = `${API}?action=read&t=${timestamp}`;
-  
-  console.log('Fetching from:', url);
-  
-  fetch(url)
-    .then(res => {
-      console.log('Response status:', res.status);
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
-      return res.text(); // Get raw text first
-    })
-    .then(text => {
-      console.log('Raw response length:', text.length);
-      console.log('Raw response (first 200 chars):', text.substring(0, 200));
-      
-      // Clean the response - remove any headers appended after JSON
-      const cleanedText = cleanApiResponse(text);
-      console.log('Cleaned text:', cleanedText);
-      
-      try {
-        const data = JSON.parse(cleanedText);
-        console.log('Parsed successfully:', data);
-        
-        if (data.warning) {
-          console.warn('API Warning:', data.warning);
-        }
-        
-        allData = data.data || [];
-        console.log('Data loaded:', allData.length, 'records');
-        renderTable(allData);
-        updateStats(allData);
-        document.getElementById('loading').style.display = 'none';
-      } catch (parseError) {
-        console.error('JSON Parse Error:', parseError);
-        console.error('Problematic text near error:', text.substring(490, 510));
-        throw new Error(`JSON parse failed: ${parseError.message}`);
-      }
-    })
-    .catch(err => {
-      console.error('Error loading data:', err);
-      document.getElementById('loading').innerHTML = `
+    function loadData() {
+      document.getElementById('loading').style.display = 'block';
+      document.getElementById('loading').innerText = 'Loading data...';
+
+      // Add cache-busting parameter
+      const timestamp = new Date().getTime();
+      const url = `${API}?action=read&t=${timestamp}`;
+
+      console.log('Fetching from:', url);
+
+      fetch(url)
+        .then(res => {
+          console.log('Response status:', res.status);
+          if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+          }
+          return res.text(); // Get raw text first
+        })
+        .then(text => {
+          console.log('Raw response length:', text.length);
+          console.log('Raw response (first 200 chars):', text.substring(0, 200));
+
+          // Clean the response - remove any headers appended after JSON
+          const cleanedText = cleanApiResponse(text);
+          console.log('Cleaned text:', cleanedText);
+
+          try {
+            const data = JSON.parse(cleanedText);
+            console.log('Parsed successfully:', data);
+
+            if (data.warning) {
+              console.warn('API Warning:', data.warning);
+            }
+
+            allData = data.data || [];
+            console.log('Data loaded:', allData.length, 'records');
+            renderTable(allData);
+            updateStats(allData);
+            document.getElementById('loading').style.display = 'none';
+          } catch (parseError) {
+            console.error('JSON Parse Error:', parseError);
+            console.error('Problematic text near error:', text.substring(490, 510));
+            throw new Error(`JSON parse failed: ${parseError.message}`);
+          }
+        })
+        .catch(err => {
+          console.error('Error loading data:', err);
+          document.getElementById('loading').innerHTML = `
         <div class="empty-state">
           <h3>Error Loading Data</h3>
           <p>${err.message}</p>
@@ -628,113 +703,120 @@ function loadData() {
           <button class="btn" onclick="testDirectAPI()" style="margin-top: 10px; background-color: #eee;">Test API Directly</button>
         </div>
       `;
-    });
-}
-
-// Function to clean API response - removes headers appended after JSON
-function cleanApiResponse(text) {
-  // Trim whitespace
-  text = text.trim();
-  
-  // Find the end of JSON (last '}' followed by whitespace)
-  const jsonEnd = text.lastIndexOf('}');
-  if (jsonEnd !== -1) {
-    // Extract only the JSON part (up to and including the last '}')
-    const cleaned = text.substring(0, jsonEnd + 1).trim();
-    
-    // Validate it starts with '{'
-    if (cleaned.startsWith('{')) {
-      return cleaned;
+        });
     }
-  }
-  
-  // If we can't find valid JSON, try to extract JSON-like content
-  const jsonMatch = text.match(/\{[\s\S]*\}/);
-  if (jsonMatch) {
-    return jsonMatch[0];
-  }
-  
-  // If all else fails, return original text
-  return text;
-}
 
-// Test API directly in browser
-function testDirectAPI() {
-  const testUrl = `${API}?action=read&t=${new Date().getTime()}`;
-  console.log('Testing API directly:', testUrl);
-  
-  // Open in new tab
-  window.open(testUrl, '_blank');
-  
-  // Also try to fetch with better error handling
-  fetch(testUrl)
-    .then(res => res.text())
-    .then(text => {
-      console.log('Direct fetch response:', text);
-      console.log('Response length:', text.length);
-      console.log('First 500 chars:', text.substring(0, 500));
-      
-      // Try to parse
-      try {
-        const data = JSON.parse(text);
-        console.log('Direct parse successful:', data);
-        alert('Direct API test successful! Found ' + (data.data ? data.data.length : 0) + ' records.');
-      } catch (err) {
-        console.error('Direct parse failed:', err);
-        console.log('Trying to clean and parse...');
-        
-        const cleaned = cleanApiResponse(text);
-        console.log('Cleaned:', cleaned);
-        
-        try {
-          const data = JSON.parse(cleaned);
-          console.log('Cleaned parse successful:', data);
-          alert('API works after cleaning! Found ' + (data.data ? data.data.length : 0) + ' records.');
-        } catch (cleanErr) {
-          alert('API returns invalid JSON. Check Apps Script deployment.');
+    // Function to clean API response - removes headers appended after JSON
+    function cleanApiResponse(text) {
+      // Trim whitespace
+      text = text.trim();
+
+      // Find the end of JSON (last '}' followed by whitespace)
+      const jsonEnd = text.lastIndexOf('}');
+      if (jsonEnd !== -1) {
+        // Extract only the JSON part (up to and including the last '}')
+        const cleaned = text.substring(0, jsonEnd + 1).trim();
+
+        // Validate it starts with '{'
+        if (cleaned.startsWith('{')) {
+          return cleaned;
         }
       }
-    })
-    .catch(err => {
-      console.error('Direct fetch failed:', err);
-      alert('Failed to fetch from API: ' + err.message);
-    });
-}
 
-// Helper function to fix common JSON issues
-function fixJsonText(text) {
-  // Remove any null characters
-  text = text.replace(/\0/g, '');
-  
-  // Remove control characters except newlines and tabs
-  text = text.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '');
-  
-  // Fix common JSON issues
-  text = text.trim();
-  
-  // Ensure it starts and ends with braces
-  if (!text.startsWith('{')) text = '{' + text;
-  if (!text.endsWith('}')) text = text + '}';
-  
-  // Fix unescaped quotes inside strings (basic fix)
-  text = text.replace(/([{,]\s*"[^"]*)"([^"]*"[},])/g, '$1\\"$2');
-  
-  return text;
-}
+      // If we can't find valid JSON, try to extract JSON-like content
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        return jsonMatch[0];
+      }
 
-// Test the API directly
-function testAPI() {
-  const testUrl = `${API}?action=read&t=${new Date().getTime()}`;
-  window.open(testUrl, '_blank');
-}
+      // If all else fails, return original text
+      return text;
+    }
 
-function renderTable(data) {
-  const tbody = document.getElementById('tableBody');
-  tbody.innerHTML = "";
-  data.sort((a, b) => new Date(b.expense_date) - new Date(a.expense_date));
+    // Test API directly in browser
+    function testDirectAPI() {
+      const testUrl = `${API}?action=read&t=${new Date().getTime()}`;
+      console.log('Testing API directly:', testUrl);
 
-  if (!data.length) { 
-    tbody.innerHTML = `
+      // Open in new tab
+      window.open(testUrl, '_blank');
+
+      // Also try to fetch with better error handling
+      fetch(testUrl)
+        .then(res => res.text())
+        .then(text => {
+          console.log('Direct fetch response:', text);
+          console.log('Response length:', text.length);
+          console.log('First 500 chars:', text.substring(0, 500));
+
+          // Try to parse
+          try {
+            const data = JSON.parse(text);
+            console.log('Direct parse successful:', data);
+            alert('Direct API test successful! Found ' + (data.data ? data.data.length : 0) + ' records.');
+          } catch (err) {
+            console.error('Direct parse failed:', err);
+            console.log('Trying to clean and parse...');
+
+            const cleaned = cleanApiResponse(text);
+            console.log('Cleaned:', cleaned);
+
+            try {
+              const data = JSON.parse(cleaned);
+              console.log('Cleaned parse successful:', data);
+              alert('API works after cleaning! Found ' + (data.data ? data.data.length : 0) + ' records.');
+            } catch (cleanErr) {
+              alert('API returns invalid JSON. Check Apps Script deployment.');
+            }
+          }
+        })
+        .catch(err => {
+          console.error('Direct fetch failed:', err);
+          alert('Failed to fetch from API: ' + err.message);
+        });
+    }
+
+    // Helper function to fix common JSON issues
+    function fixJsonText(text) {
+      // Remove any null characters
+      text = text.replace(/\0/g, '');
+
+      // Remove control characters except newlines and tabs
+      text = text.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F]/g, '');
+
+      // Fix common JSON issues
+      text = text.trim();
+
+      // Ensure it starts and ends with braces
+      if (!text.startsWith('{')) text = '{' + text;
+      if (!text.endsWith('}')) text = text + '}';
+
+      // Fix unescaped quotes inside strings (basic fix)
+      text = text.replace(/([{,]\s*"[^"]*)"([^"]*"[},])/g, '$1\\"$2');
+
+      return text;
+    }
+
+    // Helper function to escape HTML special characters
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Test the API directly
+    function testAPI() {
+      const testUrl = `${API}?action=read&t=${new Date().getTime()}`;
+      window.open(testUrl, '_blank');
+    }
+
+    function renderTable(data) {
+      const tbody = document.getElementById('tableBody');
+      tbody.innerHTML = "";
+      data.sort((a, b) => new Date(b.expense_date) - new Date(a.expense_date));
+
+      if (!data.length) {
+        tbody.innerHTML = `
       <tr>
         <td colspan="13" style="text-align:center; padding: 30px;">
           <div class="empty-state">
@@ -743,27 +825,30 @@ function renderTable(data) {
             <a href="index.html" class="btn btn-add" style="padding: 6px 10px; font-size: 0.8rem;">+ Add Record</a>
           </div>
         </td>
-      </tr>`; 
-    return; 
-  }
+      </tr>`;
+        return;
+      }
 
-  data.forEach(r => {
-    const total = (Number(r.tuition)||0)+(Number(r.food)||0)+(Number(r.transport)||0)+(Number(r.materials)||0)+(Number(r.hygiene)||0)+(Number(r.other)||0);
-    const isFlagged = r.flagged === true || r.flagged === 'true';
-    const flagClass = isFlagged ? 'flagged-true' : 'flagged-false';
-    const flagIcon = isFlagged ? '★' : '☆';
+      data.forEach(r => {
+        const total = (Number(r.tuition) || 0) + (Number(r.food) || 0) + (Number(r.transport) || 0) + (Number(r.materials) || 0) + (Number(r.hygiene) || 0) + (Number(r.other) || 0);
+        const isFlagged = r.flagged === true || r.flagged === 'true';
+        const flagClass = isFlagged ? 'flagged-true' : 'flagged-false';
+        const flagIcon = isFlagged ? '★' : '☆';
 
-    tbody.innerHTML += `
-      <tr onclick="openModal(${r.id})">
+        // IMPORTANT: Quote the ID since it's a string that may contain underscores
+        const quotedId = JSON.stringify(r.id); // This will properly escape the string
+
+        tbody.innerHTML += `
+      <tr onclick="openModal(${quotedId})">
         <td>
-          <button class="flag-btn ${flagClass}" onclick="toggleFlag(${r.id}, ${isFlagged}); event.stopPropagation();" 
+          <button class="flag-btn ${flagClass}" onclick="toggleFlag(${quotedId}, ${isFlagged}); event.stopPropagation();" 
                   title="${isFlagged ? 'Unflag' : 'Flag'}">
             ${flagIcon}
           </button>
         </td>
-        <td style="font-weight:600;">${r.student}</td>
-        <td>${new Date(r.expense_date).toLocaleDateString(undefined, {month:'short', day:'numeric'})}</td>
-        <td>${r.term}</td>
+        <td style="font-weight:600;">${escapeHtml(r.student)}</td>
+        <td>${new Date(r.expense_date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</td>
+        <td>${escapeHtml(r.term)}</td>
         <td>${r.year}</td>
         <td class="number-col">${formatNum(r.tuition)}</td>
         <td class="number-col">${formatNum(r.food)}</td>
@@ -774,183 +859,184 @@ function renderTable(data) {
         <td class="total-col">${formatNum(total)}</td>
         <td>
           <div class="action-buttons">
-            <button class="action-btn btn-view" onclick="openModal(${r.id}); event.stopPropagation();" title="View">View</button>
-            <a href="index.html?id=${r.id}" class="action-btn btn-edit" onclick="event.stopPropagation();" title="Edit">Edit</a>
-            <button class="action-btn btn-del" onclick="del(${r.id}); event.stopPropagation();" title="Delete">Del</button>
+            <button class="action-btn btn-view" onclick="openModal(${quotedId}); event.stopPropagation();" title="View">View</button>
+            <a href="index.html?id=${encodeURIComponent(r.id)}" class="action-btn btn-edit" onclick="event.stopPropagation();" title="Edit">Edit</a>
+            <button class="action-btn btn-del" onclick="del(${quotedId}); event.stopPropagation();" title="Delete">Del</button>
           </div>
         </td>
       </tr>`;
-  });
-}
+      });
+    }
 
-function updateStats(data) {
-  let grandTotal = 0, flaggedCount = 0;
-  data.forEach(r => {
-    grandTotal += (Number(r.tuition)||0)+(Number(r.food)||0)+(Number(r.transport)||0)+(Number(r.materials)||0)+(Number(r.hygiene)||0)+(Number(r.other)||0);
-    if(r.flagged === true || r.flagged === 'true') flaggedCount++;
-  });
-  document.getElementById('grandTotalDisplay').innerText = formatNum(grandTotal);
-  document.getElementById('recordCount').innerText = data.length;
-  document.getElementById('flaggedCount').innerText = flaggedCount;
-}
+    function updateStats(data) {
+      let grandTotal = 0, flaggedCount = 0;
+      data.forEach(r => {
+        grandTotal += (Number(r.tuition) || 0) + (Number(r.food) || 0) + (Number(r.transport) || 0) + (Number(r.materials) || 0) + (Number(r.hygiene) || 0) + (Number(r.other) || 0);
+        if (r.flagged === true || r.flagged === 'true') flaggedCount++;
+      });
+      document.getElementById('grandTotalDisplay').innerText = formatNum(grandTotal);
+      document.getElementById('recordCount').innerText = data.length;
+      document.getElementById('flaggedCount').innerText = flaggedCount;
+    }
 
-function formatNum(num) { 
-  const n = Number(num||0);
-  if (n >= 1000) {
-    return n.toLocaleString(undefined, {minimumFractionDigits: 0, maximumFractionDigits: 0});
-  }
-  return n.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-}
+    function formatNum(num) {
+      const n = Number(num || 0);
+      if (n >= 1000) {
+        return n.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+      }
+      return n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
 
-function del(id) {
-  if(confirm("Delete this record?")) {
-    document.getElementById('loading').style.display = 'block';
-    fetch(API + "?id=" + id, { 
-      method: "DELETE",
-      headers: {'Content-Type': 'application/json'}
-    })
-    .then(response => {
-      if (!response.ok) throw new Error('Delete failed');
-      loadData();
-    })
-    .catch(err => {
-      console.error(err);
-      alert("Delete failed. Try again.");
-      document.getElementById('loading').style.display = 'none';
-    });
-  }
-}
+    function del(id) {
+      if (confirm("Delete this record?")) {
+        document.getElementById('loading').style.display = 'block';
+        fetch(API + "?id=" + id, {
+          method: "DELETE",
+          headers: { 'Content-Type': 'application/json' }
+        })
+          .then(response => {
+            if (!response.ok) throw new Error('Delete failed');
+            loadData();
+          })
+          .catch(err => {
+            console.error(err);
+            alert("Delete failed. Try again.");
+            document.getElementById('loading').style.display = 'none';
+          });
+      }
+    }
 
-function toggleFlag(id, currentStatus) {
-  fetch(API, {
-    method: "PUT",
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({ id: id, flagged: !currentStatus })
-  })
-  .then(response => {
-    if (!response.ok) throw new Error('Update failed');
-    loadData();
-  })
-  .catch(err => {
-    console.error(err);
-    alert("Failed to update flag.");
-  });
-}
+    function toggleFlag(id, currentStatus) {
+      fetch(API, {
+        method: "PUT",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: id, flagged: !currentStatus })
+      })
+        .then(response => {
+          if (!response.ok) throw new Error('Update failed');
+          loadData();
+        })
+        .catch(err => {
+          console.error(err);
+          alert("Failed to update flag.");
+        });
+    }
 
-function filterTable() {
-  const q = document.getElementById("searchInput").value.toLowerCase().trim();
-  if (!q) {
-    renderTable(allData);
-    return;
-  }
-  
-  const filteredData = allData.filter(i => 
-    i.student.toLowerCase().includes(q) || 
-    i.term.toLowerCase().includes(q) || 
-    (i.notes && i.notes.toLowerCase().includes(q)) ||
-    i.year.toString().includes(q)
-  );
-  
-  renderTable(filteredData);
-}
+    function filterTable() {
+      const q = document.getElementById("searchInput").value.toLowerCase().trim();
+      if (!q) {
+        renderTable(allData);
+        return;
+      }
 
-function exportData() {
-  const filterTerm = document.getElementById('exportSelect').value;
-  let dataToExport = allData;
-  
-  if (filterTerm !== 'all') {
-    dataToExport = allData.filter(i => i.term === filterTerm);
-  }
+      const filteredData = allData.filter(i =>
+        i.student.toLowerCase().includes(q) ||
+        i.term.toLowerCase().includes(q) ||
+        (i.notes && i.notes.toLowerCase().includes(q)) ||
+        i.year.toString().includes(q)
+      );
 
-  if (dataToExport.length === 0) {
-    alert("No data to export!");
-    return;
-  }
+      renderTable(filteredData);
+    }
 
-  let csvContent = "data:text/csv;charset=utf-8,";
-  csvContent += "Student,Date,Term,Year,Tuition,Food,Transport,Materials,Hygiene,Other,Total,Notes\n";
+    function exportData() {
+      const filterTerm = document.getElementById('exportSelect').value;
+      let dataToExport = allData;
 
-  dataToExport.forEach(r => {
-    const total = (Number(r.tuition)||0)+(Number(r.food)||0)+(Number(r.transport)||0)+(Number(r.materials)||0)+(Number(r.hygiene)||0)+(Number(r.other)||0);
-    const row = [
-      `"${r.student}"`,
-      r.expense_date,
-      r.term,
-      r.year,
-      r.tuition,
-      r.food,
-      r.transport,
-      r.materials,
-      r.hygiene,
-      r.other,
-      total,
-      `"${(r.notes || '').replace(/"/g, '""')}"`
-    ];
-    csvContent += row.join(",") + "\n";
-  });
+      if (filterTerm !== 'all') {
+        dataToExport = allData.filter(i => i.term === filterTerm);
+      }
 
-  const encodedUri = encodeURI(csvContent);
-  const link = document.createElement("a");
-  link.setAttribute("href", encodedUri);
-  link.setAttribute("download", `expenses_${filterTerm}.csv`);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}
+      if (dataToExport.length === 0) {
+        alert("No data to export!");
+        return;
+      }
 
-function openModal(id) {
-  const r = allData.find(x => x.id == id);
-  if(!r) return;
+      let csvContent = "data:text/csv;charset=utf-8,";
+      csvContent += "Student,Date,Term,Year,Tuition,Food,Transport,Materials,Hygiene,Other,Total,Notes\n";
 
-  const total = (Number(r.tuition)||0)+(Number(r.food)||0)+(Number(r.transport)||0)+(Number(r.materials)||0)+(Number(r.hygiene)||0)+(Number(r.other)||0);
+      dataToExport.forEach(r => {
+        const total = (Number(r.tuition) || 0) + (Number(r.food) || 0) + (Number(r.transport) || 0) + (Number(r.materials) || 0) + (Number(r.hygiene) || 0) + (Number(r.other) || 0);
+        const row = [
+          `"${r.student}"`,
+          r.expense_date,
+          r.term,
+          r.year,
+          r.tuition,
+          r.food,
+          r.transport,
+          r.materials,
+          r.hygiene,
+          r.other,
+          total,
+          `"${(r.notes || '').replace(/"/g, '""')}"`
+        ];
+        csvContent += row.join(",") + "\n";
+      });
 
-  document.getElementById('modalStudent').innerText = r.student;
-  document.getElementById('modalTerm').innerText = r.term;
-  document.getElementById('modalYear').innerText = r.year;
-  document.getElementById('receiptDate').innerText = new Date(r.expense_date).toLocaleDateString();
-  document.getElementById('modalTotal').innerText = formatNum(total);
-  document.getElementById('modalNotes').innerText = r.notes || "No notes";
-  document.getElementById('modalId').innerText = r.id;
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `expenses_${filterTerm}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
 
-  let breakdownHTML = "";
-  const categories = [
-    {k:'tuition', l:'Tuition'}, 
-    {k:'food', l:'Food'}, 
-    {k:'transport', l:'Transport'}, 
-    {k:'materials', l:'Materials'}, 
-    {k:'hygiene', l:'Hygiene'}, 
-    {k:'other', l:'Other'}
-  ];
+    function openModal(id) {
+      const r = allData.find(x => x.id == id);
+      if (!r) return;
 
-  categories.forEach(cat => {
-    const value = Number(r[cat.k]) || 0;
-    if(value > 0) {
-      breakdownHTML += `
+      const total = (Number(r.tuition) || 0) + (Number(r.food) || 0) + (Number(r.transport) || 0) + (Number(r.materials) || 0) + (Number(r.hygiene) || 0) + (Number(r.other) || 0);
+
+      document.getElementById('modalStudent').innerText = r.student;
+      document.getElementById('modalTerm').innerText = r.term;
+      document.getElementById('modalYear').innerText = r.year;
+      document.getElementById('receiptDate').innerText = new Date(r.expense_date).toLocaleDateString();
+      document.getElementById('modalTotal').innerText = formatNum(total);
+      document.getElementById('modalNotes').innerText = r.notes || "No notes";
+      document.getElementById('modalId').innerText = r.id;
+
+      let breakdownHTML = "";
+      const categories = [
+        { k: 'tuition', l: 'Tuition' },
+        { k: 'food', l: 'Food' },
+        { k: 'transport', l: 'Transport' },
+        { k: 'materials', l: 'Materials' },
+        { k: 'hygiene', l: 'Hygiene' },
+        { k: 'other', l: 'Other' }
+      ];
+
+      categories.forEach(cat => {
+        const value = Number(r[cat.k]) || 0;
+        if (value > 0) {
+          breakdownHTML += `
         <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.9rem;">
           <span>${cat.l}:</span>
           <span>${formatNum(value)}</span>
         </div>`;
+        }
+      });
+
+      document.getElementById('modalBreakdown').innerHTML = breakdownHTML;
+      document.getElementById('viewModal').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
     }
-  });
-  
-  document.getElementById('modalBreakdown').innerHTML = breakdownHTML;
-  document.getElementById('viewModal').style.display = 'flex';
-  document.body.style.overflow = 'hidden';
-}
 
-function closeModal() {
-  document.getElementById('viewModal').style.display = 'none';
-  document.body.style.overflow = 'auto';
-}
+    function closeModal() {
+      document.getElementById('viewModal').style.display = 'none';
+      document.body.style.overflow = 'auto';
+    }
 
-window.onclick = function(event) {
-  const modal = document.getElementById('viewModal');
-  if (event.target == modal) closeModal();
-}
+    window.onclick = function (event) {
+      const modal = document.getElementById('viewModal');
+      if (event.target == modal) closeModal();
+    }
 
-document.addEventListener('keydown', function(event) {
-  if (event.key === 'Escape') closeModal();
-});
-</script>
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') closeModal();
+    });
+  </script>
 </body>
+
 </html>
