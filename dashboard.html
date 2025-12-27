@@ -587,16 +587,18 @@ function loadData() {
     })
     .then(text => {
       console.log('Raw response length:', text.length);
-      console.log('Raw response (first 500 chars):', text.substring(0, 500));
+      console.log('Raw response (first 200 chars):', text.substring(0, 200));
+      
+      // Clean the response - remove any headers appended after JSON
+      const cleanedText = cleanApiResponse(text);
+      console.log('Cleaned text:', cleanedText);
       
       try {
-        const data = JSON.parse(text);
-        console.log('Parsed successfully');
+        const data = JSON.parse(cleanedText);
+        console.log('Parsed successfully:', data);
         
         if (data.warning) {
           console.warn('API Warning:', data.warning);
-          // Show warning to user
-          alert(`Note: ${data.warning}. Total records in sheet: ${data.totalRecords || 'unknown'}`);
         }
         
         allData = data.data || [];
@@ -606,19 +608,8 @@ function loadData() {
         document.getElementById('loading').style.display = 'none';
       } catch (parseError) {
         console.error('JSON Parse Error:', parseError);
-        console.error('Problematic text:', text.substring(520, 540)); // Show around the error position
-        
-        // Try to fix common JSON issues
-        const fixedText = fixJsonText(text);
-        try {
-          const data = JSON.parse(fixedText);
-          allData = data.data || [];
-          renderTable(allData);
-          updateStats(allData);
-          document.getElementById('loading').style.display = 'none';
-        } catch (secondError) {
-          throw new Error(`JSON parse failed: ${parseError.message}. Response may be too large or malformed.`);
-        }
+        console.error('Problematic text near error:', text.substring(490, 510));
+        throw new Error(`JSON parse failed: ${parseError.message}`);
       }
     })
     .catch(err => {
@@ -629,14 +620,84 @@ function loadData() {
           <p>${err.message}</p>
           <p>Possible causes:</p>
           <ol style="text-align: left; display: inline-block; margin: 10px auto;">
-            <li>Response too large from Google Sheets</li>
-            <li>Malformed data in spreadsheet</li>
-            <li>Network connectivity issue</li>
+            <li>Backend API returning invalid JSON</li>
+            <li>Check Apps Script deployment settings</li>
+            <li>Try refreshing the page</li>
           </ol>
           <button class="btn btn-add" onclick="loadData()" style="margin-top: 15px;">Retry</button>
-          <button class="btn" onclick="testAPI()" style="margin-top: 10px; background-color: #eee;">Test API</button>
+          <button class="btn" onclick="testDirectAPI()" style="margin-top: 10px; background-color: #eee;">Test API Directly</button>
         </div>
       `;
+    });
+}
+
+// Function to clean API response - removes headers appended after JSON
+function cleanApiResponse(text) {
+  // Trim whitespace
+  text = text.trim();
+  
+  // Find the end of JSON (last '}' followed by whitespace)
+  const jsonEnd = text.lastIndexOf('}');
+  if (jsonEnd !== -1) {
+    // Extract only the JSON part (up to and including the last '}')
+    const cleaned = text.substring(0, jsonEnd + 1).trim();
+    
+    // Validate it starts with '{'
+    if (cleaned.startsWith('{')) {
+      return cleaned;
+    }
+  }
+  
+  // If we can't find valid JSON, try to extract JSON-like content
+  const jsonMatch = text.match(/\{[\s\S]*\}/);
+  if (jsonMatch) {
+    return jsonMatch[0];
+  }
+  
+  // If all else fails, return original text
+  return text;
+}
+
+// Test API directly in browser
+function testDirectAPI() {
+  const testUrl = `${API}?action=read&t=${new Date().getTime()}`;
+  console.log('Testing API directly:', testUrl);
+  
+  // Open in new tab
+  window.open(testUrl, '_blank');
+  
+  // Also try to fetch with better error handling
+  fetch(testUrl)
+    .then(res => res.text())
+    .then(text => {
+      console.log('Direct fetch response:', text);
+      console.log('Response length:', text.length);
+      console.log('First 500 chars:', text.substring(0, 500));
+      
+      // Try to parse
+      try {
+        const data = JSON.parse(text);
+        console.log('Direct parse successful:', data);
+        alert('Direct API test successful! Found ' + (data.data ? data.data.length : 0) + ' records.');
+      } catch (err) {
+        console.error('Direct parse failed:', err);
+        console.log('Trying to clean and parse...');
+        
+        const cleaned = cleanApiResponse(text);
+        console.log('Cleaned:', cleaned);
+        
+        try {
+          const data = JSON.parse(cleaned);
+          console.log('Cleaned parse successful:', data);
+          alert('API works after cleaning! Found ' + (data.data ? data.data.length : 0) + ' records.');
+        } catch (cleanErr) {
+          alert('API returns invalid JSON. Check Apps Script deployment.');
+        }
+      }
+    })
+    .catch(err => {
+      console.error('Direct fetch failed:', err);
+      alert('Failed to fetch from API: ' + err.message);
     });
 }
 
