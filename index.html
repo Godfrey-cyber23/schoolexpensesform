@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Expenses Dashboard</title>
+    <title>Expense Entry Form</title>
     <style>
         :root {
             --primary: #4a90e2;
+            --secondary: #f5f6fa;
             --dark: #2c3e50;
-            --light: #f4f6f9;
             --success: #2ecc71;
             --danger: #e74c3c;
-            --warning: #f1c40f;
+            --border: #dfe6e9;
         }
 
         * {
@@ -21,498 +21,383 @@
 
         body {
             font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--light);
+            background-color: #eef2f5;
             margin: 0;
-            padding: 12px;
-            font-size: 14px;
+            padding: 15px;
+            min-height: 100vh;
         }
 
         .container {
-            max-width: 1400px;
+            max-width: 800px;
             margin: 0 auto;
-            padding: 0 8px;
         }
 
-        /* Header - Compact for Mobile */
-        .header {
+        .form-card {
+            background: white;
+            width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .form-header {
+            background: var(--primary);
+            color: white;
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 15px;
-            gap: 10px;
-            flex-wrap: nowrap;
+            flex-wrap: wrap;
         }
 
-        .header h1 {
+        .form-header h2 {
             margin: 0;
             font-size: 1.3rem;
-            color: var(--dark);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            flex-shrink: 0;
-            max-width: 50%;
-        }
-
-        .actions-bar {
-            display: flex;
-            gap: 6px;
-            flex-wrap: nowrap;
-            justify-content: flex-end;
-            align-items: center;
-            flex-shrink: 1;
+            flex: 1;
             min-width: 0;
         }
 
-        .btn {
-            padding: 8px 10px;
-            border: none;
-            border-radius: 5px;
-            font-size: 0.8rem;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            white-space: nowrap;
-            height: 36px;
-            min-width: min-content;
-        }
-
-        .btn-add {
-            background-color: var(--primary);
-            color: white;
-            padding: 8px 12px;
-        }
-
-        .btn-export {
-            background-color: var(--dark);
-            color: white;
-        }
-
-        .btn-export-term {
-            background-color: white;
-            border: 1px solid var(--dark);
-            color: var(--dark);
-            padding: 8px 8px;
-            font-size: 0.75rem;
-            max-width: 100px;
-        }
-
-        /* Icon-only buttons on very small screens */
-        @media (max-width: 360px) {
-            .btn-text {
-                display: none;
-            }
-
-            .btn-icon {
-                display: inline-block !important;
-                font-size: 1rem;
-            }
-
-            .btn-add {
-                padding: 8px;
-                min-width: 36px;
-            }
-
-            .btn-export {
-                padding: 8px;
-                min-width: 36px;
-            }
-
-            .btn-export-term {
-                max-width: 70px;
-            }
-        }
-
-        .btn-icon {
-            display: none;
-            margin: 0;
-        }
-
-        /* Stats Cards - Compact */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-
-        @media (max-width: 480px) {
-            .stats-grid {
-                gap: 6px;
-            }
-        }
-
-        .stat-card {
-            background: white;
-            padding: 10px 12px;
-            border-radius: 6px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-            border-left: 3px solid var(--primary);
-            min-width: 0;
-            overflow: hidden;
-        }
-
-        .stat-card h3 {
-            margin: 0 0 4px;
-            font-size: 0.7rem;
-            color: #95a5a6;
-            text-transform: uppercase;
-            font-weight: 700;
-            letter-spacing: 0.3px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .stat-card .value {
-            font-size: 1.2rem;
-            font-weight: 800;
-            color: var(--dark);
-            line-height: 1.2;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        /* Compact Toolbar */
-        .toolbar {
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: nowrap;
-            gap: 8px;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 9px 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
+        .form-header p {
+            margin: 5px 0 0;
+            opacity: 0.9;
             font-size: 0.85rem;
-            min-width: 0;
-            height: 36px;
-        }
-
-        /* Table Container - Compact */
-        .table-wrapper {
-            background: white;
-            border-radius: 6px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-            overflow-x: auto;
-            position: relative;
-            -webkit-overflow-scrolling: touch;
-            margin-bottom: 15px;
-            font-size: 0.85rem;
-        }
-
-        table {
             width: 100%;
-            border-collapse: collapse;
-            min-width: 900px;
         }
 
-        @media (max-width: 768px) {
-            table {
-                min-width: 700px;
-            }
-        }
-
-        th,
-        td {
-            padding: 8px 6px;
-            text-align: left;
-            border-bottom: 1px solid #eee;
-            font-size: 0.8rem;
-            vertical-align: middle;
-        }
-
-        th {
-            background-color: #f8f9fa;
-            color: var(--dark);
-            font-weight: 600;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-            white-space: nowrap;
-        }
-
-        /* Clickable Row */
-        tbody tr {
-            cursor: pointer;
-            transition: background 0.1s;
-        }
-
-        tbody tr:hover {
-            background-color: #f0f8ff;
-        }
-
-        /* Number columns alignment */
-        .number-col {
+        .header-total {
             text-align: right;
-            font-family: 'SF Mono', 'Courier New', monospace;
-            font-feature-settings: "tnum";
-            font-variant-numeric: tabular-nums;
-        }
-
-        .total-col {
             font-weight: bold;
-            color: var(--dark);
-            text-align: right;
-            font-family: 'SF Mono', 'Courier New', monospace;
-            white-space: nowrap;
+            font-size: 1.5rem;
+            min-width: 80px;
         }
 
-        /* Compact Action Buttons */
-        .action-buttons {
-            display: flex;
-            gap: 4px;
-            flex-wrap: nowrap;
+        .header-total small {
+            display: block;
+            font-size: 0.75rem;
+            font-weight: normal;
+            opacity: 0.9;
         }
 
-        .action-btn {
-            padding: 4px 6px;
-            border-radius: 3px;
-            text-decoration: none;
+        .form-body {
+            padding: 20px;
+        }
+
+        /* Section Styling */
+        .section-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #7f8c8d;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            margin-top: 20px;
+        }
+
+        /* Helper Text Styling */
+        .helper-text {
+            display: block;
             font-size: 0.7rem;
-            border: none;
+            color: #888;
+            margin-bottom: 5px;
+            margin-top: -2px;
+            font-style: italic;
+        }
+
+        /* Category Toggles - Compact for Mobile */
+        .category-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .cat-chip {
+            position: relative;
+        }
+
+        .cat-chip input {
+            position: absolute;
+            opacity: 0;
             cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        .chip-label {
+            display: inline-block;
+            padding: 6px 12px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 16px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
             white-space: nowrap;
-            text-align: center;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 24px;
-            min-width: 40px;
         }
 
-        .btn-edit {
-            background-color: #f39c12;
-            color: white;
-        }
-
-        .btn-del {
-            background-color: var(--danger);
-            color: white;
-        }
-
-        .btn-view {
+        .cat-chip input:checked+.chip-label {
             background-color: var(--primary);
             color: white;
+            border-color: var(--primary);
+            box-shadow: 0 3px 5px rgba(74, 144, 226, 0.3);
         }
 
-        /* Compact Flag Icon */
-        .flag-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-            padding: 4px;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: background-color 0.2s;
+        /* Dynamic Inputs - Responsive Grid */
+        .grid-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
         }
 
-        .flagged-true {
-            color: var(--warning);
-            text-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
-        }
-
-        .flagged-false {
-            color: #ccc;
-        }
-
-        /* Column abbreviations for mobile */
-        @media (max-width: 768px) {
-            th:nth-child(6)::after {
-                content: " (T)";
-                font-size: 0.6rem;
-                opacity: 0.7;
-            }
-
-            th:nth-child(7)::after {
-                content: " (F)";
-                font-size: 0.6rem;
-                opacity: 0.7;
-            }
-
-            th:nth-child(8)::after {
-                content: " (Tr)";
-                font-size: 0.6rem;
-                opacity: 0.7;
-            }
-
-            th:nth-child(9)::after {
-                content: " (M)";
-                font-size: 0.6rem;
-                opacity: 0.7;
-            }
-
-            th:nth-child(10)::after {
-                content: " (H)";
-                font-size: 0.6rem;
-                opacity: 0.7;
-            }
-
-            th:nth-child(11)::after {
-                content: " (O)";
-                font-size: 0.6rem;
-                opacity: 0.7;
+        @media (max-width: 600px) {
+            .grid-inputs {
+                grid-template-columns: 1fr;
+                gap: 12px;
             }
         }
 
-        /* Modal adjustments for mobile */
-        .modal-overlay {
+        .input-wrapper.hidden {
             display: none;
+        }
+
+        .form-group {
+            margin-bottom: 5px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.85rem;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            box-sizing: border-box;
+            height: 42px;
+        }
+
+        textarea {
+            height: auto;
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
+        }
+
+        /* Student Details Grid - Responsive */
+        .student-details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 500px) {
+            .student-details-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+        }
+
+        /* Total Display - Mobile Friendly */
+        .total-display {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #e1e4e8;
+            text-align: right;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+
+        .total-display span {
+            font-weight: bold;
+            font-size: 1.3rem;
+            color: var(--primary);
+        }
+
+        /* Buttons - Stack on Mobile */
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            font-weight: 600;
+            flex: 1;
+            min-width: 120px;
+            transition: all 0.2s;
+        }
+
+        .btn-save {
+            background: var(--success);
+            color: white;
+        }
+
+        .btn-save:hover {
+            background: #27ae60;
+        }
+
+        .btn-cancel {
+            background: white;
+            border: 1px solid #ccc;
+            color: #555;
+        }
+
+        .btn-cancel:hover {
+            background: #f1f1f1;
+        }
+
+        @media (max-width: 400px) {
+            .button-group {
+                flex-direction: column;
+            }
+
+            button {
+                width: 100%;
+                min-width: 0;
+            }
+        }
+
+        /* Loading */
+        #loading {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
-            padding: 15px;
-            overflow-y: auto;
-        }
-
-        .modal-content {
-            background: white;
-            width: 100%;
-            max-width: 400px;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-            position: relative;
-            max-height: 85vh;
-            overflow-y: auto;
-            font-size: 0.9rem;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #999;
-            line-height: 1;
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Footer note for mobile table scrolling */
-        .scroll-hint {
-            text-align: center;
-            padding: 8px;
-            color: #666;
-            font-size: 0.75rem;
+            background: rgba(255, 255, 255, 0.9);
             display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
         }
 
-        @media (max-width: 768px) {
-            .scroll-hint {
-                display: block;
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
             }
         }
 
-        /* Very small screen adjustments */
-        @media (max-width: 320px) {
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile Optimizations */
+        @media (max-width: 480px) {
             body {
-                padding: 8px;
+                padding: 10px;
             }
 
-            .container {
-                padding: 0 4px;
+            .form-header {
+                padding: 12px 15px;
             }
 
-            .header {
+            .form-body {
+                padding: 15px;
+            }
+
+            .form-header h2 {
+                font-size: 1.2rem;
+            }
+
+            .header-total {
+                font-size: 1.3rem;
+            }
+
+            .section-title {
+                margin-top: 15px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .category-selector {
                 gap: 6px;
             }
 
-            .header h1 {
-                font-size: 1.1rem;
-            }
-
-            .btn {
-                padding: 6px 8px;
-                height: 32px;
-                font-size: 0.75rem;
-            }
-
-            .stat-card {
-                padding: 8px 10px;
-            }
-
-            .stat-card .value {
-                font-size: 1.1rem;
-            }
-
-            th,
-            td {
-                padding: 6px 4px;
+            .chip-label {
+                padding: 5px 10px;
                 font-size: 0.75rem;
             }
         }
 
-        /* Loading and Empty States */
-        #loading {
-            text-align: center;
-            padding: 30px 20px;
-            color: #666;
+        /* Back Button for Mobile */
+        .back-link {
+            display: inline-block;
+            margin-bottom: 10px;
+            color: var(--primary);
+            text-decoration: none;
             font-size: 0.9rem;
         }
 
-        .empty-state {
-            text-align: center;
-            padding: 30px 15px;
-            color: #666;
-            font-size: 0.9rem;
+        .back-link:hover {
+            text-decoration: underline;
         }
 
-        .empty-state h3 {
-            margin-bottom: 8px;
-            color: var(--dark);
-            font-size: 1rem;
+        /* Success/Error Messages */
+        .message {
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            display: none;
         }
 
-        /* Print Styles */
-        @media print {
-            body * {
-                visibility: hidden;
-            }
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
 
-            .modal-content,
-            .modal-content * {
-                visibility: visible;
-            }
-
-            .modal-content {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                margin: 0;
-                padding: 15px;
-                box-shadow: none;
-            }
-
-            .modal-close,
-            .modal-footer {
-                display: none !important;
-            }
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
         }
     </style>
 </head>
@@ -520,390 +405,490 @@
 <body>
 
     <div class="container">
+        <a href="index.html" class="back-link">← Back to Dashboard</a>
 
-        <div class="header">
-            <h1>🏫 Expenses</h1>
-            <div class="actions-bar">
-                <select id="exportSelect" class="btn btn-export-term">
-                    <option value="all">All</option>
-                    <option value="Term 1">Term 1</option>
-                    <option value="Term 2">Term 2</option>
-                    <option value="Term 3">Term 3</option>
-                </select>
-                <button class="btn btn-export" onclick="exportData()" title="Download Excel">
-                    <span class="btn-text">Download</span>
-                    <span class="btn-icon">📥</span>
-                </button>
-                <a href="form.html" class="btn btn-add" title="Add New Record">
-                    <span class="btn-text">Add Record</span>
-                    <span class="btn-icon">+</span>
-                </a>
+        <div class="form-card">
+            <div class="form-header">
+                <div style="flex: 1; min-width: 0;">
+                    <h2 id="pageTitle">Add New Record</h2>
+                    <p>Select categories & enter amounts</p>
+                </div>
+                <div class="header-total">
+                    <small>Total</small>
+                    <div id="headerTotal">0.00</div>
+                </div>
             </div>
-        </div>
 
-        <div class="stats-grid">
-            <div class="stat-card">
-                <h3>Total Spent</h3>
-                <div class="value" id="grandTotalDisplay">0.00</div>
-            </div>
-            <div class="stat-card">
-                <h3>Records</h3>
-                <div class="value" id="recordCount">0</div>
-            </div>
-            <div class="stat-card">
-                <h3>Flagged</h3>
-                <div class="value" id="flaggedCount">0</div>
-            </div>
-        </div>
+            <div id="successMessage" class="message success-message"></div>
+            <div id="errorMessage" class="message error-message"></div>
 
-        <div class="toolbar">
-            <input type="text" id="searchInput" placeholder="🔍 Search..." onkeyup="filterTable()">
-        </div>
+            <form id="expenseForm" class="form-body">
 
-        <div class="scroll-hint">
-            ← Scroll to see all columns →
-        </div>
+                <!-- 1. Student Context -->
+                <div class="section-title">Student Details</div>
+                <div class="student-details-grid">
+                    <div class="form-group">
+                        <label>Student Name</label>
+                        <small class="helper-text">Who is this payment for?</small>
+                        <select id="student" required>
+                            <option value="">Select Student...</option>
+                            <option value="Misheck Kombe">Misheck Kombe</option>
+                            <option value="Gift Chanda">Gift Chanda</option>
+                            <option value="Mundia Munalula">Mundia Munalula</option>
+                            <option value="Chama Mbao">Chama Mbao</option>
+                            <option value="Boyd Mulenga">Boyd Mulenga</option>
+                            <option value="Richard Mulenga">Richard Mulenga</option>
+                            <option value="David Mwansa">David Mwansa</option>
+                            <option value="Theresa Mwashi">Theresa Mwashi</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Term</label>
+                        <small class="helper-text">Which school term?</small>
+                        <select id="term" required>
+                            <option value="Term 1">Term 1</option>
+                            <option value="Term 2">Term 2</option>
+                            <option value="Term 3">Term 3</option>
+                        </select>
+                    </div>
+                </div>
 
-        <div class="table-wrapper">
-            <table id="expenseTable">
-                <thead>
-                    <tr>
-                        <th width="50">Flag</th>
-                        <th width="120">Student</th>
-                        <th width="80">Date</th>
-                        <th width="70">Term</th>
-                        <th width="70">Year</th>
-                        <th width="80" class="number-col">Tuition</th>
-                        <th width="80" class="number-col">Food</th>
-                        <th width="80" class="number-col">Transp</th>
-                        <th width="80" class="number-col">Mat</th>
-                        <th width="80" class="number-col">Hyg</th>
-                        <th width="80" class="number-col">Other</th>
-                        <th width="90" class="total-col">Total</th>
-                        <th width="120">Actions</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody"></tbody>
-            </table>
-            <div id="loading">Loading...</div>
-        </div>
+                <div class="student-details-grid" style="margin-top: 12px;">
+                    <div class="form-group">
+                        <label>Year</label>
+                        <small class="helper-text">The academic year</small>
+                        <input type="number" id="year" value="2024" required min="2000" max="2100">
+                    </div>
+                    <div class="form-group">
+                        <label>Date</label>
+                        <small class="helper-text">When did this expense occur?</small>
+                        <input type="date" id="expense_date" required>
+                    </div>
+                </div>
 
+                <!-- 2. Category Selector -->
+                <div class="section-title">Select Expense Categories</div>
+                <div class="category-selector">
+
+                    <div class="cat-chip">
+                        <input type="checkbox" id="check-tuition" onchange="toggleVisibility('tuition', this.checked)">
+                        <label for="check-tuition" class="chip-label">Tuition</label>
+                    </div>
+
+                    <div class="cat-chip">
+                        <input type="checkbox" id="check-food" onchange="toggleVisibility('food', this.checked)">
+                        <label for="check-food" class="chip-label">Food</label>
+                    </div>
+
+                    <div class="cat-chip">
+                        <input type="checkbox" id="check-transport"
+                            onchange="toggleVisibility('transport', this.checked)">
+                        <label for="check-transport" class="chip-label">Transport</label>
+                    </div>
+
+                    <div class="cat-chip">
+                        <input type="checkbox" id="check-materials"
+                            onchange="toggleVisibility('materials', this.checked)">
+                        <label for="check-materials" class="chip-label">Materials</label>
+                    </div>
+
+                    <div class="cat-chip">
+                        <input type="checkbox" id="check-hygiene" onchange="toggleVisibility('hygiene', this.checked)">
+                        <label for="check-hygiene" class="chip-label">Hygiene</label>
+                    </div>
+
+                    <div class="cat-chip">
+                        <input type="checkbox" id="check-other" onchange="toggleVisibility('other', this.checked)">
+                        <label for="check-other" class="chip-label">Other</label>
+                    </div>
+
+                </div>
+
+                <!-- 3. Dynamic Inputs -->
+                <div class="section-title">Enter Amounts</div>
+                <div class="grid-inputs">
+
+                    <div id="wrap-tuition" class="input-wrapper hidden">
+                        <div class="form-group">
+                            <label>Tuition Fees</label>
+                            <small class="helper-text">Full term fee or partial?</small>
+                            <input type="number" id="tuition" class="calc-input" placeholder="0.00" min="0" step="0.01">
+                        </div>
+                    </div>
+
+                    <div id="wrap-food" class="input-wrapper hidden">
+                        <div class="form-group">
+                            <label>Food</label>
+                            <small class="helper-text">Boarding, daily meals, or groceries?</small>
+                            <input type="number" id="food" class="calc-input" placeholder="0.00" min="0" step="0.01">
+                        </div>
+                    </div>
+
+                    <div id="wrap-transport" class="input-wrapper hidden">
+                        <div class="form-group">
+                            <label>Transport</label>
+                            <small class="helper-text">Bus fare, taxi, or fuel?</small>
+                            <input type="number" id="transport" class="calc-input" placeholder="0.00" min="0"
+                                step="0.01">
+                        </div>
+                    </div>
+
+                    <div id="wrap-materials" class="input-wrapper hidden">
+                        <div class="form-group">
+                            <label>School Materials</label>
+                            <small class="helper-text">Books, pens, uniforms, or exam papers?</small>
+                            <input type="number" id="materials" class="calc-input" placeholder="0.00" min="0"
+                                step="0.01">
+                        </div>
+                    </div>
+
+                    <div id="wrap-hygiene" class="input-wrapper hidden">
+                        <div class="form-group">
+                            <label>Hygiene</label>
+                            <small class="helper-text">Soap, toiletries, or laundry fees?</small>
+                            <input type="number" id="hygiene" class="calc-input" placeholder="0.00" min="0" step="0.01">
+                        </div>
+                    </div>
+
+                    <div id="wrap-other" class="input-wrapper hidden">
+                        <div class="form-group">
+                            <label>Other</label>
+                            <small class="helper-text">What is this specific expense for?</small>
+                            <input type="number" id="other" class="calc-input" placeholder="0.00" min="0" step="0.01">
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- 4. Notes -->
+                <div class="section-title">Additional Info</div>
+                <div class="form-group">
+                    <label>Notes / Reference</label>
+                    <small class="helper-text">Receipt number, bank reference, or payment method</small>
+                    <textarea id="notes" rows="3" placeholder="E.g. Airtel Money Ref: 12345"></textarea>
+                </div>
+
+                <!-- Actions -->
+                <div class="button-group">
+                    <button type="button" class="btn-cancel" onclick="goBack()">Cancel</button>
+                    <button type="submit" class="btn-save" id="saveBtn">Save Record</button>
+                </div>
+            </form>
+        </div>
     </div>
 
-    <!-- View/Receipt Modal -->
-    <div id="viewModal" class="modal-overlay">
-        <div class="modal-content">
-            <span class="modal-close" onclick="closeModal()">&times;</span>
-
-            <div class="receipt-header">
-                <h2 style="font-size: 1.3rem; margin: 0 0 5px 0;">Payment Receipt</h2>
-                <p style="font-size: 0.85rem; color: #666; margin: 0 0 5px 0;">School Expenses</p>
-                <p id="receiptDate" style="font-size: 0.8rem; color: #999; margin: 0;"></p>
-            </div>
-
-            <div style="margin-top: 15px;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem;">
-                    <strong>Student:</strong> <span id="modalStudent"></span>
-                </div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem;">
-                    <strong>Term:</strong> <span id="modalTerm"></span>
-                </div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem;">
-                    <strong>Year:</strong> <span id="modalYear"></span>
-                </div>
-            </div>
-
-            <hr style="border:0; border-top:1px solid #eee; margin: 10px 0;">
-
-            <div id="modalBreakdown"></div>
-
-            <div
-                style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.1rem; margin-top: 15px; border-top: 2px dashed #ccc; padding-top: 10px;">
-                <span>Total:</span> <span id="modalTotal"></span>
-            </div>
-
-            <div style="margin-top: 15px; font-size: 0.8rem; color: #777;">
-                <div style="margin-bottom: 5px;"><strong>Notes:</strong> <span id="modalNotes">None</span></div>
-                <div><strong>ID:</strong> <span id="modalId"></span></div>
-            </div>
-
-            <div style="text-align: center; margin-top: 20px; display: flex; gap: 10px; justify-content: center;">
-                <button class="btn btn-export" onclick="window.print()"
-                    style="padding: 8px 12px; font-size: 0.8rem;">Print</button>
-                <button class="btn" onclick="closeModal()"
-                    style="margin-left: 0; background-color: #eee; padding: 8px 12px; font-size: 0.8rem;">Close</button>
-            </div>
-        </div>
+    <div id="loading">
+        <div class="spinner"></div>
     </div>
 
     <script>
+        // --- CONFIGURATION ---
         const API = "https://script.google.com/macros/s/AKfycbzEEeuwtZm-qGOmKLza3IfdVieYurAH14xgp3Q0lUPwUpvyz2rIHUlkC48sCc2FUK9i/exec";
-        let allData = [];
+        const DASHBOARD_URL = "index.html";
 
-        window.onload = loadData;
+        let editingId = null;
+        const calcInputs = document.querySelectorAll('.calc-input');
+        const headerTotal = document.getElementById('headerTotal');
 
-        function loadData() {
-            document.getElementById('loading').style.display = 'block';
+        // Message display functions
+        function showMessage(message, type = 'success') {
+            const messageDiv = type === 'success'
+                ? document.getElementById('successMessage')
+                : document.getElementById('errorMessage');
 
-            // Add cache-busting parameter to prevent caching
-            const timestamp = new Date().getTime();
-            const url = `${API}?t=${timestamp}`;
+            messageDiv.textContent = message;
+            messageDiv.style.display = 'block';
 
-            fetch(url)
-                .then(res => {
-                    if (!res.ok) {
-                        throw new Error(`HTTP error! status: ${res.status}`);
-                    }
-                    return res.json();
-                })
-                .then(data => {
-                    allData = data.data || [];
-                    renderTable(allData);
-                    updateStats(allData);
-                    document.getElementById('loading').style.display = 'none';
-                })
-                .catch(err => {
-                    console.error('Error loading data:', err);
-                    document.getElementById('loading').innerHTML = `
-        <div class="empty-state">
-          <h3>Connection Error</h3>
-          <p>Unable to connect to Google Sheets. Please check:</p>
-          <ol style="text-align: left; display: inline-block; margin: 10px auto;">
-            <li>Is the Apps Script deployed as a Web App?</li>
-            <li>Is "Who has access" set to "Anyone"?</li>
-            <li>Did you replace the API URL above?</li>
-          </ol>
-          <button class="btn btn-add" onclick="loadData()" style="margin-top: 15px;">Retry</button>
-        </div>
-      `;
+            // Hide other message
+            const otherDiv = type === 'success'
+                ? document.getElementById('errorMessage')
+                : document.getElementById('successMessage');
+            otherDiv.style.display = 'none';
+
+            // Auto-hide success messages after 5 seconds
+            if (type === 'success') {
+                setTimeout(() => {
+                    messageDiv.style.display = 'none';
+                }, 5000);
+            }
+        }
+
+        function hideMessages() {
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        window.onload = function () {
+            // Set today's date as default
+            const today = new Date();
+            const formattedDate = today.toISOString().split('T')[0];
+            document.getElementById('expense_date').value = formattedDate;
+
+            checkForEditMode();
+            setupLiveCalculator();
+
+            // Auto-select first category for better UX
+            setTimeout(() => {
+                document.getElementById('check-tuition').checked = true;
+                toggleVisibility('tuition', true);
+            }, 100);
+
+            // Hide any existing messages
+            hideMessages();
+        };
+
+        // --- 1. TOGGLE VISIBILITY LOGIC ---
+        function toggleVisibility(category, isChecked) {
+            const wrapper = document.getElementById('wrap-' + category);
+            const input = document.getElementById(category);
+
+            if (isChecked) {
+                wrapper.classList.remove('hidden');
+                // Focus after a small delay for better mobile UX
+                setTimeout(() => input.focus(), 50);
+            } else {
+                wrapper.classList.add('hidden');
+                input.value = '';
+                calculateTotal();
+            }
+        }
+
+        // --- 2. CALCULATOR ---
+        function setupLiveCalculator() {
+            calcInputs.forEach(input => {
+                input.addEventListener('input', calculateTotal);
+                // Better mobile experience
+                input.addEventListener('focus', function () {
+                    this.select();
                 });
-        }
-
-
-        function renderTable(data) {
-            const tbody = document.getElementById('tableBody');
-            tbody.innerHTML = "";
-            data.sort((a, b) => new Date(b.expense_date) - new Date(a.expense_date));
-
-            if (!data.length) {
-                tbody.innerHTML = `
-      <tr>
-        <td colspan="13" style="text-align:center; padding: 30px;">
-          <div class="empty-state">
-            <h3>No Records</h3>
-            <p>Add your first expense record</p>
-            <a href="form.html" class="btn btn-add" style="padding: 6px 10px; font-size: 0.8rem;">+ Add Record</a>
-          </div>
-        </td>
-      </tr>`;
-                return;
-            }
-
-            data.forEach(r => {
-                const total = (Number(r.tuition) || 0) + (Number(r.food) || 0) + (Number(r.transport) || 0) + (Number(r.materials) || 0) + (Number(r.hygiene) || 0) + (Number(r.other) || 0);
-                const isFlagged = r.flagged === true || r.flagged === 'true';
-                const flagClass = isFlagged ? 'flagged-true' : 'flagged-false';
-                const flagIcon = isFlagged ? '★' : '☆';
-
-                tbody.innerHTML += `
-      <tr onclick="openModal(${r.id})">
-        <td>
-          <button class="flag-btn ${flagClass}" onclick="toggleFlag(${r.id}, ${isFlagged}); event.stopPropagation();" 
-                  title="${isFlagged ? 'Unflag' : 'Flag'}">
-            ${flagIcon}
-          </button>
-        </td>
-        <td style="font-weight:600;">${r.student}</td>
-        <td>${new Date(r.expense_date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</td>
-        <td>${r.term}</td>
-        <td>${r.year}</td>
-        <td class="number-col">${formatNum(r.tuition)}</td>
-        <td class="number-col">${formatNum(r.food)}</td>
-        <td class="number-col">${formatNum(r.transport)}</td>
-        <td class="number-col">${formatNum(r.materials)}</td>
-        <td class="number-col">${formatNum(r.hygiene)}</td>
-        <td class="number-col">${formatNum(r.other)}</td>
-        <td class="total-col">${formatNum(total)}</td>
-        <td>
-          <div class="action-buttons">
-            <button class="action-btn btn-view" onclick="openModal(${r.id}); event.stopPropagation();" title="View">View</button>
-            <a href="form.html?id=${r.id}" class="action-btn btn-edit" onclick="event.stopPropagation();" title="Edit">Edit</a>
-            <button class="action-btn btn-del" onclick="del(${r.id}); event.stopPropagation();" title="Delete">Del</button>
-          </div>
-        </td>
-      </tr>`;
             });
         }
 
-        function updateStats(data) {
-            let grandTotal = 0, flaggedCount = 0;
-            data.forEach(r => {
-                grandTotal += (Number(r.tuition) || 0) + (Number(r.food) || 0) + (Number(r.transport) || 0) + (Number(r.materials) || 0) + (Number(r.hygiene) || 0) + (Number(r.other) || 0);
-                if (r.flagged === true || r.flagged === 'true') flaggedCount++;
+        function calculateTotal() {
+            let total = 0;
+            calcInputs.forEach(input => {
+                const value = parseFloat(input.value) || 0;
+                total += value;
             });
-            document.getElementById('grandTotalDisplay').innerText = formatNum(grandTotal);
-            document.getElementById('recordCount').innerText = data.length;
-            document.getElementById('flaggedCount').innerText = flaggedCount;
+            headerTotal.innerText = total.toLocaleString(undefined, {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
         }
 
-        function formatNum(num) {
-            const n = Number(num || 0);
-            if (n >= 1000) {
-                return n.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 0 });
-            }
-            return n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        }
+        // --- 3. EDIT MODE LOGIC ---
+        function checkForEditMode() {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
 
-        function del(id) {
-            if (confirm("Delete this record?")) {
-                document.getElementById('loading').style.display = 'block';
-                fetch(API + "?id=" + id, {
-                    method: "DELETE",
-                    headers: { 'Content-Type': 'application/json' }
-                })
-                    .then(response => {
-                        if (!response.ok) throw new Error('Delete failed');
-                        loadData();
+            if (id) {
+                editingId = id;
+                document.getElementById('pageTitle').innerText = "Edit Record";
+                document.getElementById('saveBtn').innerText = "Update Record";
+
+                document.getElementById('loading').style.display = 'flex';
+
+                // Add timestamp to prevent caching
+                const timestamp = new Date().getTime();
+                const url = `${API}?t=${timestamp}`;
+
+                fetch(url)
+                    .then(res => {
+                        if (!res.ok) {
+                            throw new Error(`HTTP error! status: ${res.status}`);
+                        }
+                        return res.json();
+                    })
+                    .then(data => {
+                        const records = data.data || [];
+                        const record = records.find(r => r.id == id);
+                        if (record) {
+                            populateForm(record);
+                        } else {
+                            showMessage("Record not found! It may have been deleted.", 'error');
+                            setTimeout(() => goBack(), 2000);
+                        }
+                        document.getElementById('loading').style.display = 'none';
                     })
                     .catch(err => {
                         console.error(err);
-                        alert("Delete failed. Try again.");
+                        showMessage("Error loading record. Please check your connection.", 'error');
                         document.getElementById('loading').style.display = 'none';
                     });
             }
         }
 
-        function toggleFlag(id, currentStatus) {
-            fetch(API, {
-                method: "PUT",
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id: id, flagged: !currentStatus })
-            })
-                .then(response => {
-                    if (!response.ok) throw new Error('Update failed');
-                    loadData();
-                })
-                .catch(err => {
-                    console.error(err);
-                    alert("Failed to update flag.");
-                });
-        }
+        function populateForm(r) {
+            document.getElementById('student').value = r.student || '';
+            document.getElementById('term').value = r.term || 'Term 1';
+            document.getElementById('year').value = r.year || 2024;
+            document.getElementById('expense_date').value = r.expense_date || '';
+            document.getElementById('notes').value = r.notes || "";
 
-        function filterTable() {
-            const q = document.getElementById("searchInput").value.toLowerCase().trim();
-            if (!q) {
-                renderTable(allData);
-                return;
-            }
-
-            const filteredData = allData.filter(i =>
-                i.student.toLowerCase().includes(q) ||
-                i.term.toLowerCase().includes(q) ||
-                (i.notes && i.notes.toLowerCase().includes(q)) ||
-                i.year.toString().includes(q)
-            );
-
-            renderTable(filteredData);
-        }
-
-        function exportData() {
-            const filterTerm = document.getElementById('exportSelect').value;
-            let dataToExport = allData;
-
-            if (filterTerm !== 'all') {
-                dataToExport = allData.filter(i => i.term === filterTerm);
-            }
-
-            if (dataToExport.length === 0) {
-                alert("No data to export!");
-                return;
-            }
-
-            let csvContent = "data:text/csv;charset=utf-8,";
-            csvContent += "Student,Date,Term,Year,Tuition,Food,Transport,Materials,Hygiene,Other,Total,Notes\n";
-
-            dataToExport.forEach(r => {
-                const total = (Number(r.tuition) || 0) + (Number(r.food) || 0) + (Number(r.transport) || 0) + (Number(r.materials) || 0) + (Number(r.hygiene) || 0) + (Number(r.other) || 0);
-                const row = [
-                    `"${r.student}"`,
-                    r.expense_date,
-                    r.term,
-                    r.year,
-                    r.tuition,
-                    r.food,
-                    r.transport,
-                    r.materials,
-                    r.hygiene,
-                    r.other,
-                    total,
-                    `"${(r.notes || '').replace(/"/g, '""')}"`
-                ];
-                csvContent += row.join(",") + "\n";
-            });
-
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", `expenses_${filterTerm}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        function openModal(id) {
-            const r = allData.find(x => x.id == id);
-            if (!r) return;
-
-            const total = (Number(r.tuition) || 0) + (Number(r.food) || 0) + (Number(r.transport) || 0) + (Number(r.materials) || 0) + (Number(r.hygiene) || 0) + (Number(r.other) || 0);
-
-            document.getElementById('modalStudent').innerText = r.student;
-            document.getElementById('modalTerm').innerText = r.term;
-            document.getElementById('modalYear').innerText = r.year;
-            document.getElementById('receiptDate').innerText = new Date(r.expense_date).toLocaleDateString();
-            document.getElementById('modalTotal').innerText = formatNum(total);
-            document.getElementById('modalNotes').innerText = r.notes || "No notes";
-            document.getElementById('modalId').innerText = r.id;
-
-            let breakdownHTML = "";
-            const categories = [
-                { k: 'tuition', l: 'Tuition' },
-                { k: 'food', l: 'Food' },
-                { k: 'transport', l: 'Transport' },
-                { k: 'materials', l: 'Materials' },
-                { k: 'hygiene', l: 'Hygiene' },
-                { k: 'other', l: 'Other' }
-            ];
+            // List of all expense categories
+            const categories = ['tuition', 'food', 'transport', 'materials', 'hygiene', 'other'];
 
             categories.forEach(cat => {
-                const value = Number(r[cat.k]) || 0;
+                const value = Number(r[cat]) || 0;
+                const checkbox = document.getElementById('check-' + cat);
                 if (value > 0) {
-                    breakdownHTML += `
-        <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.9rem;">
-          <span>${cat.l}:</span>
-          <span>${formatNum(value)}</span>
-        </div>`;
+                    checkbox.checked = true;
+                    toggleVisibility(cat, true);
+                    document.getElementById(cat).value = value;
+                } else {
+                    checkbox.checked = false;
+                    toggleVisibility(cat, false);
                 }
             });
 
-            document.getElementById('modalBreakdown').innerHTML = breakdownHTML;
-            document.getElementById('viewModal').style.display = 'flex';
-            document.body.style.overflow = 'hidden';
+            calculateTotal();
         }
 
-        function closeModal() {
-            document.getElementById('viewModal').style.display = 'none';
-            document.body.style.overflow = 'auto';
+        // --- 4. SUBMIT ---
+        document.getElementById("expenseForm").addEventListener("submit", e => {
+            e.preventDefault();
+
+            // Clear any existing messages
+            hideMessages();
+
+            // Validate student selection
+            const student = document.getElementById("student").value;
+            if (!student) {
+                showMessage("Please select a student.", 'error');
+                document.getElementById("student").focus();
+                return;
+            }
+
+            // Validate at least one category is selected
+            const anyChecked = Array.from(document.querySelectorAll('.category-selector input[type="checkbox"]'))
+                .some(cb => cb.checked);
+
+            if (!anyChecked) {
+                showMessage("Please select at least one expense category.", 'error');
+                return;
+            }
+
+            // Validate at least one amount is entered
+            const hasAmount = Array.from(calcInputs)
+                .some(input => parseFloat(input.value) > 0);
+
+            if (!hasAmount) {
+                showMessage("Please enter at least one amount greater than 0.", 'error');
+                return;
+            }
+
+            document.getElementById('loading').style.display = 'flex';
+
+            const data = {
+                student: student,
+                term: document.getElementById("term").value,
+                year: parseInt(document.getElementById("year").value),
+                expense_date: document.getElementById("expense_date").value,
+                tuition: parseFloat(document.getElementById("tuition").value) || 0,
+                food: parseFloat(document.getElementById("food").value) || 0,
+                transport: parseFloat(document.getElementById("transport").value) || 0,
+                materials: parseFloat(document.getElementById("materials").value) || 0,
+                hygiene: parseFloat(document.getElementById("hygiene").value) || 0,
+                other: parseFloat(document.getElementById("other").value) || 0,
+                notes: document.getElementById("notes").value.trim()
+            };
+
+            const method = editingId ? "PUT" : "POST";
+            const payload = editingId ? { id: editingId, ...data } : data;
+
+            // For Apps Script, we need to pass method as parameter
+            const timestamp = new Date().getTime();
+            const url = `${API}?method=${method}&t=${timestamp}`;
+
+            fetch(url, {
+                method: 'POST', // Always use POST for Apps Script
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(result => {
+                    console.log('API Response:', result);
+                    document.getElementById('loading').style.display = 'none';
+
+                    if (result.success === false) {
+                        throw new Error(result.message || 'Unknown error from server');
+                    }
+
+                    const successMsg = editingId ? "Record Updated Successfully!" : "Record Saved Successfully!";
+                    showMessage(successMsg, 'success');
+
+                    // Redirect after 1.5 seconds
+                    setTimeout(() => {
+                        window.location.href = DASHBOARD_URL;
+                    }, 1500);
+                })
+                .catch(err => {
+                    console.error("Error:", err);
+                    document.getElementById('loading').style.display = 'none';
+
+                    let errorMsg = err.message || "Error saving data.";
+
+                    // More user-friendly error messages
+                    if (errorMsg.includes('NetworkError') || errorMsg.includes('Failed to fetch')) {
+                        errorMsg = "Network error. Please check your internet connection and try again.";
+                    } else if (errorMsg.includes('405')) {
+                        errorMsg = "Server configuration error. Please check your Apps Script deployment.";
+                    } else if (errorMsg.includes('404')) {
+                        errorMsg = "API endpoint not found. Please check your API URL.";
+                    }
+
+                    showMessage(errorMsg, 'error');
+
+                    // Scroll to top to show error message
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+        });
+
+        function goBack() {
+            if (confirm("Are you sure you want to cancel? Any unsaved changes will be lost.")) {
+                window.location.href = DASHBOARD_URL;
+            }
         }
 
-        window.onclick = function (event) {
-            const modal = document.getElementById('viewModal');
-            if (event.target == modal) closeModal();
-        }
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                goBack();
+            }
+            if (e.ctrlKey && e.key === 's') {
+                e.preventDefault();
+                document.getElementById('saveBtn').click();
+            }
+        });
 
-        document.addEventListener('keydown', function (event) {
-            if (event.key === 'Escape') closeModal();
+        // Prevent accidental page refresh with unsaved changes
+        window.addEventListener('beforeunload', function (e) {
+            // Check if form has unsaved changes
+            const form = document.getElementById('expenseForm');
+            const anyValue = Array.from(form.elements).some(element => {
+                if (element.type === 'checkbox') return element.checked;
+                if (element.type === 'text' || element.type === 'number' || element.type === 'textarea' || element.tagName === 'SELECT') {
+                    return element.value && element.defaultValue !== element.value;
+                }
+                return false;
+            });
+
+            if (anyValue) {
+                // Standard way
+                e.preventDefault();
+                // Custom message (not all browsers show this)
+                e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+            }
         });
     </script>
+
 </body>
 
 </html>
