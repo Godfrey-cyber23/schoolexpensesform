@@ -583,6 +583,7 @@
 
     <script>
         // --- CONFIGURATION ---
+        // ENSURE THIS URL MATCHES YOUR NEWLY DEPLOYED BACKEND
         const API = "https://script.google.com/macros/s/AKfycbzEEeuwtZm-qGOmKLza3IfdVieYurAH14xgp3Q0lUPwUpvyz2rIHUlkC48sCc2FUK9i/exec";
         const DASHBOARD_URL = "index.html";
 
@@ -688,9 +689,10 @@
 
                 document.getElementById('loading').style.display = 'flex';
 
-                // Add timestamp to prevent caching
+                // Fetch Logic: Use GET with action=read
+                // Timestamp prevents caching
                 const timestamp = new Date().getTime();
-                const url = `${API}?t=${timestamp}`;
+                const url = `${API}?action=read&t=${timestamp}`;
 
                 fetch(url)
                     .then(res => {
@@ -700,7 +702,7 @@
                         return res.json();
                     })
                     .then(data => {
-                        const records = data.data || [];
+                        const records = data.data || []; // Backend returns { data: [...] }
                         const record = records.find(r => r.id == id);
                         if (record) {
                             populateForm(record);
@@ -744,7 +746,7 @@
             calculateTotal();
         }
 
-        // --- 4. SUBMIT ---
+        // --- 4. SUBMIT (Updated for GET requests) ---
         document.getElementById("expenseForm").addEventListener("submit", e => {
             e.preventDefault();
 
@@ -779,6 +781,7 @@
 
             document.getElementById('loading').style.display = 'flex';
 
+            // Prepare Data Object
             const data = {
                 student: student,
                 term: document.getElementById("term").value,
@@ -793,20 +796,14 @@
                 notes: document.getElementById("notes").value.trim()
             };
 
-            const method = editingId ? "PUT" : "POST";
+            // Construct Payload and URL for GET request
+            const actionType = editingId ? "update" : "add";
             const payload = editingId ? { id: editingId, ...data } : data;
+            
+            // URL Encode the JSON payload to send it via GET
+            const url = `${API}?action=${actionType}&data=${encodeURIComponent(JSON.stringify(payload))}`;
 
-            // For Apps Script, we need to pass method as parameter
-            const timestamp = new Date().getTime();
-            const url = `${API}?method=${method}&t=${timestamp}`;
-
-            fetch(url, {
-                method: 'POST', // Always use POST for Apps Script
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(payload)
-            })
+            fetch(url) // Default is GET
                 .then(response => {
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
@@ -817,8 +814,8 @@
                     console.log('API Response:', result);
                     document.getElementById('loading').style.display = 'none';
 
-                    if (result.success === false) {
-                        throw new Error(result.message || 'Unknown error from server');
+                    if (result.error) {
+                        throw new Error(result.error);
                     }
 
                     const successMsg = editingId ? "Record Updated Successfully!" : "Record Saved Successfully!";
