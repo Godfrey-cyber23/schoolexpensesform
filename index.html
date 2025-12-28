@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Expense Entry Form</title>
+    <title>Expense Entry Form - Action for Children Zambia</title>
     <style>
         :root {
             --primary: #4a90e2;
@@ -12,6 +12,7 @@
             --dark: #2c3e50;
             --success: #2ecc71;
             --danger: #e74c3c;
+            --warning: #f39c12;
             --border: #dfe6e9;
         }
 
@@ -28,7 +29,7 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
         }
 
@@ -55,16 +56,22 @@
             display: block;
         }
 
-        @media (max-width: 480px) {
-            .org-name {
-                font-size: 1.5rem;
-            }
-
-            .org-tagline {
-                font-size: 0.8rem;
-            }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 15px;
+            color: var(--primary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            padding: 8px 12px;
+            border: 1px solid var(--primary);
+            border-radius: 5px;
+            transition: all 0.2s;
         }
 
+        .back-link:hover {
+            background-color: var(--primary);
+            color: white;
+        }
 
         .form-card {
             background: white;
@@ -73,6 +80,7 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             overflow: hidden;
             animation: fadeIn 0.5s ease-in-out;
+            margin-bottom: 30px;
         }
 
         .form-header {
@@ -119,32 +127,41 @@
 
         /* Section Styling */
         .section-title {
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            color: #7f8c8d;
-            margin-bottom: 10px;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 5px;
-            margin-top: 20px;
+            color: var(--dark);
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #eee;
+            margin-top: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-total {
+            font-size: 0.8rem;
+            color: var(--primary);
+            font-weight: bold;
         }
 
         /* Helper Text Styling */
         .helper-text {
             display: block;
-            font-size: 0.7rem;
-            color: #888;
-            margin-bottom: 5px;
+            font-size: 0.75rem;
+            color: #666;
+            margin-bottom: 8px;
             margin-top: -2px;
             font-style: italic;
         }
 
-        /* Category Toggles - Compact for Mobile */
+        /* Category Toggles */
         .category-selector {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 15px;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
         .cat-chip {
@@ -161,52 +178,43 @@
 
         .chip-label {
             display: inline-block;
-            padding: 6px 12px;
+            padding: 8px 16px;
             background-color: white;
-            border: 1px solid #ccc;
-            border-radius: 16px;
-            font-size: 0.8rem;
+            border: 2px solid #ddd;
+            border-radius: 20px;
+            font-size: 0.85rem;
             cursor: pointer;
             transition: all 0.2s;
             user-select: none;
             white-space: nowrap;
+            font-weight: 500;
         }
 
         .cat-chip input:checked+.chip-label {
             background-color: var(--primary);
             color: white;
             border-color: var(--primary);
-            box-shadow: 0 3px 5px rgba(74, 144, 226, 0.3);
+            box-shadow: 0 3px 8px rgba(74, 144, 226, 0.3);
         }
 
-        /* Dynamic Inputs - Responsive Grid */
-        .grid-inputs {
+        /* Student Details Grid */
+        .student-details-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
-        }
-
-        @media (max-width: 600px) {
-            .grid-inputs {
-                grid-template-columns: 1fr;
-                gap: 12px;
-            }
-        }
-
-        .input-wrapper.hidden {
-            display: none;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
         }
 
         .form-group {
-            margin-bottom: 5px;
+            margin-bottom: 15px;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
             font-weight: 600;
             color: var(--dark);
-            font-size: 0.85rem;
+            font-size: 0.9rem;
         }
 
         input[type="text"],
@@ -215,17 +223,18 @@
         select,
         textarea {
             width: 100%;
-            padding: 10px 12px;
+            padding: 12px 15px;
             border: 1px solid #ddd;
-            border-radius: 6px;
-            font-size: 0.9rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
             box-sizing: border-box;
-            height: 42px;
+            height: 46px;
+            transition: all 0.2s;
         }
 
         textarea {
             height: auto;
-            min-height: 80px;
+            min-height: 100px;
             resize: vertical;
         }
 
@@ -234,88 +243,207 @@
         textarea:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
         }
 
-        /* Student Details Grid - Responsive */
-        .student-details-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+        /* Category Section */
+        .category-section {
+            margin-bottom: 25px;
+            display: none;
         }
 
-        @media (max-width: 500px) {
-            .student-details-grid {
-                grid-template-columns: 1fr;
-                gap: 12px;
+        .category-section.visible {
+            display: block;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
-        /* Total Display - Mobile Friendly */
-        .total-display {
-            background: #f8f9fa;
-            padding: 12px;
-            border-radius: 6px;
-            border: 1px solid #e1e4e8;
-            text-align: right;
-            margin-top: 12px;
+        /* Items Table */
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .items-table th {
+            background-color: #f8f9fa;
+            padding: 12px 15px;
+            text-align: left;
+            font-size: 0.8rem;
+            color: var(--dark);
+            font-weight: 600;
+            border-bottom: 2px solid #eee;
+        }
+
+        .items-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+            vertical-align: middle;
+        }
+
+        .items-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .item-input {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
             font-size: 0.9rem;
         }
 
-        .total-display span {
+        .item-input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-icon {
+            padding: 6px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            width: 36px;
+            height: 36px;
+        }
+
+        .btn-add-item {
+            background-color: var(--success);
+            color: white;
+            border: none;
+            margin-top: 10px;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-add-item:hover {
+            background-color: #27ae60;
+            transform: translateY(-1px);
+        }
+
+        .btn-remove {
+            background-color: #ffebee;
+            color: var(--danger);
+            border: 1px solid #ffcdd2;
+        }
+
+        .btn-remove:hover {
+            background-color: var(--danger);
+            color: white;
+        }
+
+        .btn-move {
+            background-color: #fff3e0;
+            color: var(--warning);
+            border: 1px solid #ffe0b2;
+            cursor: move;
+        }
+
+        .category-total {
+            text-align: right;
             font-weight: bold;
-            font-size: 1.3rem;
+            color: var(--primary);
+            font-size: 1.1rem;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px dashed #eee;
+        }
+
+        /* Total Display */
+        .total-display {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid var(--primary);
+            text-align: right;
+            margin-top: 25px;
+            font-size: 1rem;
+        }
+
+        .total-display-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .total-display-amount {
+            font-weight: bold;
+            font-size: 2rem;
             color: var(--primary);
         }
 
-        /* Buttons - Stack on Mobile */
+        /* Buttons */
         .button-group {
             display: flex;
-            gap: 10px;
-            margin-top: 25px;
+            gap: 15px;
+            margin-top: 30px;
             flex-wrap: wrap;
         }
 
-        button {
-            padding: 12px 20px;
+        button[type="submit"],
+        button[type="button"] {
+            padding: 14px 25px;
             border: none;
-            border-radius: 6px;
-            font-size: 0.9rem;
+            border-radius: 8px;
+            font-size: 1rem;
             cursor: pointer;
             font-weight: 600;
             flex: 1;
-            min-width: 120px;
+            min-width: 150px;
             transition: all 0.2s;
         }
 
         .btn-save {
             background: var(--success);
             color: white;
+            box-shadow: 0 4px 6px rgba(46, 204, 113, 0.2);
         }
 
         .btn-save:hover {
             background: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(46, 204, 113, 0.3);
         }
 
         .btn-cancel {
             background: white;
-            border: 1px solid #ccc;
+            border: 2px solid #ddd;
             color: #555;
         }
 
         .btn-cancel:hover {
             background: #f1f1f1;
-        }
-
-        @media (max-width: 400px) {
-            .button-group {
-                flex-direction: column;
-            }
-
-            button {
-                width: 100%;
-                min-width: 0;
-            }
+            border-color: #bbb;
         }
 
         /* Loading */
@@ -325,7 +453,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             display: none;
             justify-content: center;
             align-items: center;
@@ -336,90 +464,28 @@
             border: 4px solid #f3f3f3;
             border-top: 4px solid var(--primary);
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
+            width: 50px;
+            height: 50px;
             animation: spin 1s linear infinite;
         }
 
         @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
 
         @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Mobile Optimizations */
-        @media (max-width: 480px) {
-            body {
-                padding: 10px;
-            }
-
-            .form-header {
-                padding: 12px 15px;
-            }
-
-            .form-body {
-                padding: 15px;
-            }
-
-            .form-header h2 {
-                font-size: 1.2rem;
-            }
-
-            .header-total {
-                font-size: 1.3rem;
-            }
-
-            .section-title {
-                margin-top: 15px;
-            }
-        }
-
-        @media (max-width: 360px) {
-            .category-selector {
-                gap: 6px;
-            }
-
-            .chip-label {
-                padding: 5px 10px;
-                font-size: 0.75rem;
-            }
-        }
-
-        /* Back Button for Mobile */
-        .back-link {
-            display: inline-block;
-            margin-bottom: 10px;
-            color: var(--primary);
-            text-decoration: none;
-            font-size: 0.9rem;
-        }
-
-        .back-link:hover {
-            text-decoration: underline;
-        }
-
-        /* Success/Error Messages */
+        /* Messages */
         .message {
-            padding: 10px 15px;
-            border-radius: 6px;
-            margin-bottom: 15px;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
             display: none;
+            animation: fadeIn 0.3s ease-out;
         }
 
         .success-message {
@@ -434,45 +500,68 @@
             border: 1px solid #f5c6cb;
         }
 
-        /* Simple Footer */
-        .simple-footer {
-            background: #2c3e50;
-            color: white;
-            padding: 20px;
-            margin-top: 30px;
-            border-radius: 8px;
-            text-align: center;
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .org-name {
+                font-size: 1.5rem;
+            }
+            
+            .student-details-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .items-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            button[type="submit"],
+            button[type="button"] {
+                width: 100%;
+                min-width: 0;
+            }
+            
+            .total-display-amount {
+                font-size: 1.5rem;
+            }
         }
 
-        .simple-footer h3 {
-            color: #4a90e2;
-            margin: 0 0 10px 0;
+        @media (max-width: 480px) {
+            .category-selector {
+                gap: 8px;
+            }
+            
+            .chip-label {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+            
+            .items-table th,
+            .items-table td {
+                padding: 8px 10px;
+                font-size: 0.85rem;
+            }
         }
 
-        .footer-links {
-            margin: 15px 0;
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
+        /* Drag and Drop Styles */
+        .dragging {
+            opacity: 0.5;
+            background-color: #f0f8ff;
         }
 
-        .footer-links a {
-            color: #bdc3c7;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .footer-links a:hover {
-            color: #4a90e2;
-        }
-
-        .copyright {
-            font-size: 0.85rem;
-            color: #95a5a6;
-            margin-top: 15px;
-            border-top: 1px solid #34495e;
-            padding-top: 15px;
+        .drop-zone {
+            border: 2px dashed var(--primary);
+            background-color: rgba(74, 144, 226, 0.05);
         }
     </style>
 </head>
@@ -490,8 +579,8 @@
         <div class="form-card">
             <div class="form-header">
                 <div style="flex: 1; min-width: 0;">
-                    <h2 id="pageTitle">Add New Record</h2>
-                    <p>Select categories & enter amounts</p>
+                    <h2 id="pageTitle">Add New Expense Record</h2>
+                    <p>Select categories and add individual expense items</p>
                 </div>
                 <div class="header-total">
                     <small>Total</small>
@@ -533,18 +622,14 @@
                             <!-- Semester Options -->
                             <option value="Semester 1">Semester 1</option>
                             <option value="Semester 2">Semester 2</option>
-                            <option value="Semester 3">Semester 3</option>
                             <!-- Special Term -->
                             <option value="Special Term">Special Term</option>
                         </select>
                     </div>
-                </div>
-
-                <div class="student-details-grid" style="margin-top: 12px;">
                     <div class="form-group">
                         <label>Year</label>
                         <small class="helper-text">The academic year</small>
-                        <input type="number" id="year" value="2025" required min="2000" max="2100">
+                        <input type="number" id="year" value="2024" required min="2000" max="2100">
                     </div>
                     <div class="form-group">
                         <label>Date</label>
@@ -556,109 +641,207 @@
                 <!-- 2. Category Selector -->
                 <div class="section-title">Select Expense Categories</div>
                 <div class="category-selector">
-
                     <div class="cat-chip">
-                        <input type="checkbox" id="check-tuition" onchange="toggleVisibility('tuition', this.checked)">
+                        <input type="checkbox" id="check-tuition" onchange="toggleCategorySection('tuition', this.checked)">
                         <label for="check-tuition" class="chip-label">Tuition</label>
                     </div>
-
                     <div class="cat-chip">
-                        <input type="checkbox" id="check-food" onchange="toggleVisibility('food', this.checked)">
+                        <input type="checkbox" id="check-food" onchange="toggleCategorySection('food', this.checked)">
                         <label for="check-food" class="chip-label">Food</label>
                     </div>
-
                     <div class="cat-chip">
-                        <input type="checkbox" id="check-transport"
-                            onchange="toggleVisibility('transport', this.checked)">
+                        <input type="checkbox" id="check-transport" onchange="toggleCategorySection('transport', this.checked)">
                         <label for="check-transport" class="chip-label">Transport</label>
                     </div>
-
                     <div class="cat-chip">
-                        <input type="checkbox" id="check-materials"
-                            onchange="toggleVisibility('materials', this.checked)">
+                        <input type="checkbox" id="check-materials" onchange="toggleCategorySection('materials', this.checked)">
                         <label for="check-materials" class="chip-label">Materials</label>
                     </div>
-
                     <div class="cat-chip">
-                        <input type="checkbox" id="check-hygiene" onchange="toggleVisibility('hygiene', this.checked)">
+                        <input type="checkbox" id="check-hygiene" onchange="toggleCategorySection('hygiene', this.checked)">
                         <label for="check-hygiene" class="chip-label">Hygiene</label>
                     </div>
-
                     <div class="cat-chip">
-                        <input type="checkbox" id="check-other" onchange="toggleVisibility('other', this.checked)">
+                        <input type="checkbox" id="check-other" onchange="toggleCategorySection('other', this.checked)">
                         <label for="check-other" class="chip-label">Other</label>
                     </div>
-
                 </div>
 
-                <!-- 3. Dynamic Inputs -->
-                <div class="section-title">Enter Amounts</div>
-                <div class="grid-inputs">
-
-                    <div id="wrap-tuition" class="input-wrapper hidden">
-                        <div class="form-group">
-                            <label>Tuition Fees</label>
-                            <small class="helper-text">Full term fee or partial?</small>
-                            <input type="number" id="tuition" class="calc-input" placeholder="0.00" min="0" step="0.01">
-                        </div>
+                <!-- Category Sections (initially hidden) -->
+                <div id="section-tuition" class="category-section">
+                    <div class="section-title">
+                        <span>Tuition Expenses</span>
+                        <span class="section-total">Total: <span id="tuition-total">0.00</span></span>
                     </div>
+                    <small class="helper-text">Add individual tuition items (e.g., School fees, Exam fees, Library fees, etc.)</small>
+                    
+                    <table class="items-table" id="tuition-table">
+                        <thead>
+                            <tr>
+                                <th width="40%">Item Description</th>
+                                <th width="30%">Quantity</th>
+                                <th width="25%">Unit Price (ZMW)</th>
+                                <th width="5%"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tuition-items">
+                            <!-- Items will be added here dynamically -->
+                        </tbody>
+                    </table>
+                    
+                    <button type="button" class="btn-add-item" onclick="addItemRow('tuition')">
+                        <span>+</span> Add Tuition Item
+                    </button>
+                </div>
 
-                    <div id="wrap-food" class="input-wrapper hidden">
-                        <div class="form-group">
-                            <label>Food</label>
-                            <small class="helper-text">Boarding, daily meals, or groceries?</small>
-                            <input type="number" id="food" class="calc-input" placeholder="0.00" min="0" step="0.01">
-                        </div>
+                <div id="section-food" class="category-section">
+                    <div class="section-title">
+                        <span>Food Expenses</span>
+                        <span class="section-total">Total: <span id="food-total">0.00</span></span>
                     </div>
+                    <small class="helper-text">Add individual food items (e.g., Meal plan, Groceries, Snacks, etc.)</small>
+                    
+                    <table class="items-table" id="food-table">
+                        <thead>
+                            <tr>
+                                <th width="40%">Item Description</th>
+                                <th width="30%">Quantity</th>
+                                <th width="25%">Unit Price (ZMW)</th>
+                                <th width="5%"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="food-items">
+                            <!-- Items will be added here dynamically -->
+                        </tbody>
+                    </table>
+                    
+                    <button type="button" class="btn-add-item" onclick="addItemRow('food')">
+                        <span>+</span> Add Food Item
+                    </button>
+                </div>
 
-                    <div id="wrap-transport" class="input-wrapper hidden">
-                        <div class="form-group">
-                            <label>Transport</label>
-                            <small class="helper-text">Bus fare, taxi, or fuel?</small>
-                            <input type="number" id="transport" class="calc-input" placeholder="0.00" min="0"
-                                step="0.01">
-                        </div>
+                <div id="section-transport" class="category-section">
+                    <div class="section-title">
+                        <span>Transport Expenses</span>
+                        <span class="section-total">Total: <span id="transport-total">0.00</span></span>
                     </div>
+                    <small class="helper-text">Add individual transport items (e.g., Bus fare, Taxi, Fuel, etc.)</small>
+                    
+                    <table class="items-table" id="transport-table">
+                        <thead>
+                            <tr>
+                                <th width="40%">Item Description</th>
+                                <th width="30%">Quantity</th>
+                                <th width="25%">Unit Price (ZMW)</th>
+                                <th width="5%"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="transport-items">
+                            <!-- Items will be added here dynamically -->
+                        </tbody>
+                    </table>
+                    
+                    <button type="button" class="btn-add-item" onclick="addItemRow('transport')">
+                        <span>+</span> Add Transport Item
+                    </button>
+                </div>
 
-                    <div id="wrap-materials" class="input-wrapper hidden">
-                        <div class="form-group">
-                            <label>School Materials</label>
-                            <small class="helper-text">Books, pens, uniforms, or exam papers?</small>
-                            <input type="number" id="materials" class="calc-input" placeholder="0.00" min="0"
-                                step="0.01">
-                        </div>
+                <div id="section-materials" class="category-section">
+                    <div class="section-title">
+                        <span>Materials Expenses</span>
+                        <span class="section-total">Total: <span id="materials-total">0.00</span></span>
                     </div>
+                    <small class="helper-text">Add individual material items (e.g., Books, Stationery, Uniforms, etc.)</small>
+                    
+                    <table class="items-table" id="materials-table">
+                        <thead>
+                            <tr>
+                                <th width="40%">Item Description</th>
+                                <th width="30%">Quantity</th>
+                                <th width="25%">Unit Price (ZMW)</th>
+                                <th width="5%"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="materials-items">
+                            <!-- Items will be added here dynamically -->
+                        </tbody>
+                    </table>
+                    
+                    <button type="button" class="btn-add-item" onclick="addItemRow('materials')">
+                        <span>+</span> Add Materials Item
+                    </button>
+                </div>
 
-                    <div id="wrap-hygiene" class="input-wrapper hidden">
-                        <div class="form-group">
-                            <label>Hygiene</label>
-                            <small class="helper-text">Soap, toiletries, or laundry fees?</small>
-                            <input type="number" id="hygiene" class="calc-input" placeholder="0.00" min="0" step="0.01">
-                        </div>
+                <div id="section-hygiene" class="category-section">
+                    <div class="section-title">
+                        <span>Hygiene Expenses</span>
+                        <span class="section-total">Total: <span id="hygiene-total">0.00</span></span>
                     </div>
+                    <small class="helper-text">Add individual hygiene items (e.g., Soap, Toiletries, Sanitary pads, etc.)</small>
+                    
+                    <table class="items-table" id="hygiene-table">
+                        <thead>
+                            <tr>
+                                <th width="40%">Item Description</th>
+                                <th width="30%">Quantity</th>
+                                <th width="25%">Unit Price (ZMW)</th>
+                                <th width="5%"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="hygiene-items">
+                            <!-- Items will be added here dynamically -->
+                        </tbody>
+                    </table>
+                    
+                    <button type="button" class="btn-add-item" onclick="addItemRow('hygiene')">
+                        <span>+</span> Add Hygiene Item
+                    </button>
+                </div>
 
-                    <div id="wrap-other" class="input-wrapper hidden">
-                        <div class="form-group">
-                            <label>Other</label>
-                            <small class="helper-text">What is this specific expense for?</small>
-                            <input type="number" id="other" class="calc-input" placeholder="0.00" min="0" step="0.01">
-                        </div>
+                <div id="section-other" class="category-section">
+                    <div class="section-title">
+                        <span>Other Expenses</span>
+                        <span class="section-total">Total: <span id="other-total">0.00</span></span>
                     </div>
-
+                    <small class="helper-text">Add other miscellaneous expense items</small>
+                    
+                    <table class="items-table" id="other-table">
+                        <thead>
+                            <tr>
+                                <th width="40%">Item Description</th>
+                                <th width="30%">Quantity</th>
+                                <th width="25%">Unit Price (ZMW)</th>
+                                <th width="5%"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="other-items">
+                            <!-- Items will be added here dynamically -->
+                        </tbody>
+                    </table>
+                    
+                    <button type="button" class="btn-add-item" onclick="addItemRow('other')">
+                        <span>+</span> Add Other Item
+                    </button>
                 </div>
 
                 <!-- 4. Notes -->
-                <div class="section-title">Additional Info</div>
+                <div class="section-title">Additional Information</div>
                 <div class="form-group">
                     <label>Notes / Reference</label>
                     <small class="helper-text">Receipt number, bank reference, or payment method</small>
-                    <textarea id="notes" rows="3" placeholder="E.g. Airtel Money Ref: 12345"></textarea>
+                    <textarea id="notes" rows="4" placeholder="E.g. Airtel Money Ref: 12345, Receipt #456789, Paid via bank transfer"></textarea>
+                </div>
+
+                <!-- Grand Total Display -->
+                <div class="total-display">
+                    <div class="total-display-label">Grand Total (ZMW)</div>
+                    <div class="total-display-amount" id="grandTotal">0.00</div>
                 </div>
 
                 <!-- Actions -->
                 <div class="button-group">
                     <button type="button" class="btn-cancel" onclick="goBack()">Cancel</button>
-                    <button type="submit" class="btn-save" id="saveBtn">Save Record</button>
+                    <button type="submit" class="btn-save" id="saveBtn">Save Expense Record</button>
                 </div>
             </form>
         </div>
@@ -668,31 +851,23 @@
         <div class="spinner"></div>
     </div>
 
-    <div class="simple-footer">
-        <h3>Action for Children Zambia</h3>
-        <p>Empowering Zambian Children Through Education</p>
-
-        <div class="footer-links">
-            <a href="mailto:info@afczambia.org">Contact Us</a>
-            <a href="https://www.afczambia.org" target="_blank">Website</a>
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
-        </div>
-
-        <div class="copyright">
-            © 2025 Action for Children Zambia. All rights reserved.
-        </div>
-    </div>
-
     <script>
         // --- CONFIGURATION ---
-        // ENSURE THIS URL MATCHES YOUR NEWLY DEPLOYED BACKEND
         const API = "https://script.google.com/macros/s/AKfycbzEEeuwtZm-qGOmKLza3IfdVieYurAH14xgp3Q0lUPwUpvyz2rIHUlkC48sCc2FUK9i/exec";
         const DASHBOARD_URL = "dashboard.html";
 
         let editingId = null;
-        const calcInputs = document.querySelectorAll('.calc-input');
-        const headerTotal = document.getElementById('headerTotal');
+        const categories = ['tuition', 'food', 'transport', 'materials', 'hygiene', 'other'];
+        
+        // Item templates for each category
+        const itemSuggestions = {
+            tuition: ['School Fees', 'Exam Fees', 'Library Fees', 'Sports Fees', 'ICT Fees', 'Building Fund'],
+            food: ['Term Meal Plan', 'Daily Lunch', 'Breakfast', 'Snacks', 'Groceries', 'Drinking Water'],
+            transport: ['Bus Fare', 'Taxi', 'Bicycle Repair', 'Fuel', 'Maintenance', 'Travel Allowance'],
+            materials: ['Exercise Books', 'Text Books', 'Pens & Pencils', 'Uniform', 'Shoes', 'Calculator'],
+            hygiene: ['Soap', 'Toothpaste', 'Sanitary Pads', 'Toilet Paper', 'Detergent', 'First Aid'],
+            other: ['Medical Fee', 'Excursion', 'Club Fee', 'Contribution', 'Emergency']
+        };
 
         // Message display functions
         function showMessage(message, type = 'success') {
@@ -729,71 +904,199 @@
             document.getElementById('expense_date').value = formattedDate;
 
             checkForEditMode();
-            setupLiveCalculator();
+            setupEventListeners();
 
             // Auto-select first category for better UX
             setTimeout(() => {
                 document.getElementById('check-tuition').checked = true;
-                toggleVisibility('tuition', true);
+                toggleCategorySection('tuition', true);
+                addItemRow('tuition'); // Add one default row
             }, 100);
 
             // Hide any existing messages
             hideMessages();
         };
 
-        // --- 1. TOGGLE VISIBILITY LOGIC ---
-        function toggleVisibility(category, isChecked) {
-            const wrapper = document.getElementById('wrap-' + category);
-            const input = document.getElementById(category);
-
+        // --- 1. CATEGORY SECTION TOGGLE ---
+        function toggleCategorySection(category, isChecked) {
+            const section = document.getElementById(`section-${category}`);
+            
             if (isChecked) {
-                wrapper.classList.remove('hidden');
-                // Focus after a small delay for better mobile UX
-                setTimeout(() => input.focus(), 50);
+                section.classList.add('visible');
+                // Add a default item row if none exists
+                const itemsTable = document.getElementById(`${category}-items`);
+                if (itemsTable.children.length === 0) {
+                    addItemRow(category);
+                }
             } else {
-                wrapper.classList.add('hidden');
-                input.value = '';
-                calculateTotal();
+                section.classList.remove('visible');
+                // Clear all items
+                const itemsTable = document.getElementById(`${category}-items`);
+                itemsTable.innerHTML = '';
+                updateCategoryTotal(category);
+            }
+            
+            updateGrandTotal();
+        }
+
+        // --- 2. ITEM MANAGEMENT ---
+        function addItemRow(category) {
+            const itemsTable = document.getElementById(`${category}-items`);
+            const rowId = Date.now() + Math.random();
+            
+            const row = document.createElement('tr');
+            row.dataset.id = rowId;
+            
+            // Create suggestion datalist
+            const datalistId = `${category}-suggestions-${rowId}`;
+            const datalist = document.createElement('datalist');
+            datalist.id = datalistId;
+            
+            itemSuggestions[category].forEach(item => {
+                const option = document.createElement('option');
+                option.value = item;
+                datalist.appendChild(option);
+            });
+            
+            document.body.appendChild(datalist);
+            
+            row.innerHTML = `
+                <td>
+                    <input type="text" 
+                           class="item-input item-description" 
+                           placeholder="e.g., ${itemSuggestions[category][0]}"
+                           list="${datalistId}"
+                           oninput="calculateItemTotal(this)">
+                </td>
+                <td>
+                    <input type="number" 
+                           class="item-input item-quantity" 
+                           value="1" 
+                           min="0.1" 
+                           step="0.1"
+                           oninput="calculateItemTotal(this)">
+                </td>
+                <td>
+                    <input type="number" 
+                           class="item-input item-price" 
+                           placeholder="0.00" 
+                           min="0" 
+                           step="0.01"
+                           oninput="calculateItemTotal(this)">
+                </td>
+                <td>
+                    <div class="item-actions">
+                        <button type="button" class="btn-icon btn-remove" onclick="removeItemRow('${category}', '${rowId}')" title="Remove">
+                            ×
+                        </button>
+                    </div>
+                </td>
+            `;
+            
+            itemsTable.appendChild(row);
+            
+            // Focus on the description input
+            setTimeout(() => {
+                row.querySelector('.item-description').focus();
+            }, 50);
+            
+            return rowId;
+        }
+
+        function removeItemRow(category, rowId) {
+            const row = document.querySelector(`#${category}-items tr[data-id="${rowId}"]`);
+            if (row) {
+                row.remove();
+                updateCategoryTotal(category);
+                updateGrandTotal();
+            }
+            
+            // Remove the associated datalist
+            const datalist = document.getElementById(`${category}-suggestions-${rowId}`);
+            if (datalist) {
+                datalist.remove();
             }
         }
 
-        // --- 2. CALCULATOR ---
-        function setupLiveCalculator() {
-            calcInputs.forEach(input => {
-                input.addEventListener('input', calculateTotal);
-                // Better mobile experience
-                input.addEventListener('focus', function () {
-                    this.select();
-                });
-            });
+        function calculateItemTotal(inputElement) {
+            const row = inputElement.closest('tr');
+            const quantityInput = row.querySelector('.item-quantity');
+            const priceInput = row.querySelector('.item-price');
+            
+            const quantity = parseFloat(quantityInput.value) || 0;
+            const price = parseFloat(priceInput.value) || 0;
+            const total = quantity * price;
+            
+            // Store the calculated total on the row
+            row.dataset.total = total;
+            
+            // Update category total
+            const category = row.closest('.category-section').id.replace('section-', '');
+            updateCategoryTotal(category);
+            updateGrandTotal();
         }
 
-        function calculateTotal() {
+        function updateCategoryTotal(category) {
+            const itemsTable = document.getElementById(`${category}-items`);
+            const rows = itemsTable.querySelectorAll('tr');
+            
             let total = 0;
-            calcInputs.forEach(input => {
-                const value = parseFloat(input.value) || 0;
-                total += value;
+            rows.forEach(row => {
+                total += parseFloat(row.dataset.total) || 0;
             });
-            headerTotal.innerText = total.toLocaleString(undefined, {
+            
+            // Update the category total display
+            const totalElement = document.getElementById(`${category}-total`);
+            totalElement.textContent = formatNumber(total);
+            
+            return total;
+        }
+
+        function updateGrandTotal() {
+            let grandTotal = 0;
+            
+            categories.forEach(category => {
+                const checkbox = document.getElementById(`check-${category}`);
+                if (checkbox.checked) {
+                    grandTotal += updateCategoryTotal(category);
+                }
+            });
+            
+            // Update both header and main total display
+            document.getElementById('headerTotal').textContent = formatNumber(grandTotal);
+            document.getElementById('grandTotal').textContent = formatNumber(grandTotal);
+        }
+
+        function formatNumber(num) {
+            return parseFloat(num || 0).toLocaleString(undefined, {
                 minimumFractionDigits: 2,
                 maximumFractionDigits: 2
             });
         }
 
-        // --- 3. EDIT MODE LOGIC ---
+        // --- 3. EVENT LISTENERS ---
+        function setupEventListeners() {
+            // Setup input event listeners for all item inputs
+            document.addEventListener('input', function(e) {
+                if (e.target.classList.contains('item-quantity') || 
+                    e.target.classList.contains('item-price')) {
+                    calculateItemTotal(e.target);
+                }
+            });
+        }
+
+        // --- 4. EDIT MODE LOGIC ---
         function checkForEditMode() {
             const params = new URLSearchParams(window.location.search);
             const id = params.get('id');
 
             if (id) {
                 editingId = id;
-                document.getElementById('pageTitle').innerText = "Edit Record";
+                document.getElementById('pageTitle').innerText = "Edit Expense Record";
                 document.getElementById('saveBtn').innerText = "Update Record";
 
                 document.getElementById('loading').style.display = 'flex';
 
-                // Fetch Logic: Use GET with action=read
-                // Timestamp prevents caching
                 const timestamp = new Date().getTime();
                 const url = `${API}?action=read&t=${timestamp}`;
 
@@ -805,7 +1108,7 @@
                         return res.json();
                     })
                     .then(data => {
-                        const records = data.data || []; // Backend returns { data: [...] }
+                        const records = data.data || [];
                         const record = records.find(r => r.id == id);
                         if (record) {
                             populateForm(record);
@@ -824,32 +1127,104 @@
         }
 
         function populateForm(r) {
+            // Populate basic fields
             document.getElementById('student').value = r.student || '';
             document.getElementById('term').value = r.term || 'Term 1';
             document.getElementById('year').value = r.year || 2024;
             document.getElementById('expense_date').value = r.expense_date || '';
             document.getElementById('notes').value = r.notes || "";
 
-            // List of all expense categories
-            const categories = ['tuition', 'food', 'transport', 'materials', 'hygiene', 'other'];
-
-            categories.forEach(cat => {
-                const value = Number(r[cat]) || 0;
-                const checkbox = document.getElementById('check-' + cat);
-                if (value > 0) {
-                    checkbox.checked = true;
-                    toggleVisibility(cat, true);
-                    document.getElementById(cat).value = value;
+            // Handle items data (if stored as JSON)
+            try {
+                const itemsData = r.items ? JSON.parse(r.items) : null;
+                if (itemsData) {
+                    // Clear all existing items
+                    categories.forEach(category => {
+                        const itemsTable = document.getElementById(`${category}-items`);
+                        itemsTable.innerHTML = '';
+                    });
+                    
+                    // Populate items from JSON
+                    categories.forEach(category => {
+                        if (itemsData[category] && itemsData[category].length > 0) {
+                            // Check the category checkbox
+                            const checkbox = document.getElementById(`check-${category}`);
+                            checkbox.checked = true;
+                            toggleCategorySection(category, true);
+                            
+                            // Add items
+                            itemsData[category].forEach(item => {
+                                const rowId = addItemRow(category);
+                                const row = document.querySelector(`#${category}-items tr[data-id="${rowId}"]`);
+                                
+                                if (row) {
+                                    row.querySelector('.item-description').value = item.description || '';
+                                    row.querySelector('.item-quantity').value = item.quantity || 1;
+                                    row.querySelector('.item-price').value = item.price || 0;
+                                    
+                                    // Trigger calculation
+                                    calculateItemTotal(row.querySelector('.item-price'));
+                                }
+                            });
+                        }
+                    });
                 } else {
-                    checkbox.checked = false;
-                    toggleVisibility(cat, false);
+                    // Fallback to old single-value fields
+                    categories.forEach(category => {
+                        const value = Number(r[category]) || 0;
+                        const checkbox = document.getElementById(`check-${category}`);
+                        if (value > 0) {
+                            checkbox.checked = true;
+                            toggleCategorySection(category, true);
+                            
+                            // Add one item with the total value
+                            const rowId = addItemRow(category);
+                            const row = document.querySelector(`#${category}-items tr[data-id="${rowId}"]`);
+                            
+                            if (row) {
+                                const categoryName = category.charAt(0).toUpperCase() + category.slice(1);
+                                row.querySelector('.item-description').value = `Total ${categoryName} Expense`;
+                                row.querySelector('.item-quantity').value = 1;
+                                row.querySelector('.item-price').value = value;
+                                
+                                calculateItemTotal(row.querySelector('.item-price'));
+                            }
+                        } else {
+                            checkbox.checked = false;
+                            toggleCategorySection(category, false);
+                        }
+                    });
                 }
-            });
-
-            calculateTotal();
+            } catch (error) {
+                console.error('Error parsing items data:', error);
+                // Fallback to old method
+                categories.forEach(category => {
+                    const value = Number(r[category]) || 0;
+                    const checkbox = document.getElementById(`check-${category}`);
+                    if (value > 0) {
+                        checkbox.checked = true;
+                        toggleCategorySection(category, true);
+                        
+                        // Add one item with the total value
+                        const rowId = addItemRow(category);
+                        const row = document.querySelector(`#${category}-items tr[data-id="${rowId}"]`);
+                        
+                        if (row) {
+                            const categoryName = category.charAt(0).toUpperCase() + category.slice(1);
+                            row.querySelector('.item-description').value = `Total ${categoryName} Expense`;
+                            row.querySelector('.item-quantity').value = 1;
+                            row.querySelector('.item-price').value = value;
+                            
+                            calculateItemTotal(row.querySelector('.item-price'));
+                        }
+                    }
+                });
+            }
+            
+            updateGrandTotal();
         }
 
-        // --- 4. SUBMIT (UPDATED FOR BETTER COMPATIBILITY) ---
+        // --- 5. FORM SUBMISSION ---
         document.getElementById("expenseForm").addEventListener("submit", async e => {
             e.preventDefault();
 
@@ -873,12 +1248,27 @@
                 return;
             }
 
-            // Validate at least one amount is entered
-            const hasAmount = Array.from(calcInputs)
-                .some(input => parseFloat(input.value) > 0);
+            // Validate each selected category has at least one valid item
+            let hasValidItems = false;
+            categories.forEach(category => {
+                const checkbox = document.getElementById(`check-${category}`);
+                if (checkbox.checked) {
+                    const itemsTable = document.getElementById(`${category}-items`);
+                    const rows = itemsTable.querySelectorAll('tr');
+                    
+                    rows.forEach(row => {
+                        const description = row.querySelector('.item-description').value.trim();
+                        const price = parseFloat(row.querySelector('.item-price').value) || 0;
+                        
+                        if (description && price > 0) {
+                            hasValidItems = true;
+                        }
+                    });
+                }
+            });
 
-            if (!hasAmount) {
-                showMessage("Please enter at least one amount greater than 0.", 'error');
+            if (!hasValidItems) {
+                showMessage("Please enter at least one item with description and amount greater than 0.", 'error');
                 return;
             }
 
@@ -890,25 +1280,66 @@
                 term: document.getElementById("term").value,
                 year: parseInt(document.getElementById("year").value),
                 expense_date: document.getElementById("expense_date").value,
-                tuition: parseFloat(document.getElementById("tuition").value) || 0,
-                food: parseFloat(document.getElementById("food").value) || 0,
-                transport: parseFloat(document.getElementById("transport").value) || 0,
-                materials: parseFloat(document.getElementById("materials").value) || 0,
-                hygiene: parseFloat(document.getElementById("hygiene").value) || 0,
-                other: parseFloat(document.getElementById("other").value) || 0,
-                notes: document.getElementById("notes").value.trim()
+                notes: document.getElementById("notes").value.trim(),
+                // Initialize old fields for backward compatibility
+                tuition: 0,
+                food: 0,
+                transport: 0,
+                materials: 0,
+                hygiene: 0,
+                other: 0
             };
+
+            // Collect items data
+            const itemsData = {};
+            let grandTotal = 0;
+
+            categories.forEach(category => {
+                const checkbox = document.getElementById(`check-${category}`);
+                if (checkbox.checked) {
+                    const itemsTable = document.getElementById(`${category}-items`);
+                    const rows = itemsTable.querySelectorAll('tr');
+                    const categoryItems = [];
+                    let categoryTotal = 0;
+
+                    rows.forEach(row => {
+                        const description = row.querySelector('.item-description').value.trim();
+                        const quantity = parseFloat(row.querySelector('.item-quantity').value) || 0;
+                        const price = parseFloat(row.querySelector('.item-price').value) || 0;
+                        const total = quantity * price;
+
+                        if (description && total > 0) {
+                            categoryItems.push({
+                                description: description,
+                                quantity: quantity,
+                                price: price,
+                                total: total
+                            });
+                            categoryTotal += total;
+                        }
+                    });
+
+                    if (categoryItems.length > 0) {
+                        itemsData[category] = categoryItems;
+                        // Set the old field for backward compatibility (total for the category)
+                        data[category] = categoryTotal;
+                        grandTotal += categoryTotal;
+                    }
+                }
+            });
+
+            // Add items data as JSON string
+            data.items = JSON.stringify(itemsData);
 
             try {
                 // Determine action type
                 const actionType = editingId ? "update" : "add";
                 const payload = editingId ? { id: editingId, ...data } : data;
 
-                // OPTION 1: Use POST method (Recommended - more reliable)
-                // This is the best approach for Google Apps Script
+                // Try POST method first
                 const response = await fetch(API, {
                     method: 'POST',
-                    mode: 'no-cors', // Important for Apps Script to work
+                    mode: 'no-cors',
                     headers: {
                         'Content-Type': 'application/json',
                     },
@@ -917,9 +1348,6 @@
                         data: payload
                     })
                 });
-
-                // With no-cors mode, we can't check response status directly
-                // But we'll assume success if no error is thrown
 
                 const successMsg = editingId ? "Record Updated Successfully!" : "Record Saved Successfully!";
                 showMessage(successMsg, 'success');
@@ -932,12 +1360,12 @@
             } catch (err) {
                 console.error("Error:", err);
 
-                // OPTION 2: Fallback to GET request if POST fails
+                // Fallback to GET request
                 try {
                     const actionType = editingId ? "update" : "add";
                     const payload = editingId ? { id: editingId, ...data } : data;
 
-                    // Create URL with individual parameters (safer than JSON in URL)
+                    // Create URL with individual parameters
                     const params = new URLSearchParams();
                     params.append('action', actionType);
 
@@ -949,8 +1377,8 @@
                     });
 
                     const url = `${API}?${params.toString()}`;
-
                     const response = await fetch(url);
+                    
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
@@ -964,17 +1392,14 @@
                     const successMsg = editingId ? "Record Updated Successfully!" : "Record Saved Successfully!";
                     showMessage(successMsg, 'success');
 
-                    // Redirect after 1.5 seconds
                     setTimeout(() => {
                         window.location.href = DASHBOARD_URL;
                     }, 1500);
 
                 } catch (fallbackError) {
                     console.error("Fallback error:", fallbackError);
-
                     let errorMsg = fallbackError.message || "Error saving data. Please try again.";
-
-                    // More user-friendly error messages
+                    
                     if (errorMsg.includes('NetworkError') || errorMsg.includes('Failed to fetch')) {
                         errorMsg = "Network error. Please check your internet connection and try again.";
                     } else if (errorMsg.includes('405')) {
@@ -984,8 +1409,6 @@
                     }
 
                     showMessage(errorMsg, 'error');
-
-                    // Scroll to top to show error message
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                 }
             } finally {
@@ -1013,7 +1436,6 @@
         // Prevent accidental page refresh with unsaved changes
         let formChanged = false;
 
-        // Mark form as changed when any input is modified
         document.querySelectorAll('#expenseForm input, #expenseForm select, #expenseForm textarea').forEach(element => {
             element.addEventListener('input', () => {
                 formChanged = true;
@@ -1025,9 +1447,7 @@
 
         window.addEventListener('beforeunload', function (e) {
             if (formChanged) {
-                // Standard way
                 e.preventDefault();
-                // Custom message (not all browsers show this)
                 e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
             }
         });
