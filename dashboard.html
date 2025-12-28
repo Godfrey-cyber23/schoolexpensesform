@@ -666,6 +666,11 @@ let filters = { student: '', term: '', year: '', search: '' };
 window.onload = function() {
   loadData();
   initYearFilter();
+  document.getElementById('exportSelect').addEventListener('change', function(e) {
+    if (e.target.value) {
+      exportData();
+    }
+  });
 };
 
 function initYearFilter() {
