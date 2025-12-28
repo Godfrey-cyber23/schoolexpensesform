@@ -538,7 +538,7 @@
                     </div>
                     <div class="form-group">
                         <label>Year</label>
-                        <input type="number" id="year" value="2024" required min="2000" max="2100">
+                        <input type="number" id="year" value="2026" required min="2026" max="2100">
                     </div>
                     <div class="form-group">
                         <label>Expense Date</label>
@@ -748,10 +748,14 @@
 
         // --- INIT ---
         window.onload = function () {
-            document.getElementById('expense_date').valueAsDate = new Date();
-            checkForEditMode();
-            setupEventListeners();
-        };
+    document.getElementById('expense_date').valueAsDate = new Date();
+    
+    // Set the year input to 2026
+    document.getElementById('year').value = 2026;
+    
+    checkForEditMode();
+    setupEventListeners();
+};
 
         // --- UI HELPERS ---
         function showMessage(msg, type = 'success') {
