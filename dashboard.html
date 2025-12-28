@@ -1154,6 +1154,12 @@ function exportWord() {
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
 }
+  
+  document.getElementById('exportSelect').addEventListener('change', function(e) {
+  if (e.target.value) {
+    exportData(); // This will export CSV for the selected term
+  }
+});
 
 function exportData() {
   // Original CSV Export
