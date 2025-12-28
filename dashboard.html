@@ -4,611 +4,474 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>School Expenses Dashboard</title>
+  <title>Expenses Dashboard | AFCZ</title>
   <style>
     :root {
       --primary: #4a90e2;
+      --primary-dark: #357abd;
+      --secondary: #f5f7fa;
       --dark: #2c3e50;
-      --light: #f4f6f9;
+      --text-muted: #7f8c8d;
       --success: #2ecc71;
       --danger: #e74c3c;
-      --warning: #f1c40f;
+      --border: #e1e4e8;
+      --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+      --radius: 8px;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-      background-color: var(--light);
+      background-color: var(--secondary);
       margin: 0;
-      padding: 12px;
-      font-size: 14px;
+      padding: 15px;
+      color: var(--dark);
+      -webkit-font-smoothing: antialiased;
     }
 
     .container {
       max-width: 1400px;
       margin: 0 auto;
-      padding: 0 8px;
     }
 
-    /* Header - Compact for Mobile */
+    /* Header */
     .header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 15px;
-      gap: 10px;
-      flex-wrap: nowrap;
+      margin-bottom: 25px;
+      flex-wrap: wrap;
+      gap: 15px;
     }
 
-    .header h1 {
+    .header-title h1 {
       margin: 0;
-      font-size: 1.3rem;
+      font-size: 1.5rem;
       color: var(--dark);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      flex-shrink: 0;
-      max-width: 50%;
     }
+    .header-title p { margin: 5px 0 0; color: var(--text-muted); font-size: 0.9rem; }
 
     .actions-bar {
       display: flex;
-      gap: 6px;
-      flex-wrap: nowrap;
-      justify-content: flex-end;
-      align-items: center;
-      flex-shrink: 1;
-      min-width: 0;
+      gap: 10px;
     }
 
+    /* Buttons */
     .btn {
-      padding: 8px 10px;
+      padding: 10px 16px;
+      border-radius: var(--radius);
+      font-size: 0.9rem;
+      font-weight: 600;
       border: none;
-      border-radius: 5px;
-      font-size: 0.8rem;
       cursor: pointer;
-      text-decoration: none;
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      font-weight: 500;
-      transition: all 0.2s ease;
-      white-space: nowrap;
-      height: 36px;
-      min-width: min-content;
+      gap: 6px;
+      transition: all 0.2s;
+      text-decoration: none;
     }
 
-    .btn-add {
-      background-color: var(--primary);
-      color: white;
-      padding: 8px 12px;
-    }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-dark); box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3); }
+    
+    .btn-secondary { background: white; border: 1px solid var(--border); color: var(--dark); }
+    .btn-secondary:hover { background: #f8f9fa; border-color: #ccc; }
 
-    .btn-export {
-      background-color: var(--dark);
-      color: white;
-    }
+    .btn-danger { background: white; border: 1px solid #fab1a0; color: var(--danger); }
+    .btn-danger:hover { background: var(--danger); color: white; }
 
-    .btn-export-term {
-      background-color: white;
-      border: 1px solid var(--dark);
-      color: var(--dark);
-      padding: 8px 8px;
-      font-size: 0.75rem;
-      max-width: 100px;
-    }
+    .btn-icon { padding: 8px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    
+    .btn-export-pdf { background: var(--danger); color: white; border: 1px solid #e74c3c; }
+    .btn-export-pdf:hover { background: #c0392b; }
 
-    /* Icon-only buttons on very small screens */
-    @media (max-width: 360px) {
-      .btn-text {
-        display: none;
-      }
-
-      .btn-icon {
-        display: inline-block !important;
-        font-size: 1rem;
-      }
-
-      .btn-add {
-        padding: 8px;
-        min-width: 36px;
-      }
-
-      .btn-export {
-        padding: 8px;
-        min-width: 36px;
-      }
-
-      .btn-export-term {
-        max-width: 70px;
-      }
-    }
-
-    .btn-icon {
-      display: none;
-      margin: 0;
-    }
-
-    /* Stats Cards - Compact */
+    /* Stats Grid */
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-bottom: 15px;
-    }
-
-    @media (max-width: 480px) {
-      .stats-grid {
-        gap: 6px;
-      }
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
     }
 
     .stat-card {
       background: white;
-      padding: 10px 12px;
-      border-radius: 6px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-      border-left: 3px solid var(--primary);
-      min-width: 0;
-      overflow: hidden;
+      padding: 20px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-left: 4px solid var(--primary);
     }
 
-    .stat-card h3 {
-      margin: 0 0 4px;
-      font-size: 0.7rem;
-      color: #95a5a6;
-      text-transform: uppercase;
-      font-weight: 700;
-      letter-spacing: 0.3px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+    .stat-info h3 { margin: 0; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .stat-info .value { font-size: 1.8rem; font-weight: 700; margin-top: 5px; color: var(--dark); }
+    .stat-icon { font-size: 1.5rem; color: var(--border); opacity: 0.5; }
 
-    .stat-card .value {
-      font-size: 1.2rem;
-      font-weight: 800;
-      color: var(--dark);
-      line-height: 1.2;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    /* Compact Toolbar */
+    /* Filters & Toolbar */
     .toolbar {
-      margin-bottom: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: nowrap;
-      gap: 8px;
-    }
-
-    input[type="text"] {
-      width: 100%;
-      padding: 9px 12px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      font-size: 0.85rem;
-      min-width: 0;
-      height: 36px;
-    }
-
-    /* Filter Controls */
-    .filter-container {
       background: white;
-      border-radius: 6px;
-      padding: 12px;
-      margin-bottom: 12px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-    }
-
-    .filter-header {
+      padding: 15px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 20px;
       display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      align-items: center;
       justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-      cursor: pointer;
     }
 
-    .filter-header h3 {
-      margin: 0;
+    .search-box {
+      flex: 1;
+      min-width: 250px;
+      position: relative;
+    }
+    .search-box input {
+      width: 100%;
+      padding: 10px 10px 10px 35px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
       font-size: 0.9rem;
-      color: var(--dark);
-      display: flex;
-      align-items: center;
-      gap: 5px;
+    }
+    .search-icon {
+      position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #999;
     }
 
-    .filter-toggle {
-      background: none;
-      border: none;
-      font-size: 1rem;
-      cursor: pointer;
-      color: var(--primary);
-    }
-
-    .filters-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-
-    @media (max-width: 768px) {
-      .filters-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .filters-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .filter-group {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .filter-group label {
-      font-size: 0.75rem;
-      color: #666;
-      font-weight: 600;
-    }
-
+    .filter-group { display: flex; gap: 10px; flex-wrap: wrap; }
     .filter-group select {
-      padding: 8px 10px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      font-size: 0.85rem;
-      background-color: white;
-      cursor: pointer;
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: white;
+      font-size: 0.9rem;
+      min-width: 120px;
     }
 
-    .filter-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 8px;
-      padding-top: 8px;
-      border-top: 1px solid #eee;
-    }
-
-    .btn-clear {
-      background-color: #f8f9fa;
-      border: 1px solid #ddd;
-      color: #666;
-      padding: 6px 12px;
-      font-size: 0.8rem;
-    }
-
-    .btn-apply {
-      background-color: var(--primary);
-      color: white;
-      padding: 6px 12px;
-      font-size: 0.8rem;
-    }
-
-    /* Table Container - Compact */
+    /* Table */
     .table-wrapper {
       background: white;
-      border-radius: 6px;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+
+    .table-scroll {
       overflow-x: auto;
-      position: relative;
-      -webkit-overflow-scrolling: touch;
-      margin-bottom: 15px;
-      font-size: 0.85rem;
+      width: 100%;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 900px;
-    }
-
-    @media (max-width: 768px) {
-      table {
-        min-width: 700px;
-      }
-    }
-
-    th,
-    td {
-      padding: 8px 6px;
-      text-align: left;
-      border-bottom: 1px solid #eee;
-      font-size: 0.8rem;
-      vertical-align: middle;
+      white-space: nowrap;
     }
 
     th {
-      background-color: #f8f9fa;
-      color: var(--dark);
+      background: #f8f9fa;
+      color: var(--text-muted);
       font-weight: 600;
+      text-align: left;
+      padding: 15px;
+      font-size: 0.85rem;
+      border-bottom: 2px solid var(--border);
       position: sticky;
       top: 0;
       z-index: 10;
-      white-space: nowrap;
     }
 
-    /* Clickable Row */
-    tbody tr {
+    td {
+      padding: 12px 15px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+      vertical-align: middle;
+    }
+
+    /* Interactive Rows */
+    tbody tr.main-row {
       cursor: pointer;
-      transition: background 0.1s;
+      transition: background 0.2s;
     }
 
-    tbody tr:hover {
-      background-color: #f0f8ff;
+    tbody tr.main-row:hover td {
+      background-color: #f0f8ff; /* Light blue hint */
     }
 
-    /* Number columns alignment */
-    .number-col {
+    /* Expanded Row Styling */
+    tr.detail-row {
+      display: none; /* Hidden by default */
+      background-color: #fafafa;
+    }
+    
+    tr.detail-row.visible {
+      display: table-row; /* Visible when toggled */
+    }
+
+    .detail-content {
+      padding: 20px 30px; /* Space around items */
+      font-size: 0.9rem;
+    }
+
+    /* Grid for Breakdown Categories */
+    .breakdown-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .breakdown-card {
+      background: white;
+      border: 1px solid #eee;
+      border-radius: 6px;
+      padding: 10px 15px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    .breakdown-cat-header {
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 0.85rem;
+      margin-bottom: 10px;
+      text-transform: uppercase;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 5px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .breakdown-item-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .breakdown-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+
+    .item-desc { color: #555; }
+    .item-meta { color: #888; font-size: 0.8rem; }
+    .item-val { font-weight: 600; color: var(--dark); }
+    
+    .breakdown-subtotal {
+      margin-top: 8px;
+      padding-top: 8px;
+      border-top: 1px dotted #ddd;
       text-align: right;
-      font-family: 'SF Mono', 'Courier New', monospace;
-      font-feature-settings: "tnum";
-      font-variant-numeric: tabular-nums;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #666;
     }
 
-    .total-col {
-      font-weight: bold;
+    .number-col { font-family: 'SF Mono', 'Roboto Mono', monospace; text-align: right; }
+    .total-row { font-weight: bold; color: var(--primary); }
+    
+    .action-cell { white-space: normal; }
+    .action-buttons { display: flex; gap: 5px; }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      background: #eef2f5;
       color: var(--dark);
-      text-align: right;
-      font-family: 'SF Mono', 'Courier New', monospace;
-      white-space: nowrap;
     }
 
-    /* Compact Action Buttons */
-    .action-buttons {
-      display: flex;
-      gap: 4px;
-      flex-wrap: nowrap;
-    }
-
-    .action-btn {
-      padding: 4px 6px;
-      border-radius: 3px;
-      text-decoration: none;
-      font-size: 0.7rem;
-      border: none;
-      cursor: pointer;
-      white-space: nowrap;
-      text-align: center;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 24px;
-      min-width: 40px;
-    }
-
-    .btn-edit {
-      background-color: #f39c12;
-      color: white;
-    }
-
-    .btn-del {
-      background-color: var(--danger);
-      color: white;
-    }
-
-    .btn-view {
-      background-color: var(--primary);
-      color: white;
-    }
-
-    /* Compact Flag Icon */
-    .flag-btn {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 1rem;
-      padding: 4px;
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      transition: background-color 0.2s;
-    }
-
-    .flagged-true {
-      color: var(--warning);
-      text-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
-    }
-
-    .flagged-false {
-      color: #ccc;
-    }
-
-    /* Column abbreviations for mobile */
-    @media (max-width: 768px) {
-      th:nth-child(6)::after {
-        content: " (T)";
-        font-size: 0.6rem;
-        opacity: 0.7;
-      }
-
-      th:nth-child(7)::after {
-        content: " (F)";
-        font-size: 0.6rem;
-        opacity: 0.7;
-      }
-
-      th:nth-child(8)::after {
-        content: " (Tr)";
-        font-size: 0.6rem;
-        opacity: 0.7;
-      }
-
-      th:nth-child(9)::after {
-        content: " (M)";
-        font-size: 0.6rem;
-        opacity: 0.7;
-      }
-
-      th:nth-child(10)::after {
-        content: " (H)";
-        font-size: 0.6rem;
-        opacity: 0.7;
-      }
-
-      th:nth-child(11)::after {
-        content: " (O)";
-        font-size: 0.6rem;
-        opacity: 0.7;
-      }
-    }
-
-    /* Modal adjustments for mobile */
+    /* Modal */
     .modal-overlay {
       display: none;
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
       z-index: 1000;
       justify-content: center;
       align-items: center;
-      padding: 15px;
-      overflow-y: auto;
+      padding: 20px;
+      backdrop-filter: blur(3px);
     }
 
-    .modal-content {
+    .modal-card {
       background: white;
       width: 100%;
-      max-width: 400px;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-      position: relative;
-      max-height: 85vh;
-      overflow-y: auto;
-      font-size: 0.9rem;
-    }
-
-    .modal-close {
-      position: absolute;
-      top: 12px;
-      right: 12px;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: #999;
-      line-height: 1;
-      width: 24px;
-      height: 24px;
+      max-width: 500px;
+      border-radius: 12px;
+      box-shadow: var(--shadow-md);
+      overflow: hidden;
+      animation: slideUp 0.3s ease;
+      max-height: 90vh;
       display: flex;
+      flex-direction: column;
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modal-header {
+      background: var(--primary);
+      color: white;
+      padding: 20px;
+      display: flex;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
     }
+    .modal-header h2 { margin: 0; font-size: 1.2rem; }
+    .close-btn { background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer; }
 
-    /* Footer note for mobile table scrolling */
-    .scroll-hint {
-      text-align: center;
-      padding: 8px;
-      color: #666;
-      font-size: 0.75rem;
-      display: none;
+    .modal-body { padding: 25px; overflow-y: auto; }
+    
+    .receipt-meta {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      margin-bottom: 20px;
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
     }
+    .meta-item label { display: block; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 2px; }
+    .meta-item span { font-weight: 600; color: var(--dark); }
 
-    @media (max-width: 768px) {
-      .scroll-hint {
-        display: block;
-      }
-    }
-
-    /* Very small screen adjustments */
-    @media (max-width: 320px) {
-      body {
-        padding: 8px;
-      }
-
-      .container {
-        padding: 0 4px;
-      }
-
-      .header {
-        gap: 6px;
-      }
-
-      .header h1 {
-        font-size: 1.1rem;
-      }
-
-      .btn {
-        padding: 6px 8px;
-        height: 32px;
-        font-size: 0.75rem;
-      }
-
-      .stat-card {
-        padding: 8px 10px;
-      }
-
-      .stat-card .value {
-        font-size: 1.1rem;
-      }
-
-      th,
-      td {
-        padding: 6px 4px;
-        font-size: 0.75rem;
-      }
-    }
-
-    /* Loading and Empty States */
-    #loading {
-      text-align: center;
-      padding: 30px 20px;
-      color: #666;
-      font-size: 0.9rem;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 30px 15px;
-      color: #666;
-      font-size: 0.9rem;
-    }
-
-    .empty-state h3 {
+    .breakdown-section { margin-bottom: 20px; }
+    .breakdown-title { font-size: 0.85rem; color: var(--primary); font-weight: 700; margin-bottom: 10px; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 5px;}
+    
+    .item-row {
+      display: flex;
+      justify-content: space-between;
       margin-bottom: 8px;
+      font-size: 0.95rem;
+      line-height: 1.4;
+    }
+    .item-row .item-name { flex: 1; padding-right: 10px; }
+    .item-row .item-qty { color: #888; font-size: 0.85rem; margin-right: 10px; min-width: 40px; text-align: right; }
+    .item-row .item-price { font-weight: 600; text-align: right; min-width: 80px; }
+
+    .receipt-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.3rem;
+      font-weight: 700;
       color: var(--dark);
-      font-size: 1rem;
+      padding-top: 15px;
+      border-top: 2px dashed var(--border);
     }
 
-    /* Print Styles */
+    .modal-footer {
+      padding: 15px 25px;
+      background: #f8f9fa;
+      border-top: 1px solid var(--border);
+      text-align: right;
+    }
+
+    /* Loading & Empty */
+    .loading-state, .empty-state {
+      text-align: center;
+      padding: 50px 20px;
+      color: var(--text-muted);
+    }
+    .spinner {
+      width: 40px; height: 40px; border: 3px solid #eee; border-top-color: var(--primary);
+      border-radius: 50%; margin: 0 auto 15px; animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .header { flex-direction: column; align-items: stretch; text-align: center; }
+      .actions-bar { justify-content: center; flex-wrap: wrap; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .toolbar { flex-direction: column; align-items: stretch; }
+      .filter-group { flex-direction: column; }
+      .receipt-meta { grid-template-columns: 1fr; }
+      .breakdown-grid { grid-template-columns: 1fr; }
+    }
+
+    /* =========================================
+       PRINT STYLES - KEY FOR PDF
+       ========================================= */
     @media print {
-      body * {
-        visibility: hidden;
+      body { 
+        background: white; 
+        margin: 0; 
+        padding: 0;
+      }
+      
+      /* Hide the Dashboard Interface */
+      .header, .toolbar, .actions-bar, .stats-grid, 
+      .modal-overlay, .modal-card, .table-wrapper {
+        display: none !important; 
+      }
+      
+      /* Show ONLY the Printable Area */
+      #printable-area { 
+        display: block !important; 
+        position: absolute; 
+        top: 0; 
+        left: 0; 
+        width: 100%; 
       }
 
-      .modal-content,
-      .modal-content * {
-        visibility: visible;
+      /* Styles for the Generated Report Cards */
+      .print-container {
+        padding: 0; /* Remove screen padding for print */
       }
 
-      .modal-content {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        margin: 0;
-        padding: 15px;
+      .print-card {
+        border: 1px solid #000;
+        page-break-inside: avoid; /* CRITICAL: Ensures individual tables don't split across pages */
+        margin-bottom: 30px;
+        background: white;
         box-shadow: none;
       }
 
-      .modal-close,
-      .modal-footer {
-        display: none !important;
+      .print-header {
+        background: #eee;
+        color: #000;
+        padding: 10px;
+        border-bottom: 1px solid #000;
+        font-weight: bold;
+        font-size: 12pt;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .print-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 0;
+      }
+      
+      .print-table th {
+        background: #f5f5f5;
+        border: 1px solid #000;
+        color: #000;
+        padding: 8px;
+        text-align: left;
+        font-size: 11pt;
+        text-transform: uppercase;
+      }
+
+      .print-table td {
+        border: 1px solid #ccc;
+        padding: 6px 10px;
+        text-align: left;
+        font-size: 10pt;
+      }
+
+      .print-total-row td {
+        background: #eee;
+        font-weight: bold;
+        border-top: 2px solid #000;
       }
     }
   </style>
@@ -616,394 +479,300 @@
 
 <body>
 
-  <div class="container">
+<div class="container">
 
-    <div class="header">
-      <h1>🏫 AFCZ  Student Expense Tracking</h1>
-      <div class="actions-bar">
-        <select id="exportSelect" class="btn btn-export-term">
-          <option value="all">All</option>
-          <option value="Term 1">Term 1</option>
-          <option value="Term 2">Term 2</option>
-          <option value="Term 3">Term 3</option>
-        </select>
-        <button class="btn btn-export" onclick="exportData()" title="Download Excel">
-          <span class="btn-text">Download</span>
-          <span class="btn-icon">📥</span>
-        </button>
-        <a href="index.html" class="btn btn-add" title="Add New Record">
-          <span class="btn-text">Add Record</span>
-          <span class="btn-icon">+</span>
-        </a>
-      </div>
+  <div class="header">
+    <div class="header-title">
+      <h1>Expenses Dashboard</h1>
+      <p>Track and manage student payments for AFCZ</p>
     </div>
+    <div class="actions-bar">
+      
+      <!-- PDF: Generates formatted view and prints -->
+      <button class="btn btn-export-pdf" onclick="exportPDF()">
+        <span>📄 PDF Print</span>
+      </button>
+      
+      <!-- Word: Generates .doc file -->
+      <button class="btn btn-secondary" onclick="exportWord()">
+        <span>📝 Word (.doc)</span>
+      </button>
 
-    <div class="stats-grid">
-      <div class="stat-card">
+      <!-- CSV Dropdown -->
+      <select id="exportSelect" class="btn btn-secondary" style="appearance: none; -webkit-appearance: none;">
+        <option value="all">Export CSV: All Data</option>
+        <option value="Term 1">Export CSV: Term 1</option>
+        <option value="Term 2">Export CSV: Term 2</option>
+        <option value="Term 3">Export CSV: Term 3</option>
+        <option value="Semester 1">Export CSV: Semester 1</option>
+        <option value="Semester 2">Export CSV: Semester 2</option>
+      </select>
+
+      <a href="index.html" class="btn btn-primary">
+        <span>+ Add Record</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-info">
         <h3>Total Spent</h3>
         <div class="value" id="grandTotalDisplay">0.00</div>
       </div>
-      <div class="stat-card">
-        <h3>Records</h3>
+      <div class="stat-icon">💰</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-info">
+        <h3>Total Records</h3>
         <div class="value" id="recordCount">0</div>
       </div>
-      <div class="stat-card">
-        <h3>Flagged</h3>
-        <div class="value" id="flaggedCount">0</div>
-      </div>
+      <div class="stat-icon">📄</div>
     </div>
+  </div>
 
-    <div class="toolbar">
-      <input type="text" id="searchInput" placeholder="🔍 Search by student, term, or notes..." onkeyup="filterTable()">
+  <div class="toolbar">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search student, term, notes..." onkeyup="filterTable()">
     </div>
-
-    <!-- Filter Controls -->
-    <div class="filter-container">
-      <div class="filter-header" onclick="toggleFilters()">
-        <h3>⚙️ Filters</h3>
-        <button class="filter-toggle" id="filterToggle">▼</button>
-      </div>
-      <div class="filters-grid" id="filtersGrid" style="display: none;">
-        <div class="filter-group">
-          <label for="filterStudent">Student</label>
-          <select id="filterStudent" onchange="applyFilters()">
-            <option value="">All Students</option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <label for="filterTerm">Term</label>
-          <select id="filterTerm" onchange="applyFilters()">
-            <option value="">All Terms</option>
-            <option value="Term 1">Term 1</option>
-            <option value="Term 2">Term 2</option>
-            <option value="Term 3">Term 3</option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <label for="filterYear">Year</label>
-          <select id="filterYear" onchange="applyFilters()">
-            <option value="">All Years</option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <label for="filterFlagged">Flag Status</label>
-          <select id="filterFlagged" onchange="applyFilters()">
-            <option value="">All</option>
-            <option value="flagged">Flagged Only</option>
-            <option value="not-flagged">Not Flagged</option>
-          </select>
-        </div>
-      </div>
-      <div class="filter-actions" id="filterActions" style="display: none;">
-        <button class="btn-clear" onclick="clearFilters()">Clear Filters</button>
-        <button class="btn-apply" onclick="applyFilters()">Apply Filters</button>
-      </div>
+    <div class="filter-group">
+      <select id="filterStudent" onchange="applyFilters()">
+        <option value="">All Students</option>
+      </select>
+      <select id="filterTerm" onchange="applyFilters()">
+        <option value="">All Terms & Semesters</option>
+        <option value="Term 1">Term 1</option>
+        <option value="Term 2">Term 2</option>
+        <option value="Term 3">Term 3</option>
+        <option value="Semester 1">Semester 1</option>
+        <option value="Semester 2">Semester 2</option>
+      </select>
+      <select id="filterYear" onchange="applyFilters()">
+        <option value="">All Years</option>
+      </select>
+      <button class="btn btn-secondary" onclick="clearFilters()">Reset</button>
     </div>
+  </div>
 
-    <div class="scroll-hint">
-      ← Scroll to see all columns →
-    </div>
-
-    <div class="table-wrapper">
+  <div class="table-wrapper">
+    <div class="table-scroll">
       <table id="expenseTable">
         <thead>
           <tr>
-            <th width="50">Flag</th>
-            <th width="120">Student</th>
-            <th width="80">Date</th>
-            <th width="70">Term</th>
-            <th width="70">Year</th>
-            <th width="80" class="number-col">Tuition</th>
-            <th width="80" class="number-col">Food</th>
-            <th width="80" class="number-col">Transp</th>
-            <th width="80" class="number-col">Mat</th>
-            <th width="80" class="number-col">Hyg</th>
-            <th width="80" class="number-col">Other</th>
-            <th width="90" class="total-col">Total</th>
-            <th width="120">Actions</th>
+            <th width="20%">Student</th>
+            <th width="10%">Date</th>
+            <th width="10%">Term</th>
+            <th width="8%">Year</th>
+            <th width="8%" class="number-col">Tuition</th>
+            <th width="8%" class="number-col">Food</th>
+            <th width="8%" class="number-col">Transp</th>
+            <th width="8%" class="number-col">Mat</th>
+            <th width="8%" class="number-col">Hyg</th>
+            <th width="8%" class="number-col">Other</th>
+            <th width="10%" class="number-col">Total</th>
+            <th width="12%">Actions</th>
           </tr>
         </thead>
         <tbody id="tableBody"></tbody>
       </table>
-      <div id="loading">Loading...</div>
-    </div>
-
-  </div>
-
-  <!-- View/Receipt Modal -->
-  <div id="viewModal" class="modal-overlay">
-    <div class="modal-content">
-      <span class="modal-close" onclick="closeModal()">&times;</span>
-
-      <div class="receipt-header">
-        <h2 style="font-size: 1.3rem; margin: 0 0 5px 0;">Payment Receipt</h2>
-        <p style="font-size: 0.85rem; color: #666; margin: 0 0 5px 0;">School Expenses</p>
-        <p id="receiptDate" style="font-size: 0.8rem; color: #999; margin: 0;"></p>
+      
+      <div id="loading" class="loading-state" style="display:none;">
+        <div class="spinner"></div>
+        <p>Loading data...</p>
       </div>
-
-      <div style="margin-top: 15px;">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem;">
-          <strong>Student:</strong> <span id="modalStudent"></span>
-        </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem;">
-          <strong>Term:</strong> <span id="modalTerm"></span>
-        </div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 0.9rem;">
-          <strong>Year:</strong> <span id="modalYear"></span>
-        </div>
-      </div>
-
-      <hr style="border:0; border-top:1px solid #eee; margin: 10px 0;">
-
-      <div id="modalBreakdown"></div>
-
-      <div
-        style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.1rem; margin-top: 15px; border-top: 2px dashed #ccc; padding-top: 10px;">
-        <span>Total:</span> <span id="modalTotal"></span>
-      </div>
-
-      <div style="margin-top: 15px; font-size: 0.8rem; color: #777;">
-        <div style="margin-bottom: 5px;"><strong>Notes:</strong> <span id="modalNotes">None</span></div>
-        <div><strong>ID:</strong> <span id="modalId"></span></div>
-      </div>
-
-      <div style="text-align: center; margin-top: 20px; display: flex; gap: 10px; justify-content: center;">
-        <button class="btn btn-export" onclick="window.print()"
-          style="padding: 8px 12px; font-size: 0.8rem;">Print</button>
-        <button class="btn" onclick="closeModal()"
-          style="margin-left: 0; background-color: #eee; padding: 8px 12px; font-size: 0.8rem;">Close</button>
+      
+      <div id="emptyState" class="empty-state" style="display:none;">
+        <h3>No Records Found</h3>
+        <p>Try adjusting your search filters or add a new record.</p>
+        <a href="index.html" class="btn btn-primary" style="margin-top:15px;">Add New Record</a>
       </div>
     </div>
   </div>
 
- <script>
+</div>
+
+<!-- HIDDEN PRINTABLE AREA (Visible only when printing) -->
+<div id="printable-area" style="display:none;">
+  <div style="padding: 20px;">
+    <h1 style="text-align:center; margin-bottom: 30px;">Expenses Report - Action for Children Zambia</h1>
+    <p style="text-align:center; color: #666; margin-bottom: 20px;">Generated: <span id="printDate"></span></p>
+    <div id="print-content" class="print-container">
+        <!-- Cards will be injected here -->
+    </div>
+  </div>
+</div>
+
+<!-- Receipt/View Modal -->
+<div id="viewModal" class="modal-overlay">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h2>Payment Receipt</h2>
+      <button class="close-btn" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      
+      <div class="receipt-meta">
+        <div class="meta-item">
+          <label>Student</label>
+          <span id="modalStudent">-</span>
+        </div>
+        <div class="meta-item">
+          <label>Date</label>
+          <span id="modalDate">-</span>
+        </div>
+        <div class="meta-item">
+          <label>Term</label>
+          <span id="modalTerm">-</span>
+        </div>
+        <div class="meta-item">
+          <label>Year</label>
+          <span id="modalYear">-</span>
+        </div>
+      </div>
+
+      <div id="modalBreakdown">
+        <!-- Items will be injected here via JS -->
+      </div>
+
+      <div class="receipt-total">
+        <span>Total Paid</span>
+        <span id="modalTotal">0.00</span>
+      </div>
+      
+      <div style="margin-top: 20px; padding-top: 15px; border-top: 1px dashed #eee;">
+        <strong style="font-size: 0.8rem; color: #999;">Notes:</strong>
+        <p id="modalNotes" style="margin: 5px 0 0; font-size: 0.9rem; color: #666;">-</p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" onclick="window.print()">Print</button>
+      <button class="btn btn-primary" onclick="closeModal()">Done</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// API Endpoint - ensure this matches your deployed Web App URL
 const API = "https://script.google.com/macros/s/AKfycbzEEeuwtZm-qGOmKLza3IfdVieYurAH14xgp3Q0lUPwUpvyz2rIHUlkC48sCc2FUK9i/exec";
 let allData = [];
 let filteredData = [];
 
-// Filter state
-let currentFilters = {
-  student: '',
-  term: '',
-  year: '',
-  flagged: '',
-  search: ''
-};
+// Filter State
+let filters = { student: '', term: '', year: '', search: '' };
 
 window.onload = function() {
   loadData();
-  // Set current year in year filter
-  const currentYear = new Date().getFullYear();
-  const yearSelect = document.getElementById('filterYear');
-  // Add recent years
-  for (let i = currentYear + 1; i >= currentYear - 5; i--) {
-    const option = document.createElement('option');
-    option.value = i;
-    option.textContent = i;
-    yearSelect.appendChild(option);
-  }
+  initYearFilter();
 };
 
-function loadData() {
+function initYearFilter() {
+  const yearSelect = document.getElementById('filterYear');
+  const currentYear = new Date().getFullYear();
+  for (let i = currentYear + 1; i >= currentYear - 5; i--) {
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = i;
+    yearSelect.appendChild(opt);
+  }
+  // Set default to All Years
+  yearSelect.value = "";
+}
+
+async function loadData() {
   document.getElementById('loading').style.display = 'block';
+  document.getElementById('emptyState').style.display = 'none';
   
-  const url = `${API}?action=read&t=${new Date().getTime()}`;
-  
-  fetch(url)
-    .then(res => res.text())
-    .then(text => {
-      // Extract JSON from response (remove any appended headers)
-      const jsonStart = text.indexOf('{');
-      const jsonEnd = text.lastIndexOf('}') + 1;
-      
-      if (jsonStart !== -1 && jsonEnd > jsonStart) {
-        const jsonText = text.substring(jsonStart, jsonEnd);
-        const data = JSON.parse(jsonText);
-        allData = data.data || [];
-        filteredData = [...allData];
-        
-        // Populate student filter dropdown
-        populateStudentFilter();
-        
-        renderTable(filteredData);
-        updateStats(filteredData);
-      } else {
-        throw new Error('No valid JSON found in response');
-      }
-      document.getElementById('loading').style.display = 'none';
-    })
-    .catch(err => {
-      console.error('Error:', err);
-      document.getElementById('loading').innerHTML = `
-        <div class="empty-state">
-          <h3>Error Loading Data</h3>
-          <p>${err.message}</p>
-          <button class="btn btn-add" onclick="loadData()">Retry</button>
-        </div>
-      `;
-    });
+  try {
+    const res = await fetch(`${API}?action=read&t=${Date.now()}`);
+    const json = await res.json();
+    allData = json.data || [];
+    
+    populateStudentFilter();
+    applyFilters(); // This calls renderTable
+    
+  } catch (err) {
+    console.error(err);
+    document.getElementById('loading').innerHTML = `<p style="color:red">Error loading data: ${err.message}</p>`;
+  } finally {
+    document.getElementById('loading').style.display = 'none';
+  }
 }
 
 function populateStudentFilter() {
-  const studentSelect = document.getElementById('filterStudent');
+  const select = document.getElementById('filterStudent');
+  // Keep first option (All Students)
+  select.innerHTML = '<option value="">All Students</option>';
+  
   const students = [...new Set(allData.map(item => item.student))].sort();
-  
-  // Clear existing options except first
-  while (studentSelect.options.length > 1) {
-    studentSelect.remove(1);
-  }
-  
-  // Add student options
-  students.forEach(student => {
-    const option = document.createElement('option');
-    option.value = student;
-    option.textContent = student;
-    studentSelect.appendChild(option);
+  students.forEach(s => {
+    const opt = document.createElement('option');
+    opt.value = s;
+    opt.textContent = s;
+    select.appendChild(opt);
   });
-}
-
-function toggleFilters() {
-  const filtersGrid = document.getElementById('filtersGrid');
-  const filterActions = document.getElementById('filterActions');
-  const filterToggle = document.getElementById('filterToggle');
-  
-  if (filtersGrid.style.display === 'none') {
-    filtersGrid.style.display = 'grid';
-    filterActions.style.display = 'flex';
-    filterToggle.textContent = '▲';
-  } else {
-    filtersGrid.style.display = 'none';
-    filterActions.style.display = 'none';
-    filterToggle.textContent = '▼';
-  }
 }
 
 function applyFilters() {
-  // Get filter values
-  currentFilters.student = document.getElementById('filterStudent').value;
-  currentFilters.term = document.getElementById('filterTerm').value;
-  currentFilters.year = document.getElementById('filterYear').value;
-  currentFilters.flagged = document.getElementById('filterFlagged').value;
-  currentFilters.search = document.getElementById('searchInput').value.toLowerCase().trim();
-  
-  // Apply filters
+  filters.student = document.getElementById('filterStudent').value;
+  filters.term = document.getElementById('filterTerm').value;
+  filters.year = document.getElementById('filterYear').value;
+  // Search is handled via onkeyup, but we include it here for completeness
+  filters.search = document.getElementById('searchInput').value.toLowerCase().trim();
+
   filteredData = allData.filter(item => {
-    // Student filter
-    if (currentFilters.student && item.student !== currentFilters.student) {
-      return false;
-    }
+    if (filters.student && item.student !== filters.student) return false;
+    if (filters.term && item.term !== filters.term) return false;
+    if (filters.year && String(item.year) !== filters.year) return false;
     
-    // Term filter
-    if (currentFilters.term && item.term !== currentFilters.term) {
-      return false;
+    if (filters.search) {
+      const s = filters.search;
+      const text = (item.student + " " + item.term + " " + (item.notes||"") + " " + item.year).toLowerCase();
+      if (!text.includes(s)) return false;
     }
-    
-    // Year filter
-    if (currentFilters.year && item.year != currentFilters.year) {
-      return false;
-    }
-    
-    // Flagged filter
-    const isFlagged = item.flagged === true || item.flagged === 'true';
-    if (currentFilters.flagged === 'flagged' && !isFlagged) {
-      return false;
-    }
-    if (currentFilters.flagged === 'not-flagged' && isFlagged) {
-      return false;
-    }
-    
-    // Search filter
-    if (currentFilters.search) {
-      const searchMatch = 
-        item.student.toLowerCase().includes(currentFilters.search) ||
-        item.term.toLowerCase().includes(currentFilters.search) ||
-        (item.notes && item.notes.toLowerCase().includes(currentFilters.search)) ||
-        item.year.toString().includes(currentFilters.search);
-      
-      if (!searchMatch) {
-        return false;
-      }
-    }
-    
     return true;
   });
-  
+
   renderTable(filteredData);
   updateStats(filteredData);
-  
-  // Update search input to match filter state
-  document.getElementById('searchInput').value = currentFilters.search;
 }
 
 function clearFilters() {
-  // Reset filter inputs
-  document.getElementById('filterStudent').value = '';
-  document.getElementById('filterTerm').value = '';
-  document.getElementById('filterYear').value = '';
-  document.getElementById('filterFlagged').value = '';
-  document.getElementById('searchInput').value = '';
-  
-  // Reset filter state
-  currentFilters = {
-    student: '',
-    term: '',
-    year: '',
-    flagged: '',
-    search: ''
-  };
-  
-  // Show all data
-  filteredData = [...allData];
-  renderTable(filteredData);
-  updateStats(filteredData);
+  document.getElementById('filterStudent').value = "";
+  document.getElementById('filterTerm').value = "";
+  document.getElementById('filterYear').value = "";
+  document.getElementById('searchInput').value = "";
+  applyFilters();
 }
 
 function filterTable() {
-  // Update search filter and apply all filters
-  currentFilters.search = document.getElementById('searchInput').value.toLowerCase().trim();
   applyFilters();
 }
 
 function renderTable(data) {
   const tbody = document.getElementById('tableBody');
-  tbody.innerHTML = "";
-  
-  if (!data.length) { 
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="13" style="text-align:center; padding: 30px;">
-          <div class="empty-state">
-            <h3>No Records Found</h3>
-            <p>Try adjusting your filters or search</p>
-            <button class="btn btn-add" onclick="clearFilters()" style="padding: 6px 10px; font-size: 0.8rem;">Clear Filters</button>
-          </div>
-        </td>
-      </tr>`; 
-    return; 
-  }
+  tbody.innerHTML = '';
 
-  // Sort by date (newest first)
+  if (data.length === 0) {
+    document.getElementById('emptyState').style.display = 'block';
+    return;
+  }
+  document.getElementById('emptyState').style.display = 'none';
+
+  // Sort by Date Descending
   data.sort((a, b) => new Date(b.expense_date) - new Date(a.expense_date));
 
   data.forEach(r => {
+    // Calculate total from flat fields (which are populated by backend from nested items)
     const total = (Number(r.tuition)||0)+(Number(r.food)||0)+(Number(r.transport)||0)+(Number(r.materials)||0)+(Number(r.hygiene)||0)+(Number(r.other)||0);
-    const isFlagged = r.flagged === true || r.flagged === 'true';
-    const flagClass = isFlagged ? 'flagged-true' : 'flagged-false';
-    const flagIcon = isFlagged ? '★' : '☆';
-
-    const row = document.createElement('tr');
-    row.dataset.id = r.id;
     
-    row.innerHTML = `
-      <td>
-        <button class="flag-btn ${flagClass}" 
-                title="${isFlagged ? 'Unflag' : 'Flag'}">
-          ${flagIcon}
-        </button>
-      </td>
-      <td style="font-weight:600;">${escapeHtml(r.student)}</td>
-      <td>${new Date(r.expense_date).toLocaleDateString(undefined, {month:'short', day:'numeric'})}</td>
-      <td>${escapeHtml(r.term)}</td>
+    // MAIN ROW
+    const tr = document.createElement('tr');
+    tr.className = 'main-row'; // Clickable
+    tr.innerHTML = `
+      <td style="font-weight: 600; color: var(--dark);">${escapeHtml(r.student)}</td>
+      <td>${formatDate(r.expense_date)}</td>
+      <td><span class="badge">${r.term}</span></td>
       <td>${r.year}</td>
       <td class="number-col">${formatNum(r.tuition)}</td>
       <td class="number-col">${formatNum(r.food)}</td>
@@ -1011,183 +780,366 @@ function renderTable(data) {
       <td class="number-col">${formatNum(r.materials)}</td>
       <td class="number-col">${formatNum(r.hygiene)}</td>
       <td class="number-col">${formatNum(r.other)}</td>
-      <td class="total-col">${formatNum(total)}</td>
-      <td>
+      <td class="number-col total-row">${formatNum(total)}</td>
+      <td class="action-cell">
         <div class="action-buttons">
-          <button class="action-btn btn-view" title="View">View</button>
-          <a href="index.html?id=${encodeURIComponent(r.id)}" class="action-btn btn-edit" title="Edit">Edit</a>
-          <button class="action-btn btn-del" title="Delete">Del</button>
+          <button class="btn btn-primary btn-icon" title="View Receipt" onclick='openModal("${r.id}")'>👁</button>
+          <a href="index.html?id=${encodeURIComponent(r.id)}" class="btn btn-secondary btn-icon" title="Edit" style="text-decoration:none;">✎</a>
+          <button class="btn btn-danger btn-icon" title="Delete" onclick="delRecord('${r.id}')">🗑</button>
         </div>
       </td>
     `;
     
-    // Store data on the row for event handlers
-    row.dataset.record = JSON.stringify(r);
-    
-    // Add click event for the whole row
-    row.addEventListener('click', (e) => {
-      if (!e.target.closest('button') && !e.target.closest('a')) {
-        openModal(r.id);
-      }
+    // Add click event to toggle detail row
+    tr.addEventListener('click', function(e) {
+        // Only toggle if not clicking an action button
+        if(!e.target.closest('.action-buttons')) {
+            toggleDetailRow(this);
+        }
     });
-    
-    tbody.appendChild(row);
-  });
-  
-  // Add event listeners after table is rendered
-  attachTableEventListeners();
-}
 
-function attachTableEventListeners() {
-  // Flag buttons
-  document.querySelectorAll('.flag-btn').forEach(btn => {
-    btn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      const row = this.closest('tr');
-      const record = JSON.parse(row.dataset.record);
-      const currentFlagged = record.flagged === true || record.flagged === 'true';
-      toggleFlag(record.id, currentFlagged);
-    });
-  });
-  
-  // View buttons
-  document.querySelectorAll('.btn-view').forEach(btn => {
-    btn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      const row = this.closest('tr');
-      const record = JSON.parse(row.dataset.record);
-      openModal(record.id);
-    });
-  });
-  
-  // Delete buttons
-  document.querySelectorAll('.btn-del').forEach(btn => {
-    btn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      const row = this.closest('tr');
-      const record = JSON.parse(row.dataset.record);
-      del(record.id);
-    });
+    tbody.appendChild(tr);
+
+    // DETAIL ROW (Hidden by default)
+    const detailTr = document.createElement('tr');
+    detailTr.className = 'detail-row';
+    detailTr.innerHTML = `<td colspan="13" class="detail-content">${generateInlineBreakdown(r)}</td>`;
+    tbody.appendChild(detailTr);
   });
 }
 
-function escapeHtml(text) {
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
+// Toggle Inline Expansion
+function toggleDetailRow(mainRow) {
+    const detailRow = mainRow.nextElementSibling;
+    if(detailRow && detailRow.classList.contains('detail-row')) {
+        const isVisible = detailRow.classList.contains('visible');
+        if(isVisible) {
+            detailRow.classList.remove('visible');
+        } else {
+            detailRow.classList.add('visible');
+        }
+    }
+}
+
+// Generate HTML for Inline Breakdown
+function generateInlineBreakdown(r) {
+    let items = null;
+    if (r.items) {
+        try {
+            items = typeof r.items === 'string' ? JSON.parse(r.items) : r.items;
+        } catch(e) { console.warn("Could not parse items JSON"); }
+    }
+
+    if (!items || typeof items !== 'object') {
+        return `<div style="color:#888; text-align:center;">No detailed breakdown available (Legacy Record)</div>`;
+    }
+
+    let html = '<div class="breakdown-grid">';
+    const categories = ['tuition', 'food', 'transport', 'materials', 'hygiene', 'other'];
+    
+    categories.forEach(cat => {
+        if (items[cat] && Array.isArray(items[cat]) && items[cat].length > 0) {
+            let catTotal = 0;
+            
+            html += `
+                <div class="breakdown-card">
+                    <div class="breakdown-cat-header">
+                        <span>${capitalize(cat)}</span>
+                    </div>
+                    <ul class="breakdown-item-list">`;
+            
+            items[cat].forEach(item => {
+                catTotal += (Number(item.total) || 0);
+                html += `
+                    <li class="breakdown-item">
+                        <span class="item-desc">${escapeHtml(item.description)}</span>
+                        <span class="item-meta">x${item.quantity}</span>
+                        <span class="item-val">${formatNum(item.total)}</span>
+                    </li>`;
+            });
+            
+            html += `
+                    </ul>
+                    <div class="breakdown-subtotal">Subtotal: ${formatNum(catTotal)}</div>
+                </div>`;
+        }
+    });
+    
+    html += '</div>';
+    return html;
 }
 
 function updateStats(data) {
-  let grandTotal = 0, flaggedCount = 0;
+  let grandTotal = 0;
   data.forEach(r => {
     grandTotal += (Number(r.tuition)||0)+(Number(r.food)||0)+(Number(r.transport)||0)+(Number(r.materials)||0)+(Number(r.hygiene)||0)+(Number(r.other)||0);
-    if(r.flagged === true || r.flagged === 'true') flaggedCount++;
   });
-  document.getElementById('grandTotalDisplay').innerText = formatNum(grandTotal);
-  document.getElementById('recordCount').innerText = data.length;
-  document.getElementById('flaggedCount').innerText = flaggedCount;
+  document.getElementById('grandTotalDisplay').textContent = formatNum(grandTotal);
+  document.getElementById('recordCount').textContent = data.length;
 }
 
-function formatNum(num) { 
-  const n = Number(num||0);
-  return n.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+/* --- MODAL & RECEIPT LOGIC --- */
+
+function openModal(id) {
+  const r = allData.find(x => x.id == id);
+  if(!r) return;
+
+  const total = (Number(r.tuition)||0)+(Number(r.food)||0)+(Number(r.transport)||0)+(Number(r.materials)||0)+(Number(r.hygiene)||0)+(Number(r.other)||0);
+
+  document.getElementById('modalStudent').textContent = r.student;
+  document.getElementById('modalTerm').textContent = r.term;
+  document.getElementById('modalYear').textContent = r.year;
+  document.getElementById('modalDate').textContent = formatDate(r.expense_date);
+  document.getElementById('modalTotal').textContent = formatNum(total);
+  document.getElementById('modalNotes').textContent = r.notes || "No notes provided.";
+
+  generateBreakdown(r);
+  document.getElementById('viewModal').style.display = 'flex';
 }
 
-function del(id) {
-  if(confirm("Delete this record?")) {
-    document.getElementById('loading').style.display = 'block';
+function generateBreakdown(r) {
+  const container = document.getElementById('modalBreakdown');
+  container.innerHTML = '';
+
+  // Attempt to parse new 'items' JSON structure
+  let items = null;
+  if (r.items) {
+    try {
+      items = typeof r.items === 'string' ? JSON.parse(r.items) : r.items;
+    } catch(e) { 
+      console.warn("Could not parse items JSON, falling back to flat totals"); 
+    }
+  }
+
+  if (items && typeof items === 'object') {
+    // NEW FORMAT: Iterate through categories and individual items
+    const categories = ['tuition', 'food', 'transport', 'materials', 'hygiene', 'other'];
     
-    // Use GET request with action=delete
-    const url = `${API}?action=delete&id=${encodeURIComponent(id)}&t=${new Date().getTime()}`;
-    
-    fetch(url)
-      .then(res => res.text())
-      .then(text => {
-        const jsonStart = text.indexOf('{');
-        const jsonEnd = text.lastIndexOf('}') + 1;
+    categories.forEach(cat => {
+      if (items[cat] && Array.isArray(items[cat]) && items[cat].length > 0) {
+        let catTotal = 0;
+        const section = document.createElement('div');
+        section.className = 'breakdown-section';
         
-        if (jsonStart !== -1 && jsonEnd > jsonStart) {
-          const jsonText = text.substring(jsonStart, jsonEnd);
-          const result = JSON.parse(jsonText);
-          
-          if (result.success) {
-            loadData();
-          } else {
-            alert("Delete failed: " + (result.message || 'Unknown error'));
-            document.getElementById('loading').style.display = 'none';
-          }
-        } else {
-          throw new Error('Invalid response from server');
-        }
-      })
-      .catch(err => {
-        console.error(err);
-        alert("Delete failed. Try again.");
-        document.getElementById('loading').style.display = 'none';
-      });
+        // Section Header
+        const title = document.createElement('div');
+        title.className = 'breakdown-title';
+        title.textContent = capitalize(cat);
+        section.appendChild(title);
+
+        // Iterate over individual items (e.g., Rice, Beans)
+        items[cat].forEach(item => {
+          const row = document.createElement('div');
+          row.className = 'item-row';
+          row.innerHTML = `
+            <span class="item-name">${escapeHtml(item.description)}</span>
+            <span class="item-qty">x${item.quantity}</span>
+            <span class="item-price">${formatNum(item.total)}</span>
+          `;
+          section.appendChild(row);
+          catTotal += (Number(item.total) || 0);
+        });
+
+        // Category Subtotal
+        const subtotal = document.createElement('div');
+        subtotal.className = 'subtotal-row';
+        subtotal.textContent = `${capitalize(cat)} Subtotal: ${formatNum(catTotal)}`;
+        section.appendChild(subtotal);
+
+        container.appendChild(section);
+      }
+    });
+
+  } else {
+    // LEGACY FALLBACK: Just show category totals if JSON is missing or old
+    const categories = [
+      {k:'tuition', l:'Tuition'}, 
+      {k:'food', l:'Food'}, 
+      {k:'transport', l:'Transport'}, 
+      {k:'materials', l:'Materials'}, 
+      {k:'hygiene', l:'Hygiene'}, 
+      {k:'other', l:'Other'}
+    ];
+    
+    const section = document.createElement('div');
+    section.className = 'breakdown-section';
+    
+    categories.forEach(cat => {
+      const val = Number(r[cat.k]) || 0;
+      if(val > 0) {
+        const row = document.createElement('div');
+        row.className = 'item-row';
+        row.innerHTML = `
+          <span class="item-name">${cat.l} (Legacy Total)</span>
+          <span class="item-qty">1</span>
+          <span class="item-price">${formatNum(val)}</span>
+        `;
+        section.appendChild(row);
+      }
+    });
+    container.appendChild(section);
   }
 }
 
-function toggleFlag(id, currentStatus) {
-  console.log('Toggling flag for id:', id, 'currentStatus:', currentStatus);
+function closeModal() {
+  document.getElementById('viewModal').style.display = 'none';
+}
+
+/* --- EXPORT FUNCTIONS --- */
+
+function exportPDF() {
+  // This creates a dedicated print view that shows individual tables for every student
+  const printArea = document.getElementById('printable-area');
+  const contentDiv = document.getElementById('print-content');
+  const dateSpan = document.getElementById('printDate');
   
-  document.getElementById('loading').style.display = 'block';
+  // 1. Clear previous print data
+  contentDiv.innerHTML = '';
   
-  // Try using GET request first (simpler for debugging)
-  const url = `${API}?action=update&id=${encodeURIComponent(id)}&flagged=${!currentStatus}&t=${new Date().getTime()}`;
-  
-  console.log('GET URL:', url);
-  
-  fetch(url)
-    .then(response => response.text())
-    .then(text => {
-      console.log('Response text:', text);
+  // 2. Set Print Date
+  dateSpan.textContent = new Date().toLocaleString();
+
+  // 3. Generate "Individual Tables" (Cards) for filtered data
+  filteredData.forEach(r => {
+      // Generate the detailed breakdown (Rice, Beans, etc.)
+      const breakdownHtml = generateInlineBreakdown(r);
       
-      const jsonStart = text.indexOf('{');
-      const jsonEnd = text.lastIndexOf('}') + 1;
+      // Calculate total
+      const total = (Number(r.tuition)||0)+(Number(r.food)||0)+(Number(r.transport)||0)+(Number(r.materials)||0)+(Number(r.hygiene)||0)+(Number(r.other)||0);
+
+      // Create a Card structure for this student
+      const cardHtml = `
+          <div class="print-card">
+              <div class="print-header">
+                  <span>Student: ${r.student}</span>
+                  <span>${r.term}, ${r.year}</span>
+                  <span>Date: ${formatDate(r.expense_date)}</span>
+              </div>
+              ${breakdownHtml}
+              <div style="margin-top: 15px; padding-top: 10px; border-top: 2px solid #000;">
+                  <table class="print-table">
+                      <tr class="print-total-row">
+                          <td>Total Paid (ZMW)</td>
+                          <td style="text-align: right;">${formatNum(total)}</td>
+                      </tr>
+                  </table>
+              </div>
+          </div>
+      `;
       
-      if (jsonStart !== -1 && jsonEnd > jsonStart) {
-        const jsonText = text.substring(jsonStart, jsonEnd);
-        console.log('JSON text to parse:', jsonText);
-        
-        try {
-          const result = JSON.parse(jsonText);
-          console.log('Parsed result:', result);
-          
-          if (result.success) {
-            // Reload data to show updated flag
-            loadData();
-          } else {
-            alert("Failed to update flag: " + (result.message || 'Unknown error'));
-            document.getElementById('loading').style.display = 'none';
-          }
-        } catch (parseError) {
-          console.error('Parse error:', parseError);
-          alert("Failed to parse server response");
-          document.getElementById('loading').style.display = 'none';
-        }
-      } else {
-        console.error('No JSON found in response');
-        throw new Error('Invalid response from server');
-      }
-    })
-    .catch(err => {
-      console.error('Fetch error:', err);
-      alert("Failed to update flag. Check console for details.");
-      document.getElementById('loading').style.display = 'none';
-    });
+      contentDiv.innerHTML += cardHtml;
+  });
+
+  // 4. Show Print Area and Print
+  printArea.style.display = 'block';
+  window.print();
+
+  // Optional: Hide it after printing starts (user won't see this but saves memory)
+  setTimeout(() => {
+      printArea.style.display = 'none';
+  }, 1000);
+}
+
+function exportWord() {
+  let dataToExport = filteredData;
+  const term = document.getElementById('exportSelect').value;
+  
+  if (term !== 'all') {
+    dataToExport = dataToExport.filter(i => i.term === term);
+  }
+  
+  if (dataToExport.length === 0) {
+    alert("No data to export for the selected term.");
+    return;
+  }
+
+  // HTML Header with embedded styles for Word compatibility
+  let htmlContent = `
+    <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word'>
+    <head>
+      <meta charset="utf-8">
+      <style>
+        table { border-collapse: collapse; width: 100%; font-family: Arial, sans-serif; font-size: 10pt; }
+        th, td { border: 1px solid #000; padding: 5px 10px; text-align: left; }
+        th { background: #eee; font-weight: bold; }
+        .number-cell { text-align: right; }
+      </style>
+    </head>
+    <body>
+      <h2>Expenses Report</h2>
+      <p>Generated: ${new Date().toLocaleDateString()}</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Student</th>
+            <th>Date</th>
+            <th>Term</th>
+            <th>Year</th>
+            <th>Tuition</th>
+            <th>Food</th>
+            <th>Transport</th>
+            <th>Materials</th>
+            <th>Hygiene</th>
+            <th>Other</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+  `;
+
+  dataToExport.forEach(r => {
+    const total = (Number(r.tuition)||0)+(Number(r.food)||0)+(Number(r.transport)||0)+(Number(r.materials)||0)+(Number(r.hygiene)||0)+(Number(r.other)||0);
+    
+    htmlContent += `
+      <tr>
+        <td>${r.student}</td>
+        <td>${r.expense_date}</td>
+        <td>${r.term}</td>
+        <td>${r.year}</td>
+        <td>${r.tuition || 0}</td>
+        <td>${r.food || 0}</td>
+        <td>${r.transport || 0}</td>
+        <td>${r.materials || 0}</td>
+        <td>${r.hygiene || 0}</td>
+        <td>${r.other || 0}</td>
+        <td class="number-cell" style="font-weight:bold;">${formatNum(total)}</td>
+      </tr>
+    `;
+  });
+
+  htmlContent += `
+        </tbody>
+      </table>
+    </body>
+    </html>
+  `;
+
+  // Create Blob for Word
+  const blob = new Blob(['\ufeff', htmlContent], {
+    type: 'application/msword'
+  });
+  
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `AFCZ_Expenses_${term || 'all'}.doc`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 }
 
 function exportData() {
-  const filterTerm = document.getElementById('exportSelect').value;
-  let dataToExport = filteredData; // Use filtered data for export
+  // Original CSV Export
+  const term = document.getElementById('exportSelect').value;
+  let dataToExport = filteredData;
   
-  if (filterTerm !== 'all') {
-    dataToExport = dataToExport.filter(i => i.term === filterTerm);
+  if (term !== 'all') {
+    dataToExport = dataToExport.filter(i => i.term === term);
   }
-
+  
   if (dataToExport.length === 0) {
-    alert("No data to export!");
+    alert("No data to export for the selected term.");
     return;
   }
 
@@ -1196,89 +1148,62 @@ function exportData() {
 
   dataToExport.forEach(r => {
     const total = (Number(r.tuition)||0)+(Number(r.food)||0)+(Number(r.transport)||0)+(Number(r.materials)||0)+(Number(r.hygiene)||0)+(Number(r.other)||0);
+    // Escape quotes in notes
+    const safeNotes = (r.notes || "").replace(/"/g, '""');
+    
     const row = [
       `"${r.student}"`,
       r.expense_date,
-      r.term,
+      `"${r.term}"`,
       r.year,
-      r.tuition,
-      r.food,
-      r.transport,
-      r.materials,
-      r.hygiene,
-      r.other,
+      r.tuition || 0,
+      r.food || 0,
+      r.transport || 0,
+      r.materials || 0,
+      r.hygiene || 0,
+      r.other || 0,
       total,
-      `"${(r.notes || '').replace(/"/g, '""')}"`
+      `"${safeNotes}"`
     ];
     csvContent += row.join(",") + "\n";
   });
 
-  const encodedUri = encodeURI(csvContent);
   const link = document.createElement("a");
-  link.setAttribute("href", encodedUri);
-  link.setAttribute("download", `expenses_${filterTerm}_filtered.csv`);
+  link.setAttribute("href", encodeURI(csvContent));
+  link.setAttribute("download", `expenses_export_${term}.csv`);
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
 }
 
-function openModal(id) {
-  const r = filteredData.find(x => x.id == id);
-  if(!r) {
-    console.error('Record not found with id:', id);
-    return;
-  }
-
-  const total = (Number(r.tuition)||0)+(Number(r.food)||0)+(Number(r.transport)||0)+(Number(r.materials)||0)+(Number(r.hygiene)||0)+(Number(r.other)||0);
-
-  document.getElementById('modalStudent').innerText = r.student;
-  document.getElementById('modalTerm').innerText = r.term;
-  document.getElementById('modalYear').innerText = r.year;
-  document.getElementById('receiptDate').innerText = new Date(r.expense_date).toLocaleDateString();
-  document.getElementById('modalTotal').innerText = formatNum(total);
-  document.getElementById('modalNotes').innerText = r.notes || "No notes";
-  document.getElementById('modalId').innerText = r.id;
-
-  let breakdownHTML = "";
-  const categories = [
-    {k:'tuition', l:'Tuition'}, 
-    {k:'food', l:'Food'}, 
-    {k:'transport', l:'Transport'}, 
-    {k:'materials', l:'Materials'}, 
-    {k:'hygiene', l:'Hygiene'}, 
-    {k:'other', l:'Other'}
-  ];
-
-  categories.forEach(cat => {
-    const value = Number(r[cat.k]) || 0;
-    if(value > 0) {
-      breakdownHTML += `
-        <div style="display: flex; justify-content: space-between; margin-bottom: 6px; font-size: 0.9rem;">
-          <span>${cat.l}:</span>
-          <span>${formatNum(value)}</span>
-        </div>`;
-    }
-  });
-  
-  document.getElementById('modalBreakdown').innerHTML = breakdownHTML;
-  document.getElementById('viewModal').style.display = 'flex';
-  document.body.style.overflow = 'hidden';
+function formatNum(num) {
+  return parseFloat(num||0).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
 }
 
-function closeModal() {
-  document.getElementById('viewModal').style.display = 'none';
-  document.body.style.overflow = 'auto';
+function formatDate(dateStr) {
+  const d = new Date(dateStr);
+  if(isNaN(d)) return dateStr;
+  return d.toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
+function escapeHtml(text) {
+  if(!text) return "";
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function capitalize(s) {
+  if(!s) return "";
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+// Close modal on outside click
 window.onclick = function(event) {
   const modal = document.getElementById('viewModal');
   if (event.target == modal) closeModal();
 }
-
-document.addEventListener('keydown', function(event) {
-  if (event.key === 'Escape') closeModal();
-});
 </script>
-</body>
 
+</body>
 </html>
