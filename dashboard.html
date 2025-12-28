@@ -500,13 +500,15 @@
 
       <!-- CSV Dropdown -->
       <select id="exportSelect" class="btn btn-secondary" style="appearance: none; -webkit-appearance: none;">
-        <option value="all">Export CSV: All Data</option>
-        <option value="Term 1">Export CSV: Term 1</option>
-        <option value="Term 2">Export CSV: Term 2</option>
-        <option value="Term 3">Export CSV: Term 3</option>
-        <option value="Semester 1">Export CSV: Semester 1</option>
-        <option value="Semester 2">Export CSV: Semester 2</option>
-      </select>
+  <option value="">Export CSV</option>
+  <option value="all">All Data</option>
+  <option value="Term 1">Term 1</option>
+  <option value="Term 2">Term 2</option>
+  <option value="Term 3">Term 3</option>
+  <option value="Semester 1">Semester 1</option>
+  <option value="Semester 2">Semester 2</option>
+         <option value="Semester 2">Semester 2</option>
+</select>
 
       <a href="index.html" class="btn btn-primary">
         <span>+ Add Record</span>
@@ -1180,8 +1182,10 @@ function exportData() {
 
   dataToExport.forEach(r => {
     const total = (Number(r.tuition)||0)+(Number(r.food)||0)+(Number(r.transport)||0)+(Number(r.materials)||0)+(Number(r.hygiene)||0)+(Number(r.other)||0);
-    // Escape quotes in notes
-    const safeNotes = (r.notes || "").replace(/"/g, '""');
+    
+    // FIX: Convert notes to string before calling .replace()
+    const notesStr = String(r.notes || "");
+    const safeNotes = notesStr.replace(/"/g, '""');
     
     const row = [
       `"${r.student}"`,
@@ -1207,7 +1211,7 @@ function exportData() {
   link.click();
   document.body.removeChild(link);
 }
-
+  
 function formatNum(num) {
   return parseFloat(num||0).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
 }
