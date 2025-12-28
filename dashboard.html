@@ -421,10 +421,29 @@
         width: 100%; 
       }
 
+      /* Currency Symbol Styling */
+.currency-symbol {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-right: 4px;
+  color: var(--primary);
+  vertical-align: top;
+}
+
+.stat-info .value {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-top: 5px;
+  color: var(--dark);
+  display: flex;
+  align-items: baseline;
+}
+      
       /* Styles for the Generated Report Cards */
       .print-container {
         padding: 0; /* Remove screen padding for print */
       }
+      
 
       .print-card {
         border: 1px solid #000;
@@ -619,13 +638,15 @@
 
   <div class="stats-grid">
     <div class="stat-card">
-      <div class="stat-info">
-        <h3>Total Spent</h3>
-        <div class="stat-icon">K</div>
-        <div class="value" id="grandTotalDisplay">0.00</div>
-      </div>
-      
+  <div class="stat-info">
+    <h3>Total Spent</h3>
+    <div class="value">
+      <span class="currency-symbol">K</span>
+      <span id="grandTotalDisplay">0.00</span>
     </div>
+  </div>
+  <!-- <div class="stat-icon">💰</div> -->
+</div>
     <div class="stat-card">
       <div class="stat-info">
         <h3>Total Records</h3>
@@ -1334,7 +1355,7 @@ function exportData() {
 }
   
 function formatNum(num) {
-  return parseFloat(num||0).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  return "K " + parseFloat(num||0).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
 }
 
 function formatDate(dateStr) {
