@@ -32,38 +32,38 @@
             margin: 0 auto;
         }
 
- /* Organization Header Styling */
-.org-header {
-    text-align: center;
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid var(--primary);
-}
+        /* Organization Header Styling */
+        .org-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--primary);
+        }
 
-.org-name {
-    font-size: 1.8rem;
-    color: var(--dark);
-    margin: 0;
-    font-weight: bold;
-}
+        .org-name {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin: 0;
+            font-weight: bold;
+        }
 
-.org-tagline {
-    font-size: 0.9rem;
-    color: #666;
-    font-style: italic;
-    margin-top: 5px;
-    display: block;
-}
+        .org-tagline {
+            font-size: 0.9rem;
+            color: #666;
+            font-style: italic;
+            margin-top: 5px;
+            display: block;
+        }
 
-@media (max-width: 480px) {
-    .org-name {
-        font-size: 1.5rem;
-    }
-    
-    .org-tagline {
-        font-size: 0.8rem;
-    }
-}
+        @media (max-width: 480px) {
+            .org-name {
+                font-size: 1.5rem;
+            }
+
+            .org-tagline {
+                font-size: 0.8rem;
+            }
+        }
 
 
         .form-card {
@@ -434,46 +434,46 @@
             border: 1px solid #f5c6cb;
         }
 
-/* Simple Footer */
-    .simple-footer {
-        background: #2c3e50;
-        color: white;
-        padding: 20px;
-        margin-top: 30px;
-        border-radius: 8px;
-        text-align: center;
-    }
-    
-    .simple-footer h3 {
-        color: #4a90e2;
-        margin: 0 0 10px 0;
-    }
-    
-    .footer-links {
-        margin: 15px 0;
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-        flex-wrap: wrap;
-    }
-    
-    .footer-links a {
-        color: #bdc3c7;
-        text-decoration: none;
-        transition: color 0.3s;
-    }
-    
-    .footer-links a:hover {
-        color: #4a90e2;
-    }
-    
-    .copyright {
-        font-size: 0.85rem;
-        color: #95a5a6;
-        margin-top: 15px;
-        border-top: 1px solid #34495e;
-        padding-top: 15px;
-    }
+        /* Simple Footer */
+        .simple-footer {
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .simple-footer h3 {
+            color: #4a90e2;
+            margin: 0 0 10px 0;
+        }
+
+        .footer-links {
+            margin: 15px 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #bdc3c7;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: #4a90e2;
+        }
+
+        .copyright {
+            font-size: 0.85rem;
+            color: #95a5a6;
+            margin-top: 15px;
+            border-top: 1px solid #34495e;
+            padding-top: 15px;
+        }
     </style>
 </head>
 
@@ -482,10 +482,10 @@
     <div class="container">
         <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
 
-         <div class="org-header">
-        <h1 class="org-name">Action for Children Zambia</h1>
-        <span class="org-tagline">Empowering Zambian Children Through Education</span>
-    </div>
+        <div class="org-header">
+            <h1 class="org-name">Action for Children Zambia</h1>
+            <span class="org-tagline">Empowering Zambian Children Through Education</span>
+        </div>
 
         <div class="form-card">
             <div class="form-header">
@@ -523,20 +523,21 @@
                         </select>
                     </div>
                     <div class="form-group">
-    <label>Term / Semester</label>
-    <small class="helper-text">Select academic period</small>
-    <select id="term" required>
-        <!-- Term Options -->
-        <option value="Term 1">Term 1</option>
-        <option value="Term 2">Term 2</option>
-        <option value="Term 3">Term 3</option>
-        <!-- Semester Options -->
-        <option value="Semester 1">Semester 1</option>
-        <option value="Semester 2">Semester 2</option>
-        <!-- Special Term -->
-        <option value="Special Term">Special Term</option>
-    </select>
-</div>
+                        <label>Term / Semester</label>
+                        <small class="helper-text">Select academic period</small>
+                        <select id="term" required>
+                            <!-- Term Options -->
+                            <option value="Term 1">Term 1</option>
+                            <option value="Term 2">Term 2</option>
+                            <option value="Term 3">Term 3</option>
+                            <!-- Semester Options -->
+                            <option value="Semester 1">Semester 1</option>
+                            <option value="Semester 2">Semester 2</option>
+                            <option value="Semester 3">Semester 3</option>
+                            <!-- Special Term -->
+                            <option value="Special Term">Special Term</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="student-details-grid" style="margin-top: 12px;">
@@ -667,21 +668,21 @@
         <div class="spinner"></div>
     </div>
 
-<div class="simple-footer">
-    <h3>Action for Children Zambia</h3>
-    <p>Empowering Zambian Children Through Education</p>
-    
-    <div class="footer-links">
-        <a href="mailto:info@afczambia.org">Contact Us</a>
-        <a href="https://www.afczambia.org" target="_blank">Website</a>
-        <a href="#">Privacy Policy</a>
-        <a href="#">Terms of Service</a>
+    <div class="simple-footer">
+        <h3>Action for Children Zambia</h3>
+        <p>Empowering Zambian Children Through Education</p>
+
+        <div class="footer-links">
+            <a href="mailto:info@afczambia.org">Contact Us</a>
+            <a href="https://www.afczambia.org" target="_blank">Website</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+        </div>
+
+        <div class="copyright">
+            © 2025 Action for Children Zambia. All rights reserved.
+        </div>
     </div>
-    
-    <div class="copyright">
-        © 2025 Action for Children Zambia. All rights reserved.
-    </div>
-</div>
 
     <script>
         // --- CONFIGURATION ---
