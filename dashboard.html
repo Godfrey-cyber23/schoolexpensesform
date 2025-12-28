@@ -821,6 +821,32 @@ function toggleDetailRow(mainRow) {
     }
 }
 
+  // Add this function to your JavaScript code
+function delRecord(id) {
+  if (confirm('Are you sure you want to delete this record? This action cannot be undone.')) {
+    // Show loading state
+    document.getElementById('loading').style.display = 'block';
+    
+    // Delete the record via API
+    fetch(`${API}?action=delete&id=${encodeURIComponent(id)}&t=${Date.now()}`)
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          // Reload the data to update the table
+          loadData();
+        } else {
+          alert('Error deleting record: ' + (data.message || 'Unknown error'));
+          document.getElementById('loading').style.display = 'none';
+        }
+      })
+      .catch(err => {
+        console.error('Delete error:', err);
+        alert('Failed to delete record. Please try again.');
+        document.getElementById('loading').style.display = 'none';
+      });
+  }
+}
+
 // Generate HTML for Inline Breakdown
 function generateInlineBreakdown(r) {
     let items = null;
