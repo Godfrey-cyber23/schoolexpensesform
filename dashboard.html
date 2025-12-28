@@ -1355,7 +1355,7 @@ function exportData() {
 }
   
 function formatNum(num) {
-  return "K " + parseFloat(num||0).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+  return parseFloat(num||0).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
 }
 
 function formatDate(dateStr) {
