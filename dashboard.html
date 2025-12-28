@@ -877,13 +877,21 @@ window.onload = function() {
 function initYearFilter() {
   const yearSelect = document.getElementById('filterYear');
   const currentYear = new Date().getFullYear();
-  for (let i = currentYear + 1; i >= currentYear - 5; i--) {
+  const startYear = 2026; // Start from 2026
+  const endYear = Math.max(startYear + 10, currentYear + 5); // Go at least 10 years from start, or 5 years from current
+  
+  // Clear any existing options (except the first "All Years" option)
+  yearSelect.innerHTML = '<option value="">All Years</option>';
+  
+  // Add years from endYear down to startYear (descending order)
+  for (let i = endYear; i >= startYear; i--) {
     const opt = document.createElement('option');
     opt.value = i;
     opt.textContent = i;
     yearSelect.appendChild(opt);
   }
-  // Set default to All Years
+  
+  // Set default to "All Years"
   yearSelect.value = "";
 }
 
