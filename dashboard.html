@@ -96,19 +96,42 @@
     }
 
     .stat-card {
-      background: white;
-      padding: 20px;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow-sm);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-left: 4px solid var(--primary);
-    }
+  background: white;
+  padding: 15px 20px; /* Reduced top/bottom padding */
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-left: 4px solid var(--primary);
+  min-height: 90px; /* Ensure consistent height */
+}
 
-    .stat-info h3 { margin: 0; font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
-    .stat-info .value { font-size: 1.8rem; font-weight: 700; margin-top: 5px; color: var(--dark); }
-    .stat-icon { font-size: 1.5rem; color: var(--border); opacity: 0.5; }
+   .stat-info h3 { 
+  margin: 0; 
+  font-size: 0.75rem; /* Reduced from 0.85rem */
+  color: var(--text-muted); 
+  text-transform: uppercase; 
+  letter-spacing: 0.5px; 
+  white-space: nowrap; /* Prevent wrapping */
+}
+    .stat-info .value { 
+  font-size: 1.5rem; /* Reduced from 1.8rem */
+  font-weight: 700; 
+  margin-top: 8px; 
+  color: var(--dark);
+  display: flex;
+  align-items: baseline;
+  white-space: nowrap; /* Prevent wrapping */
+  overflow: hidden; /* Prevent overflow */
+  line-height: 1.2; /* Tighter line height */
+}
+   .stat-icon { 
+  font-size: 1.3rem; /* Reduced from 1.5rem */
+  color: var(--border); 
+  opacity: 0.5;
+  flex-shrink: 0; /* Prevent icon from shrinking */
+}
 
     /* Filters & Toolbar */
     .toolbar {
@@ -389,7 +412,33 @@
     @media (max-width: 768px) {
       .header { flex-direction: column; align-items: stretch; text-align: center; }
       .actions-bar { justify-content: center; flex-wrap: wrap; }
-      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .stats-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px; /* Reduced gap */
+    margin-bottom: 20px;
+  }
+      .stat-card {
+    padding: 12px 15px; /* Even smaller padding on mobile */
+    min-height: 80px; /* Smaller height on mobile */
+  }
+
+      .stat-info h3 {
+    font-size: 0.7rem; /* Even smaller on mobile */
+  }
+  
+  .stat-info .value {
+    font-size: 1.3rem; /* Even smaller on mobile */
+    margin-top: 6px;
+  }
+  
+  .currency-symbol {
+    font-size: 1.1rem; /* Even smaller on mobile */
+    margin-right: 2px;
+  }
+  
+  .stat-icon {
+    font-size: 1.1rem; /* Even smaller on mobile */
+  }
       .toolbar { flex-direction: column; align-items: stretch; }
       .filter-group { flex-direction: column; }
       .receipt-meta { grid-template-columns: 1fr; }
@@ -423,11 +472,10 @@
 
       /* Currency Symbol Styling */
 .currency-symbol {
-  font-size: 1.4rem;
+  font-size: 1.2rem; /* Reduced from 1.4rem */
   font-weight: 600;
-  margin-right: 4px;
+  margin-right: 3px; /* Reduced from 4px */
   color: var(--primary);
-  vertical-align: top;
 }
 
 .stat-info .value {
@@ -594,6 +642,22 @@
       font-size: 1.3rem;
     }
   }
+
+    /* For very small screens */
+@media (max-width: 480px) {
+  .stat-card {
+    padding: 10px 12px;
+    min-height: 75px;
+  }
+  
+  .stat-info .value {
+    font-size: 1.2rem; /* Even smaller for very small screens */
+  }
+  
+  .currency-symbol {
+    font-size: 1rem;
+  }
+}
   </style>
 </head>
 
